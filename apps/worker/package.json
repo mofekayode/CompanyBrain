@@ -1,0 +1,21 @@
+{
+  "name": "@companybrain/worker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Job worker: pulls profiling and extraction jobs from the Postgres queue.",
+  "scripts": {
+    "dev": "tsx watch --clear-screen=false src/worker.ts",
+    "start": "node dist/worker.js",
+    "build": "esbuild src/worker.ts --bundle --platform=node --target=node22 --format=esm --outfile=dist/worker.js --packages=external --alias:@companybrain/core=../../packages/core/src",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@companybrain/core": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}

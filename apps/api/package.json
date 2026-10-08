@@ -1,0 +1,24 @@
+{
+  "name": "@companybrain/api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "HTTP API (Node.js + Hono). All backend endpoints, including the workbench chat stream.",
+  "scripts": {
+    "dev": "tsx watch --clear-screen=false src/server.ts",
+    "start": "node dist/server.js",
+    "build": "esbuild src/server.ts --bundle --platform=node --target=node22 --format=esm --outfile=dist/server.js --packages=external --alias:@companybrain/core=../../packages/core/src",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@companybrain/core": "*",
+    "@hono/node-server": "^2.1.3",
+    "hono": "^4.13.13",
+    "ai": "^7.0.127"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
