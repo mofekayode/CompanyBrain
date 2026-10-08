@@ -1,0 +1,33 @@
+{
+  "name": "company-brain",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n api,worker,web -c green,magenta,blue \"npm run dev -w @companybrain/api\" \"npm run dev -w @companybrain/worker\" \"npm run dev -w @companybrain/web\"",
+    "dev:web": "npm run dev -w @companybrain/web",
+    "dev:api": "npm run dev -w @companybrain/api",
+    "dev:worker": "npm run dev -w @companybrain/worker",
+    "dev:site": "npm run dev -w @companybrain/site",
+    "dev:client": "npm run dev -w @companybrain/client",
+    "docling": "cd services/docling && .venv/bin/docling-serve run --host 127.0.0.1 --port 5051",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm test -w @companybrain/core",
+    "land": "tsx packages/core/scripts/land-corpus.ts",
+    "profile": "tsx packages/core/scripts/profile-raw.ts",
+    "profile:local": "tsx packages/core/scripts/profile-local-check.ts",
+    "db:check": "tsx packages/core/scripts/db-check.ts",
+    "extract:sample": "tsx packages/core/scripts/extract-sample.ts",
+    "reset-discovery": "tsx packages/core/scripts/reset-discovery.ts"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.23.15"
+  }
+}

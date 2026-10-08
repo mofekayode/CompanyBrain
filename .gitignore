@@ -1,0 +1,33 @@
+# Secrets: never committed
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# The hidden Riverton truth (answer key) and the raw client evidence: never in the code repo.
+# Raw evidence lives in S3 (immutable raw store); the truth stays sealed until the final evaluation.
+*.dmg
+riverton-truth/
+riverton-data/
+
+# Dependencies and build output
+node_modules/
+.next/
+dist/
+out/
+next-env.d.ts
+*.tsbuildinfo
+services/docling/.venv/
+__pycache__/
+*.pyc
+
+# Local tooling and machine state
+.claude/settings.local.json
+.DS_Store
+*.log
+.vercel/
+coverage/
+
+# Heavy, regenerated artifacts (re-capture with the audit scripts)
+docs/ui-audit/

@@ -1,0 +1,9 @@
+**/node_modules
+**/.next
+**/dist
+.env
+*.dmg
+riverton-data
+riverton-truth
+services/docling/.venv
+docs
