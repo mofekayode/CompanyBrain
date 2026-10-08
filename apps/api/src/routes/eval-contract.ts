@@ -81,7 +81,9 @@ evalContract.post('/eval/answer', async (c) => {
   let cited: string[] = []
   let model = 'none (instant answer)'
   const locked = !!brief.restricted?.best_is_locked && brief.evidence === 'weak'
-  if (answersAllowed() && !(!brief.headline && brief.evidence === 'weak')) {
+  // The writer gets a chance whenever search found anything: weak matches can still answer from
+  // ordinary documents, and it says plainly when they don't (or refuses when only locked sources would).
+  if (answersAllowed() && ranked.hits.length) {
     const pack = await buildContext(sql, t.id, question, { as: ctx.as, prefetched: { ...ranked, hits: ranked.hits.slice(0, 12) }, view, today: askedOn })
     const w = await writeAnswer(pack, () => {}, { restricted: !!brief.restricted?.best_is_locked })
     if (w) {
@@ -96,7 +98,7 @@ evalContract.post('/eval/answer', async (c) => {
     // A refusal or "nothing found" cites nothing; an instant answer cites what it rests on.
     cited = brief.headline ? brief.sources.map((s) => s.id) : []
   }
-  if (text.includes(LOCKED) || text.includes("I can't answer that from the information you have access to")) cited = []
+  if (/^I can[’']t answer that from the information you have access to/.test(text.trim())) cited = []
 
   const refs = await refsFor(ctx, files, [...new Set([...cited, ...ranked.hits.map((h) => h.id)])])
   const citations: Ref[] = []
@@ -107,12 +109,19 @@ evalContract.post('/eval/answer', async (c) => {
       seen.add(r.source + r.locator)
       citations.push(r)
     }
-  const retrieved = ranked.hits
-    .map((h) => ({ h, r: refs.get(h.id)?.[0] }))
-    .filter((x): x is { h: (typeof ranked.hits)[number]; r: Ref } => !!x.r)
-    .map(({ h, r }, i) => ({ source: r.source, locator: r.locator, rank: i + 1, score: Number((h.ranks.rerank ?? h.score).toFixed(4)) }))
+  // One entry per piece of evidence, in result order: a fact lists the (readable) files behind it.
+  const retrieved: { source: string; locator: string; rank: number; score: number }[] = []
+  const listed = new Set<string>()
+  for (const h of ranked.hits)
+    for (const r of refs.get(h.id) ?? []) {
+      if (listed.has(r.source + r.locator)) continue
+      listed.add(r.source + r.locator)
+      retrieved.push({ source: r.source, locator: r.locator, rank: retrieved.length + 1, score: Number((h.ranks.rerank ?? h.score).toFixed(4)) })
+    }
 
-  const refused = locked || text.includes(LOCKED) || text.includes("I can't answer that from the information you have access to")
+  // Refused = the direct answer is the refusal (not an answer that mentions some sources are locked).
+  const opening = text.split(/\n\s*\n/)[0].trim()
+  const refused = /^I can[’']t answer that from the information you have access to/.test(opening)
   // Generation settings: the answer model doesn't accept a temperature (deprecated for it), so runs
   // are fixed by model id and prompt instead; reported so the runner can record it.
   const out = { answer: text, refused, citations, retrieved, latency_ms: Math.round(performance.now() - t0), model, timings: { retrieval_ms: Math.round(tRetrieved - t0) }, generation: { temperature: 'not supported by model; default' } }

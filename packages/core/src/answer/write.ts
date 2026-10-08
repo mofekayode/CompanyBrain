@@ -50,7 +50,7 @@ export async function writeAnswer(pack: ContextPack, onDelta: (text: string) => 
   const t0 = performance.now()
   // Some sources this reader can't open may matter. Never let the answer imply the information doesn't exist.
   const user = opts.restricted
-    ? `${pack.prompt.user}\n\nNote: some sources this person cannot open may be relevant. If the material above doesn't answer the question, the direct answer must be exactly: "I can't answer that from the information you have access to." Never say or imply the information doesn't exist, and never guess what the restricted sources contain.`
+    ? `${pack.prompt.user}\n\nNote: some sources this person cannot open may also be relevant. Answer from the material above whenever it answers the question, fully or in part; say what it doesn't cover. Only if nothing above answers the question at all, the direct answer must be exactly: "I can't answer that from the information you have access to." Never say or imply the information doesn't exist, and never guess what the restricted sources contain.`
     : pack.prompt.user
   if (model.startsWith('claude')) {
     const stream = claudeForAnswers().messages.stream(
