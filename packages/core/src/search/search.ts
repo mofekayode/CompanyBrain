@@ -82,6 +82,9 @@ async function slugOf(sql: Sql, tenantId: string) {
   return slugCache.get(tenantId)!
 }
 
+/** How deep into each leg (keyword, meaning) the reranker looks, beyond the fused head. */
+const LEG_POOL = 30
+
 /** The reader's principals: themselves plus every group they belong to (transitively). */
 export async function principalsOf(sql: Sql, tenantId: string, principalId: string): Promise<string[]> {
   return (
@@ -321,10 +324,10 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
     return true
   })
 
-  // The reranker sees the fused head plus each leg's own top 20: a document one leg ranks first
+  // The reranker sees the fused head plus each leg's own top LEG_POOL (30): a document one leg ranks first
   // but the other missed (approximate kNN, a keyword-only match) still gets judged.
   const pool = opts.rerank
-    ? ranked.filter(([, v], i) => i < Math.max(40, limit * 3) || (v.bm25 !== null && v.bm25 <= 20) || (v.knn !== null && v.knn <= 20))
+    ? ranked.filter(([, v], i) => i < Math.max(40, limit * 3) || (v.bm25 !== null && v.bm25 <= LEG_POOL) || (v.knn !== null && v.knn <= LEG_POOL))
     : ranked.slice(0, Math.max(40, limit * 3))
   let hits: SearchHit[] = pool.map(([id, v]) => toHit(id, v.src, v.highlight, query, { bm25: v.bm25, knn: v.knn, fused: ranked.findIndex(([x]) => x === id) + 1 }, v.score))
   // A reader sees a fact if they can open some of the evidence behind it; when some of it is
