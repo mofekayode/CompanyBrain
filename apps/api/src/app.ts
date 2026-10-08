@@ -16,6 +16,7 @@ import { files } from './routes/files'
 import { pipeline } from './routes/pipeline'
 import { tenants } from './routes/tenants'
 import { uploads } from './routes/uploads'
+import { evalContract } from './routes/eval-contract'
 import { type Env, withTenant } from './tenant'
 
 /** Browser origins allowed to call the API (the FDE portal). Comma-separated. */
@@ -31,6 +32,8 @@ app.get('/health', (c) => c.json({ ok: true }))
 app.get('/api/status', (c) => c.json({ claude_api: apiAllowed() }))
 
 app.route('/api', tenants)
+// The external eval runner's contract (docs/eval-contract.md), at the root as the runner expects.
+app.route('/', evalContract)
 
 const client = new Hono<Env>()
 client.use('*', withTenant)

@@ -22,6 +22,9 @@ services/docling/.venv/
 __pycache__/
 *.pyc
 
+# Run logs (eval runs log here, outside the knowledge store)
+logs/
+
 # Local tooling and machine state
 .claude/settings.local.json
 .DS_Store

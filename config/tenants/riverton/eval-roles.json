@@ -1,0 +1,44 @@
+{
+  "$comment": "How the Brain answers eval questions asked 'as a role' (docs/eval-contract.md): each role maps to the person whose access in the company map best matches it. The Brain's decision, from evidence (titles, groups); revisit if the access model changes.",
+  "warm_cutoffs": [
+    "2026-10-10"
+  ],
+  "roles": {
+    "ROLE-CEO-BUYER": {
+      "person": "Sarah Okafor",
+      "why": "President; Mgmt Team plus the owners, execs and deal area"
+    },
+    "ROLE-OPS-MGR": {
+      "person": "Hank Ostrander",
+      "why": "Field Service Supervisor: runs day-to-day field operations (no one holds the exact title). Judgment call."
+    },
+    "ROLE-BRANCH-MGR": {
+      "person": "Marcus Bell",
+      "why": "Branch Manager, Louisville"
+    },
+    "ROLE-FIELD-TECH": {
+      "person": "Jamal Whitaker",
+      "why": "Field Technician II"
+    },
+    "ROLE-SALES-MGR": {
+      "person": "Priya Shah",
+      "why": "Sales Manager"
+    },
+    "ROLE-SALES": {
+      "person": "Tyler Branham",
+      "why": "Account Manager"
+    },
+    "ROLE-FINANCE": {
+      "person": "Linda Marsh",
+      "why": "Controller"
+    },
+    "ROLE-HR": {
+      "person": "Karen Liu",
+      "why": "HR & Office Manager"
+    },
+    "ROLE-DISPATCH": {
+      "person": "Dee Collins",
+      "why": "Service Coordinator / Dispatch Lead"
+    }
+  }
+}
