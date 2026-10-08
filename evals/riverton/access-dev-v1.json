@@ -1,0 +1,204 @@
+{
+  "name": "Riverton access (dev) v1",
+  "purpose": "Who may open what, from the permission exports (sharepoint_permissions.csv, sharing_links.csv, mailbox_permissions.csv, group_members.csv, the field-service user list, the data-room access report). Each check names a delivered file and says whether the role may open it. DEV SET: written by the Brain side from evidence.",
+  "checks": [
+    {
+      "role": "ROLE-FIELD-TECH",
+      "path": "Operations/FieldLine quick reference.docx",
+      "allow": true,
+      "why": "Operations: All Staff read; Mgmt Team full control"
+    },
+    {
+      "role": "ROLE-FIELD-TECH",
+      "path": "Safety/SOP-LOTO Rev 4.pdf",
+      "allow": true,
+      "why": "Safety inherits All Staff"
+    },
+    {
+      "role": "ROLE-FIELD-TECH",
+      "path": "IMG_2967.MOV",
+      "allow": true,
+      "why": "Field photos and videos"
+    },
+    {
+      "role": "ROLE-FIELD-TECH",
+      "path": "export.csv",
+      "allow": true,
+      "why": "FieldLine work orders: technicians use FieldLine"
+    },
+    {
+      "role": "ROLE-FIELD-TECH",
+      "path": "dispatch db/Equipment.csv",
+      "allow": true,
+      "why": "Legacy dispatch data: field operations"
+    },
+    {
+      "role": "ROLE-FIELD-TECH",
+      "path": "Pricing/Pricing Policy 2025 FINAL.docx",
+      "allow": false,
+      "why": "Pricing: Sales + Mgmt Team"
+    },
+    {
+      "role": "ROLE-FIELD-TECH",
+      "path": "lauren.pike/Documents/Blue Book 2026 (my copy).xlsx",
+      "allow": false,
+      "why": "Shared with Sales only"
+    },
+    {
+      "role": "ROLE-FIELD-TECH",
+      "path": "HR/Handbook/Employee Handbook 2023.pdf",
+      "allow": false,
+      "why": "HR library: Karen, Dave, Sarah"
+    },
+    {
+      "role": "ROLE-FIELD-TECH",
+      "path": "users.csv",
+      "allow": false,
+      "why": "Tenant admin export: admins only"
+    },
+    {
+      "role": "ROLE-FIELD-TECH",
+      "path": "mail/linda.marsh.mbox",
+      "allow": false,
+      "why": "Personal mailbox: owner only"
+    },
+    {
+      "role": "ROLE-FIELD-TECH",
+      "path": "texts/Marcus_iPhone_Louisville crew.csv",
+      "allow": false,
+      "why": "Louisville crew chat; Jamal is an Oakley tech"
+    },
+    {
+      "role": "ROLE-SALES",
+      "path": "Pricing/Pricing Policy 2025 FINAL.docx",
+      "allow": true,
+      "why": "Pricing: Sales"
+    },
+    {
+      "role": "ROLE-SALES",
+      "path": "lauren.pike/Documents/Blue Book 2026 (my copy).xlsx",
+      "allow": true,
+      "why": "Sharing link: Sales"
+    },
+    {
+      "role": "ROLE-SALES",
+      "path": "crm/all-deals.csv",
+      "allow": true,
+      "why": "CRM: Sales"
+    },
+    {
+      "role": "ROLE-SALES",
+      "path": "Accounting/Policies/Credit and Collections Policy.docx",
+      "allow": false,
+      "why": "Accounting: Accounting + Owners & Execs"
+    },
+    {
+      "role": "ROLE-SALES",
+      "path": "rates.csv",
+      "allow": true,
+      "why": "Branch labor rates: pricing"
+    },
+    {
+      "role": "ROLE-FINANCE",
+      "path": "AR_Aging_Detail_2026-09-30.xlsx",
+      "allow": true,
+      "why": "QuickBooks export: Accounting"
+    },
+    {
+      "role": "ROLE-FINANCE",
+      "path": "mail/billing.mbox",
+      "allow": true,
+      "why": "billing@: Accounting"
+    },
+    {
+      "role": "ROLE-FINANCE",
+      "path": "Pricing/Pricing Policy 2025 FINAL.docx",
+      "allow": false,
+      "why": "Pricing: Sales + Mgmt Team"
+    },
+    {
+      "role": "ROLE-FINANCE",
+      "path": "HR/Handbook/Employee Handbook 2023.pdf",
+      "allow": false,
+      "why": "HR library"
+    },
+    {
+      "role": "ROLE-HR",
+      "path": "HR/Handbook/Employee Handbook 2023.pdf",
+      "allow": true,
+      "why": "HR library: Karen"
+    },
+    {
+      "role": "ROLE-HR",
+      "path": "users.csv",
+      "allow": true,
+      "why": "User Administrator"
+    },
+    {
+      "role": "ROLE-HR",
+      "path": "mail/linda.marsh.mbox",
+      "allow": false,
+      "why": "Personal mailbox"
+    },
+    {
+      "role": "ROLE-DISPATCH",
+      "path": "mail/dispatch.mbox",
+      "allow": true,
+      "why": "dispatch@: Dispatch"
+    },
+    {
+      "role": "ROLE-DISPATCH",
+      "path": "export.csv",
+      "allow": true,
+      "why": "FieldLine: dispatchers"
+    },
+    {
+      "role": "ROLE-DISPATCH",
+      "path": "Pricing/Pricing Policy 2025 FINAL.docx",
+      "allow": false,
+      "why": "Pricing: Sales + Mgmt Team"
+    },
+    {
+      "role": "ROLE-BRANCH-MGR",
+      "path": "mail/louisville.mbox",
+      "allow": true,
+      "why": "louisville@: Louisville Team"
+    },
+    {
+      "role": "ROLE-BRANCH-MGR",
+      "path": "mail/columbus.mbox",
+      "allow": false,
+      "why": "columbus@: Columbus Team"
+    },
+    {
+      "role": "ROLE-OPS-MGR",
+      "path": "Operations/FieldLine quick reference.docx",
+      "allow": true,
+      "why": "Operations: All Staff read; Mgmt Team full control"
+    },
+    {
+      "role": "ROLE-OPS-MGR",
+      "path": "mail/sarah.okafor.mbox",
+      "allow": false,
+      "why": "Personal mailbox"
+    },
+    {
+      "role": "ROLE-CEO-BUYER",
+      "path": "02 Financial/AR Aging 9.30.26.xlsx",
+      "allow": true,
+      "why": "Data room: Buyer - Full / owners"
+    },
+    {
+      "role": "ROLE-CEO-BUYER",
+      "path": "mail/sarah.okafor.mbox",
+      "allow": false,
+      "why": "Personal mailbox"
+    },
+    {
+      "role": "ROLE-CEO-BUYER",
+      "path": "HR/Handbook/Employee Handbook 2023.pdf",
+      "allow": false,
+      "why": "HR library: named people only"
+    }
+  ]
+}
