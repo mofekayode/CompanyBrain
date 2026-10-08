@@ -44,7 +44,7 @@ export interface Written {
 }
 
 /** Streams the answer; onDelta gets each new piece of text. Returns null when the API is off. */
-export async function writeAnswer(pack: ContextPack, onDelta: (text: string) => void, opts: { model?: string; signal?: AbortSignal; restricted?: boolean } = {}): Promise<Written | null> {
+export async function writeAnswer(pack: ContextPack, onDelta: (text: string) => void, opts: { model?: string; signal?: AbortSignal; restricted?: boolean; temperature?: number } = {}): Promise<Written | null> {
   if (!answersAllowed()) return null
   const model = opts.model ?? answerModel()
   const t0 = performance.now()
@@ -57,6 +57,7 @@ export async function writeAnswer(pack: ContextPack, onDelta: (text: string) => 
       {
         model,
         max_tokens: 1500,
+        ...(opts.temperature !== undefined ? { temperature: opts.temperature } : {}),
         system: WRITE_SYSTEM,
         ...(/opus|sonnet/.test(model) ? { output_config: { effort: 'low' } } : {}),
         messages: [{ role: 'user', content: user }],
