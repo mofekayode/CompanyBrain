@@ -3534,6 +3534,12 @@
             "source": "SharePoint - Shared Documents (copy)",
             "scope_key": "company-wide",
             "path_prefix": ""
+          },
+          {
+            "why": "Staff memos: written to all staff.",
+            "source": "fileserver2 (old S drive)",
+            "scope_key": "company-wide",
+            "path_prefix": "memos"
           }
         ],
         "audience": [
@@ -3553,6 +3559,18 @@
             "source": "Dave - OneDrive + old laptop",
             "scope_key": "dave-personal",
             "path_prefix": ""
+          },
+          {
+            "why": "Dave's OneDrive: owner only (sharepoint_permissions.csv: OneDrive - David Brennan, Owner).",
+            "source": "Dave - OneDrive + old laptop",
+            "scope_key": "dave-personal",
+            "path_prefix": "OneDrive/Ridgeline"
+          },
+          {
+            "why": "Inherited from OneDrive root: Dave only; not labelled, outside the HR library (sharepoint_permissions.csv).",
+            "source": "Dave - OneDrive + old laptop",
+            "scope_key": "dave-personal",
+            "path_prefix": "OneDrive/Greg W - termination"
           }
         ],
         "audience": [
@@ -3561,8 +3579,8 @@
       },
       {
         "key": "dispatch-ops",
-        "name": "Dispatch operations data",
-        "description": "The legacy dispatch database, used by dispatchers and management.",
+        "name": "Dispatch and field-service data",
+        "description": "Work orders, equipment, sites and customers from the field-service app and the legacy dispatch database: used by technicians, dispatch and branch managers.",
         "sensitivity": "confidential",
         "hidden": false,
         "status": "released",
@@ -3572,11 +3590,38 @@
             "source": "fileserver2 (old S drive)",
             "scope_key": "dispatch-ops",
             "path_prefix": "dispatch db"
+          },
+          {
+            "why": "FieldLine export: every FieldLine user (technicians, dispatchers, managers) works in it (users (1).csv).",
+            "source": "IT exports 10-2",
+            "scope_key": "dispatch-ops",
+            "path_prefix": "export.csv"
+          },
+          {
+            "why": "FieldLine export: every FieldLine user (technicians, dispatchers, managers) works in it (users (1).csv).",
+            "source": "IT exports 10-2",
+            "scope_key": "dispatch-ops",
+            "path_prefix": "export (1).csv"
+          },
+          {
+            "why": "FieldLine export: every FieldLine user (technicians, dispatchers, managers) works in it (users (1).csv).",
+            "source": "IT exports 10-2",
+            "scope_key": "dispatch-ops",
+            "path_prefix": "export (2).csv"
+          },
+          {
+            "why": "FieldLine export: every FieldLine user (technicians, dispatchers, managers) works in it (users (1).csv).",
+            "source": "IT exports 10-2",
+            "scope_key": "dispatch-ops",
+            "path_prefix": "fields.csv"
           }
         ],
         "audience": [
           "Dispatch",
-          "Mgmt Team"
+          "Mgmt Team",
+          "Oakley Techs",
+          "Louisville Techs",
+          "Columbus Techs"
         ]
       },
       {
@@ -3588,20 +3633,8 @@
         "status": "released",
         "rules": [
           {
-            "why": "Deal material.",
-            "source": "Dave - OneDrive + old laptop",
-            "scope_key": "exec-deal",
-            "path_prefix": "OneDrive/Ridgeline"
-          },
-          {
             "why": "Buyer handoff is deal material.",
             "source": "Northgate handoff README",
-            "scope_key": "exec-deal",
-            "path_prefix": ""
-          },
-          {
-            "why": "Seller-side data room users only.",
-            "source": "Ridgeline VDR download 10-2-26",
             "scope_key": "exec-deal",
             "path_prefix": ""
           },
@@ -3613,8 +3646,7 @@
           }
         ],
         "audience": [
-          "Linda Marsh",
-          "Sarah Okafor"
+          "Owners & Execs"
         ]
       },
       {
@@ -3671,8 +3703,7 @@
         ],
         "audience": [
           "Accounting",
-          "Linda Marsh",
-          "Sarah Okafor"
+          "Owners & Execs"
         ]
       },
       {
@@ -3711,6 +3742,7 @@
         ],
         "audience": [
           "Karen Liu",
+          "Dave Brennan",
           "Sarah Okafor"
         ]
       },
@@ -3720,7 +3752,7 @@
         "description": "Pay data for the 2026 compensation review, for HR and the managers Karen deliberately granted.",
         "sensitivity": "restricted",
         "hidden": true,
-        "status": "held",
+        "status": "released",
         "rules": [
           {
             "why": "Inheritance broken by Karen Liu.",
@@ -3730,12 +3762,8 @@
           }
         ],
         "audience": [
-          "Andrea Reyes",
           "Karen Liu",
-          "Linda Marsh",
-          "Marcus Bell",
-          "Priya Shah",
-          "Sarah Okafor"
+          "Mgmt Team"
         ]
       },
       {
@@ -3747,22 +3775,10 @@
         "status": "released",
         "rules": [
           {
-            "why": "Termination file stored outside the HR library.",
-            "source": "Dave - OneDrive + old laptop",
-            "scope_key": "hr-personnel",
-            "path_prefix": "OneDrive/Greg W - termination"
-          },
-          {
             "why": "HR interview content.",
             "source": "FDE interview recordings",
             "scope_key": "hr-personnel",
             "path_prefix": "HR"
-          },
-          {
-            "why": "Employee data in the data room.",
-            "source": "Ridgeline VDR download 10-2-26",
-            "scope_key": "hr-personnel",
-            "path_prefix": "04 HR"
           }
         ],
         "audience": [
@@ -3786,8 +3802,8 @@
           }
         ],
         "audience": [
-          "Karen Liu",
-          "Sarah Okafor"
+          "Kyle Brennan",
+          "Karen Liu"
         ]
       },
       {
@@ -4180,7 +4196,7 @@
         "description": "Payroll files, limited to the people who run payroll.",
         "sensitivity": "restricted",
         "hidden": true,
-        "status": "held",
+        "status": "released",
         "rules": [
           {
             "why": "Payroll is personal pay data.",
@@ -4219,12 +4235,6 @@
             "source": "IT exports 10-2",
             "scope_key": "pricing",
             "path_prefix": "rates.csv"
-          },
-          {
-            "why": "Explicitly shared with Sales; contains cost and margin data.",
-            "source": "OneDrive exports",
-            "scope_key": "pricing",
-            "path_prefix": "lauren.pike/Documents/Blue Book 2026 (my copy).xlsx"
           },
           {
             "why": "Sales plus Mgmt Team; labelled Confidential.",
@@ -4286,7 +4296,8 @@
           }
         ],
         "audience": [
-          "Andrea Reyes"
+          "Andrea Reyes",
+          "Columbus Team"
         ]
       },
       {
@@ -4304,20 +4315,8 @@
             "path_prefix": ""
           },
           {
-            "why": "No export; narrowest audience.",
-            "source": "mock-api",
-            "scope_key": "unsorted-intake",
-            "path_prefix": ""
-          },
-          {
             "why": "Fallback for any unmapped OneDrive.",
             "source": "OneDrive exports",
-            "scope_key": "unsorted-intake",
-            "path_prefix": ""
-          },
-          {
-            "why": "Unknown uploader with no export; texts may be personal.",
-            "source": "Phone uploads",
             "scope_key": "unsorted-intake",
             "path_prefix": ""
           }
@@ -4325,23 +4324,186 @@
         "audience": [
           "Sarah Okafor"
         ]
+      },
+      {
+        "key": "data-room",
+        "name": "Ridgeline data room",
+        "description": "The diligence data room download, as the data room grants it (VDR_User_Access_Report).",
+        "sensitivity": "restricted",
+        "hidden": true,
+        "status": "released",
+        "rules": [
+          {
+            "why": "VDR access: Seller - Full (Dave, Sarah: Owners & Execs), Buyer - Full (Rachel Stein).",
+            "source": "Ridgeline VDR download 10-2-26",
+            "scope_key": "data-room",
+            "path_prefix": ""
+          },
+          {
+            "why": "Data-room folder: same VDR access as the rest of the room.",
+            "source": "Ridgeline VDR download 10-2-26",
+            "scope_key": "data-room",
+            "path_prefix": "04 HR"
+          }
+        ],
+        "audience": [
+          "Owners & Execs",
+          "Rachel Stein"
+        ]
+      },
+      {
+        "key": "data-room-finance",
+        "name": "Ridgeline data room: financials",
+        "description": "Data-room financials, also open to the Seller - Finance group.",
+        "sensitivity": "restricted",
+        "hidden": true,
+        "status": "released",
+        "rules": [
+          {
+            "why": "VDR access: Seller - Finance (Linda) plus full users.",
+            "source": "Ridgeline VDR download 10-2-26",
+            "scope_key": "data-room-finance",
+            "path_prefix": "02 Financial"
+          }
+        ],
+        "audience": [
+          "Owners & Execs",
+          "Rachel Stein",
+          "Linda Marsh"
+        ]
+      },
+      {
+        "key": "lauren-bluebook",
+        "name": "Lauren's Blue Book copy",
+        "description": "Shared with the Sales group by a specific-people link (sharing_links.csv).",
+        "sensitivity": "confidential",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Sharing link: Sales (group), edit.",
+            "source": "OneDrive exports",
+            "scope_key": "lauren-bluebook",
+            "path_prefix": "lauren.pike/Documents/Blue Book 2026 (my copy).xlsx"
+          }
+        ],
+        "audience": [
+          "Lauren Pike",
+          "Sales"
+        ]
+      },
+      {
+        "key": "phone-media",
+        "name": "Field photos and videos",
+        "description": "Equipment and job-site photos and videos people sent from their phones.",
+        "sensitivity": "internal",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Job-site media from field phones: field operations.",
+            "source": "Phone uploads",
+            "scope_key": "phone-media",
+            "path_prefix": ""
+          }
+        ],
+        "audience": [
+          "Oakley Techs",
+          "Louisville Techs",
+          "Columbus Techs",
+          "Dispatch",
+          "Mgmt Team"
+        ]
+      },
+      {
+        "key": "chat-oakley-techs",
+        "name": "Oakley Techs group chat",
+        "description": "Text-message export of the Oakley Techs group chat (from Dee).",
+        "sensitivity": "confidential",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Group chat: its members.",
+            "source": "Phone uploads",
+            "scope_key": "chat-oakley-techs",
+            "path_prefix": "texts/Dee_iPhone_Oakley Techs group.csv"
+          },
+          {
+            "why": "Group chat: its members.",
+            "source": "Phone uploads",
+            "scope_key": "chat-oakley-techs",
+            "path_prefix": "texts/Dee_iPhone_Oakley Techs group.txt"
+          }
+        ],
+        "audience": [
+          "Oakley Techs",
+          "Dee Collins"
+        ]
+      },
+      {
+        "key": "chat-louisville-crew",
+        "name": "Louisville crew group chat",
+        "description": "Text-message export of the Louisville crew chat (from Marcus).",
+        "sensitivity": "confidential",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Group chat: its members.",
+            "source": "Phone uploads",
+            "scope_key": "chat-louisville-crew",
+            "path_prefix": "texts/Marcus_iPhone_Louisville crew.csv"
+          },
+          {
+            "why": "Group chat: its members.",
+            "source": "Phone uploads",
+            "scope_key": "chat-louisville-crew",
+            "path_prefix": "texts/Marcus_iPhone_Louisville crew.txt"
+          }
+        ],
+        "audience": [
+          "Louisville Techs",
+          "Marcus Bell"
+        ]
+      },
+      {
+        "key": "systems-docs",
+        "name": "Live systems documentation",
+        "description": "The read-only API description handed over with the files.",
+        "sensitivity": "confidential",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Systems documentation: management.",
+            "source": "mock-api",
+            "scope_key": "systems-docs",
+            "path_prefix": ""
+          }
+        ],
+        "audience": [
+          "Mgmt Team"
+        ]
       }
     ],
     "file_moves": [
       {
-        "path": "04 HR/Employee Handbook 2023.pdf",
+        "path": "greg.whitfield/Documents/Pricing Policy 2025 FINAL.docx",
         "scope_key": "company-wide",
-        "note": "moved to Company-wide shared documents by FDE: employee handbooks are written for all staff (eval finding)"
+        "note": "anonymous view link, active, no label (sharing_links.csv): anyone can open it"
       },
       {
-        "path": "HR/Handbook/Employee Handbook 2017.docx",
-        "scope_key": "company-wide",
-        "note": "moved to Company-wide shared documents by FDE: employee handbooks are written for all staff (eval finding)"
-      },
+        "path": "rates.csv",
+        "scope_key": "pricing",
+        "note": "branch labor rates, not personal pay: detector false positive"
+      }
+    ],
+    "memberships": [
       {
-        "path": "HR/Handbook/Employee Handbook 2023.pdf",
-        "scope_key": "company-wide",
-        "note": "moved to Company-wide shared documents by FDE: employee handbooks are written for all staff (eval finding)"
+        "group": "Mgmt Team",
+        "member": "Rachel Stein",
+        "why": "Guest member of Mgmt Team (group_members.csv); Teams: Mgmt Team (guest_users.csv)."
       }
     ]
   },
