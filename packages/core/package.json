@@ -1,0 +1,55 @@
+{
+  "name": "@companybrain/core",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Backend library: storage, profiling, extraction, job queue, workbench agent. Used by apps/api and apps/worker.",
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "test:s3": "S3_LIVE=1 AWS_PROFILE=companybrain AWS_REGION=us-east-1 vitest run tests/storage/s3.live.test.ts",
+    "db:check": "tsx scripts/db-check.ts",
+    "land": "tsx scripts/land-corpus.ts",
+    "profile": "tsx scripts/profile-raw.ts",
+    "profile:local": "tsx scripts/profile-local-check.ts",
+    "extract:sample": "tsx scripts/extract-sample.ts",
+    "reset-discovery": "tsx scripts/reset-discovery.ts",
+    "eval-set": "tsx scripts/eval-set.ts",
+    "search:project": "tsx scripts/search-project.ts",
+    "tenant-config": "tsx scripts/tenant-config.ts",
+    "eval:steps": "tsx scripts/steps-eval.ts",
+    "eval:trace": "tsx scripts/trace.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.131.0",
+    "@aws-sdk/client-s3": "^3.1146.0",
+    "@aws-sdk/client-sts": "^3.1146.0",
+    "@aws-sdk/credential-providers": "^3.1146.0",
+    "@aws-sdk/s3-request-presigner": "^3.1146.0",
+    "@elastic/elasticsearch": "^9.5.1",
+    "@huggingface/transformers": "^4.3.1",
+    "ai": "^7.0.127",
+    "exifr": "^7.1.3",
+    "ffmpeg-static": "^5.3.0",
+    "jszip": "^3.10.2",
+    "mailparser": "^3.9.36",
+    "music-metadata": "^12.0.0",
+    "pdf-lib": "^1.17.1",
+    "pg": "^8.23.1",
+    "twelvelabs-js": "^1.3.5",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8",
+    "@types/mailparser": "^3.9.0",
+    "@types/node": "^26.6.4",
+    "@types/pg": "^8.23.1",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  }
+}
