@@ -479,13 +479,14 @@
     {
       "kind": "data_check",
       "category": "permission",
-      "question": "Every employee can open the 2023 Employee Handbook",
+      "question": "The HR library copy of the 2023 Employee Handbook is open only to HR (per the SharePoint permissions)",
       "assertion": {
         "type": "person_access",
         "person": "Jamal Whitaker",
         "path_hint": "HR/Handbook/Employee Handbook 2023",
-        "can_open": true
-      }
+        "can_open": false
+      },
+      "notes": "Updated 2026-10-08: sharepoint_permissions.csv gives Shared Documents/HR to Karen Liu, Dave Brennan and Sarah Okafor only, and no all-staff copy exists. A governance gap worth raising with the client (the handbook is written for all staff), not something the Brain should paper over."
     },
     {
       "kind": "question",
@@ -737,18 +738,17 @@
       "difficulty": "hard",
       "persona": "Jamal Whitaker",
       "question": "Is Riverton being sold?",
-      "expected_answer": "Yes, Dave told All Staff on Aug 10, 2026 that Riverton is being sold to Northgate Industrial Partners, and on Sept 30, 2026 that the deal closed with Sarah Okafor as President. A field tech can see this because it was sent to All Staff; the deal documents themselves (LOI, SPA, data room) stay restricted.",
+      "expected_answer": "Yes, as far as a field tech can see: the Oakley Techs group chat on Aug 10, 2026 says 'so we got sold'. Dave's All Staff announcement only exists in Dave's own mailbox (owner-only), so it must not be cited; the deal documents (LOI, SPA, data room) stay restricted.",
       "key_points": [
-        "yes, sold to Northgate",
-        "announced to All Staff Aug 10 2026",
-        "closed Sept 30 2026",
+        "yes, the company was sold (Aug 2026)",
+        "cites only what a tech may open (the Oakley Techs chat), not Dave's mailbox",
         "does not reveal LOI/SPA terms or data-room documents"
       ],
       "retrieval": {
-        "text": "Northgate",
-        "kind": "email_body",
+        "text": "got sold",
         "top": 10
-      }
+      },
+      "notes": "Updated 2026-10-08: access now follows the source permissions per item (a copy in a private mailbox keeps that mailbox's access), so the evidence a tech may use is the group chat."
     },
     {
       "kind": "question",

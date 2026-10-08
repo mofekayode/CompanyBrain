@@ -56,6 +56,23 @@ mailbox keeps that mailbox's access. A reader sees a fact only through evidence 
 statement if some of its evidence is restricted for them. Guests and former staff never inherit group access, except
 where the config records an evidence-backed membership (Rachel Stein → Mgmt Team).
 
+## Changes since round 1
+
+- Access rebuilt from the permission exports (see Access basis). Brain-side checks: `scripts/access-check.ts` (33/33
+  per-item expectations) and `scripts/eval-leak-check.ts` (0 citations or candidates a role may not open, 18 questions
+  across all roles).
+- Identical copies of a file are read once: content is readable through any copy, and citations name a copy the
+  asking role may open (its own first).
+- Facts: a role sees a fact only through evidence it may open; when part of the evidence is restricted for it, only
+  the statement, never quotes or notes.
+- Refusals: the writer refuses only when nothing the role may open answers; `refused` is true only when the answer
+  itself is the refusal.
+- Retrieval list and citations: facts expand to the readable evidence behind them; records cite the system rows that
+  mention them.
+- Ontology export: account managers over time from the CRM owner changes, branch labor rates with effective dates,
+  terms, titles and branch managers from the system records. Seven typo'd customer variants merged (letters-in-order
+  match plus a shared site/asset or whole-name match).
+
 ## Run conditions and known limits
 
 - **Model:** `claude-sonnet-5-5` for written answers, reported per response. It does not accept `temperature`
