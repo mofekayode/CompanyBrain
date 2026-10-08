@@ -1,0 +1,136 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@theme inline {
+  --font-sans: var(--font-geist);
+  --font-heading: var(--font-geist);
+  --font-serif: var(--font-newsreader);
+  --font-mono: var(--font-geist-mono);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Brand */
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-navy: var(--navy);
+  --color-cobalt: var(--cobalt);
+  --color-cobalt-soft: var(--cobalt-soft);
+  --color-verified: var(--verified);
+  --color-verified-soft: var(--verified-soft);
+  --color-stale: var(--stale);
+  --color-stale-soft: var(--stale-soft);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  color-scheme: light;
+
+  --paper: #f7f7f4;
+  --ink: #111318;
+  --navy: #16243a;
+  --cobalt: #4169e1;
+  --cobalt-soft: #eaf0ff;
+  --verified: #1f8a5b;
+  --verified-soft: #e5f4ec;
+  --stale: #b0651a;
+  --stale-soft: #fbf0e4;
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: #ffffff;
+  --card-foreground: var(--ink);
+  --popover: #ffffff;
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: #ffffff;
+  --secondary: #ecece7;
+  --secondary-foreground: var(--ink);
+  --muted: #efefea;
+  --muted-foreground: #5d6170;
+  --accent: var(--cobalt-soft);
+  --accent-foreground: var(--navy);
+  --destructive: #c4372c;
+  --border: #e3e3dd;
+  --input: #dcdcd5;
+  --ring: var(--cobalt);
+  --radius: 0.625rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans antialiased;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "cv11";
+  }
+  ::selection {
+    background: var(--cobalt-soft);
+    color: var(--navy);
+  }
+}
+
+@layer utilities {
+  /* Fine engineering-paper grid used behind hero and diagrams. */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--ink) 6%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--ink) 6%, transparent) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+  .mask-fade-y {
+    mask-image: linear-gradient(to bottom, transparent, black 18%, black 70%, transparent);
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
+
+@layer utilities {
+  .eyebrow {
+    font-family: var(--font-geist-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cobalt);
+  }
+  .eyebrow-muted {
+    font-family: var(--font-geist-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+}
