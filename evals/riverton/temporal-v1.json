@@ -1,0 +1,673 @@
+{
+  "name": "Temporal v1",
+  "description": "What was true when, what is true now, what changed and when. Written from Riverton's own evidence (price lists, policies, contracts, emails, interviews). Questions about the present must also say what it used to be.",
+  "items": [
+    {
+      "kind": "data_check",
+      "category": "temporal",
+      "question": "Blue Ridge payment terms in mid-2023 were Net 30",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Blue Ridge Food Processing LLC",
+        "predicate_hint": "payment_terms",
+        "value_hint": "30",
+        "as_of": "2023-06-01"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "temporal",
+      "question": "Blue Ridge payment terms in 2026 are Net 60",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Blue Ridge Food Processing LLC",
+        "predicate_hint": "payment_terms",
+        "value_hint": "60",
+        "as_of": "2026-03-01"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "temporal",
+      "question": "Emergency dispatch fee in 2010 was the $95 call-out",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Emergency Dispatch Fee",
+        "predicate_hint": "amount",
+        "value_hint": "95",
+        "as_of": "2010-06-01"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "temporal",
+      "question": "Emergency dispatch fee in 2020 was $200",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Emergency Dispatch Fee",
+        "predicate_hint": "amount",
+        "value_hint": "200",
+        "as_of": "2020-06-01"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "temporal",
+      "question": "Emergency dispatch fee in 2026 is $250",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Emergency Dispatch Fee",
+        "predicate_hint": "amount",
+        "value_hint": "250",
+        "as_of": "2026-03-01"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "temporal",
+      "question": "Columbus branch manager in 2024 was Tom Jablonski",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Columbus Branch (Grove City)",
+        "predicate_hint": "branch_manager",
+        "value_hint": "Tom",
+        "as_of": "2024-06-01"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "temporal",
+      "question": "Columbus branch manager in 2026 is Andrea Reyes",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Columbus Branch (Grove City)",
+        "predicate_hint": "branch_manager",
+        "value_hint": "Andrea",
+        "as_of": "2026-03-01"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "temporal",
+      "question": "Sarah Okafor was Operations Manager in 2020",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Sarah Okafor",
+        "predicate_hint": "role",
+        "value_hint": "Operations Manager",
+        "as_of": "2020-06-01"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "temporal",
+      "question": "Overtime in 2025 was $187.50/hr (1.5 × $125), not the 2006 price-list $108",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Service Labor - OT",
+        "predicate_hint": "rate",
+        "value_hint": "187.50",
+        "as_of": "2025-06-01"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "temporal",
+      "question": "Mid-2026, Sarah owns all discounts on deals under $50k (policy v3), not Dave's 2019 rule",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Sarah Okafor",
+        "predicate_hint": "discount",
+        "value_hint": "50,000",
+        "as_of": "2026-06-01"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "temporal",
+      "question": "From Oct 19, 2026 Sarah approves deals up to $75,000 (Northgate policy)",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Sarah Okafor",
+        "predicate_hint": "discount",
+        "value_hint": "75,000",
+        "as_of": "2026-10-25"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "temporal",
+      "question": "The Sales Manager limit was 10% on deals under $50k in mid-2026",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Sales Manager",
+        "predicate_hint": "discount",
+        "value_hint": "50,000",
+        "as_of": "2026-06-01"
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:as_of",
+      "question": "What were Blue Ridge's payment terms in 2023?",
+      "expected_answer": "Net 30 under the 2022–2025 PM agreement. (They moved to Net 60 from July 1, 2025.)",
+      "key_points": [
+        "Net 30",
+        "2022 agreement period",
+        "mentions later change to Net 60"
+      ],
+      "retrieval": {
+        "text": "Net 30",
+        "top": 5,
+        "above": "Net 60"
+      },
+      "anchors": [
+        {
+          "subject": "Blue Ridge Food Processing LLC",
+          "predicate": "payment_terms"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:current",
+      "question": "What are Blue Ridge's payment terms now?",
+      "expected_answer": "Net 60 since July 1, 2025 (2025 renewal). Changed: before that it was Net 30.",
+      "key_points": [
+        "Net 60",
+        "since July 1 2025",
+        "was Net 30 before"
+      ],
+      "retrieval": {
+        "text": "Net 60",
+        "top": 3,
+        "above": "Net 30"
+      },
+      "anchors": [
+        {
+          "subject": "Blue Ridge Food Processing LLC",
+          "predicate": "payment_terms"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:as_of",
+      "question": "What was the emergency dispatch fee in 2020?",
+      "expected_answer": "$200 per hot job (March 2018 – end of 2024). It is $250 now.",
+      "key_points": [
+        "$200",
+        "2018–2024 period",
+        "now $250"
+      ],
+      "retrieval": {
+        "text": "$200",
+        "top": 5,
+        "above": "$250"
+      },
+      "anchors": [
+        {
+          "subject": "Emergency Dispatch Fee",
+          "predicate": "amount"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:as_of",
+      "question": "What did an emergency call-out cost in 2010?",
+      "expected_answer": "$95 call-out plus labor, from the 2006 price list (until March 2018).",
+      "key_points": [
+        "$95",
+        "plus labor",
+        "2006 price list"
+      ],
+      "retrieval": {
+        "text": "95",
+        "top": 5,
+        "above": "$250"
+      },
+      "anchors": [
+        {
+          "subject": "Emergency Dispatch Fee",
+          "predicate": "amount"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:current",
+      "question": "What is the emergency dispatch fee today?",
+      "expected_answer": "$250 per hot job since January 1, 2025, plus hours at 1.5×. Changed: it was $200 from 2018 to 2024 (and $95 on the 2006 list).",
+      "key_points": [
+        "$250",
+        "since Jan 2025",
+        "was $200 before"
+      ],
+      "retrieval": {
+        "text": "$250",
+        "top": 3,
+        "above": "$200"
+      },
+      "anchors": [
+        {
+          "subject": "Emergency Dispatch Fee",
+          "predicate": "amount"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:as_of",
+      "question": "What was the standard labor rate in 2025?",
+      "expected_answer": "$125/hr standard ($187.50 overtime). It rose to $132 on January 5, 2026.",
+      "key_points": [
+        "$125",
+        "now $132 from Jan 2026"
+      ],
+      "retrieval": {
+        "text": "125",
+        "top": 5,
+        "above": "132"
+      },
+      "anchors": [
+        {
+          "subject": "Standard labor rate",
+          "predicate": "rate"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:as_of",
+      "question": "What overtime rate did Riverton bill in 2025?",
+      "expected_answer": "$187.50/hr, time and a half on the $125 standard rate. From January 2026 it is $198.",
+      "key_points": [
+        "$187.50",
+        "time and a half",
+        "now $198"
+      ],
+      "retrieval": {
+        "text": "187.50",
+        "top": 5,
+        "above": "198"
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:as_of",
+      "question": "Who ran the Columbus branch in 2024?",
+      "expected_answer": "Tom Jablonski (from the 2021 opening until he left in June 2025). Andrea Reyes has run it since June 2025.",
+      "key_points": [
+        "Tom Jablonski",
+        "until June 2025",
+        "Andrea now"
+      ],
+      "retrieval": {
+        "text": "Tom",
+        "top": 5,
+        "above": "Andrea"
+      },
+      "anchors": [
+        {
+          "subject": "Columbus Branch (Grove City)",
+          "predicate": "branch_manager"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:current",
+      "question": "Who runs the Columbus branch now?",
+      "expected_answer": "Andrea Reyes, since early June 2025. Changed: Tom Jablonski ran it from 2021 until he left.",
+      "key_points": [
+        "Andrea Reyes",
+        "since June 2025",
+        "was Tom Jablonski"
+      ],
+      "retrieval": {
+        "text": "Andrea",
+        "top": 3,
+        "above": "Tom Jablonski"
+      },
+      "anchors": [
+        {
+          "subject": "Columbus Branch (Grove City)",
+          "predicate": "branch_manager"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:as_of",
+      "question": "What was Sarah Okafor's job in 2020?",
+      "expected_answer": "Operations Manager (from August 2014). She became General Manager in June 2025 and President when the Northgate deal closed on Sept 30, 2026.",
+      "key_points": [
+        "Operations Manager",
+        "GM from June 2025",
+        "President from Sept 30 2026"
+      ],
+      "retrieval": {
+        "text": "Operations Manager",
+        "top": 5,
+        "above": "General Manager"
+      },
+      "anchors": [
+        {
+          "subject": "Sarah Okafor",
+          "predicate": "role"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:as_of",
+      "question": "What was Priya Shah's title in 2024?",
+      "expected_answer": "Senior Account Manager (2023 – March 2026). Before that Account Manager; since April 2026 Sales Manager.",
+      "key_points": [
+        "Senior Account Manager",
+        "Sales Manager since April 2026"
+      ],
+      "retrieval": {
+        "text": "Senior Account Manager",
+        "top": 5,
+        "above": "Sales Manager ("
+      },
+      "anchors": [
+        {
+          "subject": "Priya Shah",
+          "predicate": "role"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:as_of",
+      "question": "Where did Louisville buy bearings in 2025?",
+      "expected_answer": "Tri-County Bearing & Supply (same-day parts from Dana). From Jan 1, 2026 Kinetic Parts Direct is required.",
+      "key_points": [
+        "Tri-County",
+        "Kinetic from Jan 2026"
+      ],
+      "retrieval": {
+        "text": "Tri-County",
+        "top": 5,
+        "above": "Kinetic"
+      },
+      "anchors": [
+        {
+          "subject": "Louisville Branch (Jeffersontown)",
+          "predicate": "parts_vendor"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:current",
+      "question": "How many PTO days do employees get now?",
+      "expected_answer": "12 days a year after one year of service (2023 handbook). Changed: the 2017 handbook gave 10.",
+      "key_points": [
+        "12 days",
+        "2023 handbook",
+        "was 10 days"
+      ],
+      "retrieval": {
+        "text": "12 days",
+        "top": 5,
+        "above": "10 days"
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:change",
+      "question": "How has the emergency dispatch fee changed over the years?",
+      "expected_answer": "$95 call-out plus labor (2006 list) → $200 per hot job from March 2018 → $250 from January 1, 2025.",
+      "key_points": [
+        "$95 in 2006",
+        "$200 from 2018",
+        "$250 from 2025"
+      ],
+      "retrieval": {
+        "text_all": [
+          "$200",
+          "$250"
+        ],
+        "top": 8
+      },
+      "anchors": [
+        {
+          "subject": "Emergency Dispatch Fee",
+          "predicate": "amount"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:change",
+      "question": "When did the standard labor rate go up to $132?",
+      "expected_answer": "January 5, 2026, from $125 (overtime from $187.50 to $198). Louisville and Columbus FieldLine tables only caught up in May 2026.",
+      "key_points": [
+        "Jan 5 2026",
+        "from $125",
+        "Louisville/Columbus lagged until May"
+      ],
+      "retrieval": {
+        "text_all": [
+          "132",
+          "125"
+        ],
+        "top": 5
+      },
+      "anchors": [
+        {
+          "subject": "Standard labor rate",
+          "predicate": "rate"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:change",
+      "question": "How has Sarah Okafor's discount authority changed?",
+      "expected_answer": "June 1, 2025 (Dave's memo): up to 15%, above to Dave. Sept 1, 2025 (policy v3): every discount on deals under $50k. Oct 19, 2026 (Northgate policy): deals up to $75,000; above goes to the Northgate deal committee.",
+      "key_points": [
+        "15% from June 2025",
+        "deals under $50k from Sept 2025",
+        "up to $75k from Oct 19 2026, above Northgate committee"
+      ],
+      "retrieval": {
+        "text_all": [
+          "75,000",
+          "50,000"
+        ],
+        "top": 8
+      },
+      "anchors": [
+        {
+          "subject": "Sarah Okafor",
+          "predicate": "discount"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:change",
+      "question": "When did Blue Ridge Mills become Blue Ridge Food Processing?",
+      "expected_answer": "March 17, 2025, renamed under new parent Harvest Plains Foods; new domain blueridgefp.com. QuickBooks invoices changed from April 2025.",
+      "key_points": [
+        "March 17 2025",
+        "Harvest Plains Foods",
+        "April invoices"
+      ],
+      "retrieval": {
+        "text": "Harvest Plains",
+        "top": 5
+      },
+      "anchors": [
+        {
+          "subject": "Blue Ridge Food Processing LLC",
+          "predicate": "renamed"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:change",
+      "question": "When did Pinnacle 3PL change its legal name?",
+      "expected_answer": "August 18, 2025: Pinnacle Third-Party Logistics LLC became Ardent Pinnacle Logistics LLC (QuickBooks name kept until year-end).",
+      "key_points": [
+        "Aug 18 2025",
+        "Ardent Pinnacle Logistics"
+      ],
+      "retrieval": {
+        "text": "Ardent",
+        "top": 5
+      },
+      "anchors": [
+        {
+          "subject": "Pinnacle 3PL",
+          "predicate": "legal_name"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:change",
+      "question": "How did hot-job miscoding in Columbus change?",
+      "expected_answer": "Before July 2025 about 1 in 6 (~15%) hot jobs were coded T&M; after Gina's Monday reviews started it fell to about 3 of 100.",
+      "key_points": [
+        "~15% before",
+        "~3% after July 2025",
+        "Monday review"
+      ],
+      "retrieval": {
+        "text": "Monday",
+        "top": 5
+      },
+      "anchors": [
+        {
+          "subject": "Columbus Branch (Grove City)",
+          "predicate": "hot_job_miscoding"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:event",
+      "question": "What were Dave's office days before the sale closed, and after?",
+      "expected_answer": "Before the Sept 30, 2026 close: Tuesdays through Thursdays. After: Mondays, Tuesdays and Thursdays through December 29, 2026, to hand off knowledge.",
+      "key_points": [
+        "Tue–Thu before",
+        "Mon/Tue/Thu after",
+        "through Dec 29 2026"
+      ],
+      "retrieval": {
+        "text": "Thursday",
+        "top": 5
+      },
+      "anchors": [
+        {
+          "subject": "Dave Brennan",
+          "predicate": "work_schedule"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:event",
+      "question": "Who owned the Tri State Bottling account before Priya?",
+      "expected_answer": "Greg Whitfield, until he left in February 2026; Priya Shah since early March 2026 (QuickBooks still shows Greg).",
+      "key_points": [
+        "Greg Whitfield",
+        "Priya since March 2026"
+      ],
+      "retrieval": {
+        "text": "Greg",
+        "top": 5
+      },
+      "anchors": [
+        {
+          "subject": "Tri State Bottling",
+          "predicate": "account_owner"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:event",
+      "question": "Who covered the Kroll Logistics account before Tyler took it over?",
+      "expected_answer": "Priya Shah, temporarily, from April 2 to June 7, 2026; Tyler since June 8.",
+      "key_points": [
+        "Priya Shah temporarily",
+        "April–June 2026",
+        "Tyler from June 8"
+      ],
+      "retrieval": {
+        "text": "Kroll",
+        "top": 5
+      },
+      "anchors": [
+        {
+          "subject": "Kroll Logistics - Tri-County DC",
+          "predicate": "account_owner"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:stale",
+      "question": "Who can approve a discount over 10% today?",
+      "expected_answer": "Since Northgate's pricing policy took effect on Oct 19, 2026: Sarah Okafor approves deals up to $75,000, the Northgate deal committee above that, and Priya up to 10% on deals under $25,000. Changed: under policy v3 (Sept 2025) Sarah owned every discount under $50k and $50k+ went to Dave; from the Sept 30 close until Oct 19 that $50k+ step had no owner. The 2019 'Dave approves over 10%' rule is long outdated.",
+      "key_points": [
+        "Sarah up to $75k",
+        "Northgate deal committee above",
+        "since Oct 19 2026",
+        "previous policy v3 / 2019 Dave rule outdated"
+      ],
+      "retrieval": {
+        "text": "75,000",
+        "top": 3,
+        "above": "require Dave"
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:stale",
+      "question": "Is Harmon Auto Parts on credit hold right now?",
+      "expected_answer": "Yes. Since the May 14, 2026 payment plan it stays on hold until the plan is current for two consecutive months; emergency work only with written approval. Before: on hold since Dec 8, 2025 under Credit & Collections v2.",
+      "key_points": [
+        "yes, on hold",
+        "until two consecutive current months",
+        "on hold since Dec 2025"
+      ],
+      "retrieval": {
+        "text": "credit hold",
+        "top": 3
+      },
+      "anchors": [
+        {
+          "subject": "Harmon Auto Parts DC (Obetz)",
+          "predicate": "credit_hold"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal:stale",
+      "question": "What does Midwest Galvanizing owe us?",
+      "expected_answer": "Unclear: the Nov 4, 2025 aging email shows $107,908.88 open, while an undated QuickBooks snapshot shows $14,203.67, the two disagree and need the export date.",
+      "key_points": [
+        "$107,908.88 as of Nov 2025",
+        "$14,203.67 undated",
+        "flags the disagreement"
+      ],
+      "retrieval": {
+        "text_all": [
+          "107,908.88",
+          "14,203.67"
+        ],
+        "top": 8
+      }
+    }
+  ]
+}

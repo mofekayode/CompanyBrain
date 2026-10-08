@@ -1,0 +1,914 @@
+{
+  "name": "Evidence-derived v1",
+  "description": "Written in a Claude Code session from Riverton's own files (interviews, documents, email, system exports), not from the sealed truth. Data checks test the model (aliases, counts, timelines, links, access); questions test search and answers with cited sources.",
+  "items": [
+    {
+      "kind": "data_check",
+      "category": "alias",
+      "question": "'Big Blue' resolves to Blue Ridge Food Processing",
+      "assertion": {
+        "type": "alias_resolves",
+        "entity_type": "Customer",
+        "alias": "Big Blue",
+        "entity": "Blue Ridge Food Processing LLC"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "alias",
+      "question": "'Fifer' resolves to Pfeiffer Brothers Meats",
+      "assertion": {
+        "type": "alias_resolves",
+        "entity_type": "Customer",
+        "alias": "Fifer",
+        "entity": "Pfeiffer Brothers Meats"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "alias",
+      "question": "'K-Plate' resolves to Kentuckiana Plating Works",
+      "assertion": {
+        "type": "alias_resolves",
+        "entity_type": "Customer",
+        "alias": "K-Plate",
+        "entity": "Kentuckiana Plating Works"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "alias",
+      "question": "Old name 'Kemper Molding' resolves to Kemper Plastics Corp.",
+      "assertion": {
+        "type": "alias_resolves",
+        "entity_type": "Customer",
+        "alias": "Kemper Molding",
+        "entity": "Kemper Plastics Corp."
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "alias",
+      "question": "'Midwest Gals' resolves to Midwest Galvanizing",
+      "assertion": {
+        "type": "alias_resolves",
+        "entity_type": "Customer",
+        "alias": "Midwest Gals",
+        "entity": "Midwest Galvanizing"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "alias",
+      "question": "'the freezer' resolves to Ohio Valley Cold Storage",
+      "assertion": {
+        "type": "alias_resolves",
+        "entity_type": "Customer",
+        "alias": "the freezer",
+        "entity": "Ohio Valley Cold Storage"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "alias",
+      "question": "'QC' resolves to Queen City Paper & Packaging",
+      "assertion": {
+        "type": "alias_resolves",
+        "entity_type": "Customer",
+        "alias": "QC",
+        "entity": "Queen City Paper & Packaging"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "alias",
+      "question": "'J-town' resolves to the Louisville branch",
+      "assertion": {
+        "type": "alias_resolves",
+        "entity_type": "Branch",
+        "alias": "J-town",
+        "entity": "Louisville Branch (Jeffersontown)"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "alias",
+      "question": "'Falls City Pump' (acquired 2012) resolves to the Louisville branch",
+      "assertion": {
+        "type": "alias_resolves",
+        "entity_type": "Branch",
+        "alias": "Falls City Pump",
+        "entity": "Louisville Branch (Jeffersontown)"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "alias",
+      "question": "'Grove City' resolves to the Columbus branch",
+      "assertion": {
+        "type": "alias_resolves",
+        "entity_type": "Branch",
+        "alias": "Grove City",
+        "entity": "Columbus Branch (Grove City)"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "alias",
+      "question": "'P17' is the failing pump TP-17 at Blue Ridge Hamilton (not a customer or site)",
+      "assertion": {
+        "type": "alias_resolves",
+        "entity_type": "Asset",
+        "alias": "P17",
+        "entity": "TP-17"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "alias",
+      "question": "'J-town Mike' resolves to Mike Hargrove",
+      "assertion": {
+        "type": "alias_resolves",
+        "entity_type": "Person",
+        "alias": "J-town Mike",
+        "entity": "Mike Hargrove"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "alias",
+      "question": "'Cincy Pump' resolves to Cincinnati Pump & Fluid Systems",
+      "assertion": {
+        "type": "alias_resolves",
+        "entity_type": "Vendor",
+        "alias": "Cincy Pump",
+        "entity": "Cincinnati Pump & Fluid Systems"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "alias",
+      "question": "'hot job' resolves to Emergency Labor (Hot Job)",
+      "assertion": {
+        "type": "alias_resolves",
+        "entity_type": "Service Item",
+        "alias": "hot job",
+        "entity": "Emergency Labor (Hot Job)"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "aggregation",
+      "question": "Riverton has exactly three branches (Oakley, Louisville, Columbus)",
+      "assertion": {
+        "type": "entity_count",
+        "entity_type": "Branch",
+        "min": 3,
+        "max": 3
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "aggregation",
+      "question": "Customer count is in a plausible range after de-duplication (~200-240)",
+      "assertion": {
+        "type": "entity_count",
+        "entity_type": "Customer",
+        "min": 200,
+        "max": 240
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "aggregation",
+      "question": "Vendor count is in a plausible range (25-45)",
+      "assertion": {
+        "type": "entity_count",
+        "entity_type": "Vendor",
+        "min": 25,
+        "max": 45
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "aggregation",
+      "question": "People (staff, former staff, guests, contacts named in records) number 100-125",
+      "assertion": {
+        "type": "entity_count",
+        "entity_type": "Person",
+        "min": 100,
+        "max": 125
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "temporal",
+      "question": "Standard labor rate in March 2026 is $132/hr",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Standard labor rate",
+        "predicate_hint": "rate",
+        "value_hint": "132",
+        "as_of": "2026-03-01"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "temporal",
+      "question": "On-call stipend in mid-2025 was $50/week",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "On-call",
+        "predicate_hint": "stipend",
+        "value_hint": "$50",
+        "as_of": "2025-06-01"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "temporal",
+      "question": "On-call stipend in 2026 is $75/week",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "On-call stipend",
+        "predicate_hint": "on_call",
+        "value_hint": "$75",
+        "as_of": "2026-03-01"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "temporal",
+      "question": "Louisville FieldLine rate table billed $125 in early 2026",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "J-town",
+        "predicate_hint": "labor_rate",
+        "value_hint": "125",
+        "as_of": "2026-03-01"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "lookup",
+      "question": "Kemper parts markup is cost plus 38%",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Kemper Molding",
+        "predicate_hint": "markup",
+        "value_hint": "38",
+        "as_of": null
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "lookup",
+      "question": "A PO is required for purchases over $500",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Purchase order",
+        "predicate_hint": "po_required",
+        "value_hint": "500",
+        "as_of": null
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "lookup",
+      "question": "Ohio Pump Salvage takes orders by phone only",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Ohio Pump Salvage",
+        "predicate_hint": "ordering",
+        "value_hint": "phone",
+        "as_of": null
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "key_person",
+      "question": "Mike Hargrove is the only tech who services the Kessler ZX pumps",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Mike Hargrove",
+        "predicate_hint": "zx",
+        "value_hint": "Kessler ZX",
+        "as_of": null
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "lookup",
+      "question": "Kinetic Parts Direct replaced Tri-County Bearing & Supply",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Kinetic Parts Direct",
+        "predicate_hint": "replaced",
+        "value_hint": "Tri-County",
+        "as_of": null
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "lookup",
+      "question": "Norwood Ice's account manager after Greg left was Priya Shah",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Norwood Ice",
+        "predicate_hint": "account_manager",
+        "value_hint": "Priya",
+        "as_of": null
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "lookup",
+      "question": "Harmon payment plan: an installment over 15 days late accelerates the balance",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Harmon Auto Parts DC (Obetz)",
+        "predicate_hint": "acceleration",
+        "value_hint": "15 days",
+        "as_of": null
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "lookup",
+      "question": "Sarah Okafor can approve discounted deals up to $75,000",
+      "assertion": {
+        "type": "fact_value",
+        "subject": "Sarah Okafor",
+        "predicate_hint": "discount",
+        "value_hint": "75,000",
+        "as_of": null
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "resolution",
+      "question": "Mike Hargrove is based at the Louisville branch",
+      "assertion": {
+        "type": "relation_exists",
+        "source": "Mike Hargrove",
+        "relationship": "based_at",
+        "target": "Louisville Branch (Jeffersontown)"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "resolution",
+      "question": "Mike Hargis is based at Oakley",
+      "assertion": {
+        "type": "relation_exists",
+        "source": "Mike Hargis",
+        "relationship": "based_at",
+        "target": "Oakley HQ & Main Shop"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "resolution",
+      "question": "Mike Hargrove reports to Marcus Bell",
+      "assertion": {
+        "type": "relation_exists",
+        "source": "Mike Hargrove",
+        "relationship": "reports_to",
+        "target": "Marcus Bell"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "resolution",
+      "question": "TP-17 is at the Blue Ridge Hamilton Plant",
+      "assertion": {
+        "type": "relation_exists",
+        "source": "TP-17",
+        "relationship": "located_at",
+        "target": "Hamilton Plant"
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "permission",
+      "question": "Linda Marsh can open her own mailbox",
+      "assertion": {
+        "type": "person_access",
+        "person": "Linda Marsh",
+        "path_hint": "mail/linda.marsh.mbox",
+        "can_open": true
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "permission",
+      "question": "A field tech cannot open the controller's mailbox",
+      "assertion": {
+        "type": "person_access",
+        "person": "Jamal Whitaker",
+        "path_hint": "mail/linda.marsh.mbox",
+        "can_open": false
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "permission",
+      "question": "A field tech cannot open payroll detail",
+      "assertion": {
+        "type": "person_access",
+        "person": "Jamal Whitaker",
+        "path_hint": "payroll stuff/adp_employee_detail",
+        "can_open": false
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "permission",
+      "question": "A field tech cannot open the 2026 comp review",
+      "assertion": {
+        "type": "person_access",
+        "person": "Jamal Whitaker",
+        "path_hint": "Comp review 2026",
+        "can_open": false
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "permission",
+      "question": "A field tech cannot open the deal data-room access report",
+      "assertion": {
+        "type": "person_access",
+        "person": "Jamal Whitaker",
+        "path_hint": "VDR_User_Access_Report",
+        "can_open": false
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "permission",
+      "question": "A Louisville tech can open Louisville customer files",
+      "assertion": {
+        "type": "person_access",
+        "person": "Mike Hargrove",
+        "path_hint": "Louisville/Customers/Bluegrass proposal",
+        "can_open": true
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "permission",
+      "question": "A Columbus tech cannot open Louisville customer files",
+      "assertion": {
+        "type": "person_access",
+        "person": "Erin Haddad",
+        "path_hint": "Louisville/Customers/Bluegrass proposal",
+        "can_open": false
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "permission",
+      "question": "Sales can open the 2026 Blue Book",
+      "assertion": {
+        "type": "person_access",
+        "person": "Priya Shah",
+        "path_hint": "Blue Book 2026",
+        "can_open": true
+      }
+    },
+    {
+      "kind": "data_check",
+      "category": "permission",
+      "question": "Every employee can open the 2023 Employee Handbook",
+      "assertion": {
+        "type": "person_access",
+        "person": "Jamal Whitaker",
+        "path_hint": "HR/Handbook/Employee Handbook 2023",
+        "can_open": true
+      }
+    },
+    {
+      "kind": "question",
+      "category": "key_person",
+      "difficulty": "hard",
+      "question": "Who is the only person who can rebuild the Kessler ZX pumps, and what is the risk?",
+      "expected_answer": "Mike Hargrove at the Louisville (J-town) branch, often confused with Mike Hargis at Oakley. He is the only tech who services and rebuilds the 14 Kessler ZX pumps (Kessler stopped making them around 2012-13). Parts come only from Gary Lindquist at Ohio Pump Salvage, by phone, and Mike is the only one who calls him. His shim technique for worn casings is undocumented, and his retirement timing is unclear (one interview says next June, another says unknown).",
+      "key_points": [
+        "Mike Hargrove, Louisville",
+        "only ZX specialist",
+        "parts only via Gary at Ohio Pump Salvage, phone only",
+        "undocumented shim technique",
+        "retirement timing unclear"
+      ],
+      "anchors": [
+        {
+          "subject": "Mike Hargrove",
+          "predicate": "zx"
+        },
+        {
+          "subject": "Ohio Pump Salvage",
+          "predicate": "critical_parts"
+        },
+        {
+          "subject": "Mike Hargrove",
+          "predicate": "retiring"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal",
+      "difficulty": "medium",
+      "question": "What is the standard labor rate, what was it before, and what went wrong with the change?",
+      "expected_answer": "$132/hr standard and $198/hr overtime from January 2026 (was $125). Only Oakley's FieldLine rate table was updated; Louisville and Columbus tables and the quote template stayed at $125 until about May 11, 2026. Nobody owns updating rates everywhere.",
+      "key_points": [
+        "$132 from Jan 2026",
+        "was $125",
+        "$198 OT",
+        "Louisville/Columbus FieldLine and quote template stayed at $125 until May",
+        "no owner for rate changes"
+      ],
+      "anchors": [
+        {
+          "subject": "Standard labor rate",
+          "predicate": "rate"
+        },
+        {
+          "subject": "Louisville Branch (Jeffersontown)",
+          "predicate": "underbilled"
+        },
+        {
+          "subject": "Service Labor",
+          "predicate": "rate_change_owner"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "exception",
+      "difficulty": "hard",
+      "question": "Which customers don't get charged the emergency dispatch fee, and is that allowed?",
+      "expected_answer": "Dave's long-standing customers: Kemper Plastics, Queen City Paper, Hartwell Precision, Pfeiffer Brothers and Mill Creek Rendering (Rhonda removes the $250 fee at billing). Policy says exceptions need Dave or Sarah to approve in writing, and none are documented.",
+      "key_points": [
+        "Kemper, Queen City, Hartwell, Pfeiffer, Mill Creek",
+        "$250 fee removed at billing by Rhonda",
+        "written approval by Dave or Sarah required",
+        "no documented list"
+      ],
+      "anchors": [
+        {
+          "subject": "Kemper Plastics Corp.",
+          "predicate": "waives_dispatch_fee"
+        },
+        {
+          "subject": "Mill Creek Rendering",
+          "predicate": "waives_dispatch_fee"
+        },
+        {
+          "subject": "Emergency Dispatch Fee",
+          "predicate": "exception_approval"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "alias",
+      "difficulty": "easy",
+      "question": "Who is 'Big Blue'?",
+      "expected_answer": "Blue Ridge Food Processing, Riverton's biggest customer since 2006, with the Hamilton and Florence plants. The relationship is moving from Dave Brennan to Sarah Okafor.",
+      "key_points": [
+        "Blue Ridge Food Processing",
+        "biggest customer",
+        "Hamilton and Florence plants",
+        "moving from Dave to Sarah"
+      ],
+      "anchors": [
+        {
+          "subject": "Blue Ridge Food Processing LLC",
+          "predicate": "customer_since"
+        },
+        {
+          "subject": "Blue Ridge Food Processing LLC",
+          "predicate": "relationship_transition"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "exception",
+      "difficulty": "hard",
+      "question": "Who can approve a discount over 10%?",
+      "expected_answer": "Sarah Okafor, on deals up to $75,000; above that it goes to the Northgate deal committee. The Sales Manager's own limit is 10% (sources disagree on whether the cap is deals under $25k or $50k). The 'Pricing Policy 2025 Final' giving 12% is an unsigned draft that was never approved.",
+      "key_points": [
+        "Sarah up to $75k",
+        "above to Northgate deal committee",
+        "sales manager 10%, threshold disputed",
+        "12% 'Final' policy never approved"
+      ],
+      "anchors": [
+        {
+          "subject": "Sarah Okafor",
+          "predicate": "discount"
+        },
+        {
+          "subject": "Sales Manager",
+          "predicate": "discount"
+        },
+        {
+          "subject": "Oakley HQ & Main Shop",
+          "predicate": "pricing_policy_status"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "multi_hop",
+      "difficulty": "hard",
+      "question": "What is going on with Harmon Auto Parts' account?",
+      "expected_answer": "A long-time slow payer that went 90+ days (~$86k). Dave overrode the credit hold. Linda Marsh signed a payment plan on May 14, 2026; any installment more than 15 days late makes the whole balance due. Payments have come in off schedule, with over $30k of the plan unpaid.",
+      "key_points": [
+        "slow payer, 90+ days",
+        "credit hold overridden",
+        "payment plan signed May 14 2026 by Linda",
+        "15-day acceleration clause",
+        "off schedule / >$30k unpaid"
+      ],
+      "anchors": [
+        {
+          "subject": "Harmon Auto Parts DC (Obetz)",
+          "predicate": "payment_plan"
+        },
+        {
+          "subject": "Harmon Auto Parts DC (Obetz)",
+          "predicate": "acceleration"
+        },
+        {
+          "subject": "Linda Marsh",
+          "predicate": "harmon"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "lookup",
+      "difficulty": "medium",
+      "question": "What is the lockout rule for ammonia refrigeration work?",
+      "expected_answer": "SOP-LOTO Rev 4 requires two-person verification for ammonia systems and anything with stored pressure over 150 psi; the verifier signs the LOTO tag log before work starts, and if no verifier is available you stop and call dispatch. The old Rev 3 / 2024 video showing one person is wrong. Brian Teller is the ammonia-certified tech.",
+      "key_points": [
+        "two-person verification",
+        "ammonia and >150 psi",
+        "verifier signs tag log first",
+        "old single-person video is wrong",
+        "Brian Teller"
+      ],
+      "anchors": [
+        {
+          "subject": "Oakley HQ & Main Shop",
+          "predicate": "loto_two_person"
+        },
+        {
+          "subject": "SOP-LOTO Rev 3",
+          "predicate": "verifier"
+        },
+        {
+          "subject": "Jim Polk",
+          "predicate": "outdated_training"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "key_person",
+      "difficulty": "medium",
+      "question": "What site knowledge is at risk in Columbus?",
+      "expected_answer": "Tom Jablonski's site contacts, gate rules and PPE notes were in his head and laptop; his notes cover only Olentangy Glass. Phil Gorman is the only tech allowed on Olentangy's IS machines. Erin Haddad is the only Columbus refrigeration tech. Gina Marchetti was to document all sites in FieldLine by Aug 15, 2025.",
+      "key_points": [
+        "Tom's notes only Olentangy",
+        "Phil only on IS machines",
+        "Erin only refrigeration tech",
+        "site documentation deadline Aug 15 2025, Gina checks"
+      ],
+      "anchors": [
+        {
+          "subject": "Columbus Branch (Grove City)",
+          "predicate": "site_knowledge_gap"
+        },
+        {
+          "subject": "Phil Gorman",
+          "predicate": "sole_tech"
+        },
+        {
+          "subject": "Erin Haddad",
+          "predicate": "on_call"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "exception",
+      "difficulty": "medium",
+      "question": "Which parts vendor should Louisville use, and are they following it?",
+      "expected_answer": "Kinetic Parts Direct from January 1, 2026 (about 12% cheaper); Tri-County only for genuine same-day emergencies with an exception note on the PO. Louisville still buys bearings and seals from Tri-County. Marcus Bell owns compliance.",
+      "key_points": [
+        "Kinetic from Jan 2026",
+        "~12% cheaper",
+        "Tri-County emergencies only with PO note",
+        "Louisville still buys from Tri-County",
+        "Marcus owns compliance"
+      ],
+      "anchors": [
+        {
+          "subject": "Louisville Branch (Jeffersontown)",
+          "predicate": "parts_vendor"
+        },
+        {
+          "subject": "Louisville Branch (Jeffersontown)",
+          "predicate": "still_buys"
+        },
+        {
+          "subject": "Kinetic Parts Direct",
+          "predicate": "price_advantage"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "permission",
+      "difficulty": "hard",
+      "persona": "Jamal Whitaker",
+      "question": "Is Riverton being sold?",
+      "expected_answer": "Yes, Dave told All Staff on Aug 10, 2026 that Riverton is being sold to Northgate Industrial Partners, and on Sept 30, 2026 that the deal closed with Sarah Okafor as President. A field tech can see this because it was sent to All Staff; the deal documents themselves (LOI, SPA, data room) stay restricted.",
+      "key_points": [
+        "yes, sold to Northgate",
+        "announced to All Staff Aug 10 2026",
+        "closed Sept 30 2026",
+        "does not reveal LOI/SPA terms or data-room documents"
+      ],
+      "retrieval": {
+        "text": "Northgate",
+        "kind": "email_body",
+        "top": 10
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal",
+      "difficulty": "medium",
+      "question": "When does the Northgate deal close and what changes for Dave and Sarah?",
+      "expected_answer": "LOI executed in April 2026 with exclusivity; the stock purchase agreement was executed September 30, 2026. Sarah Okafor becomes President; Dave Brennan works Mon/Tue/Thu through December 29, 2026, to hand off knowledge.",
+      "key_points": [
+        "LOI April 2026",
+        "SPA executed Sept 30 2026",
+        "Sarah becomes President",
+        "Dave part-time through Dec 29 2026"
+      ],
+      "anchors": [
+        {
+          "subject": "Oakley HQ & Main Shop",
+          "predicate": "loi"
+        },
+        {
+          "subject": "Stock Purchase Agreement",
+          "predicate": "executed"
+        },
+        {
+          "subject": "Dave Brennan",
+          "predicate": "work_schedule"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "unanswerable",
+      "difficulty": "easy",
+      "question": "What is Riverton's approved 2027 budget?",
+      "expected_answer": "Not in the files. The system should say it can't find a 2027 budget, not make one up.",
+      "key_points": [
+        "says not found",
+        "no invented numbers"
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "temporal",
+      "difficulty": "easy",
+      "question": "How much is the on-call stipend?",
+      "expected_answer": "$75 per week plus pay for hours worked on calls, from January 2026; before that it was $50 per week.",
+      "key_points": [
+        "$75/week from 2026",
+        "was $50/week",
+        "plus hours worked"
+      ],
+      "anchors": [
+        {
+          "subject": "On-call stipend",
+          "predicate": "on_call_pay"
+        },
+        {
+          "subject": "On-call",
+          "predicate": "on_call_stipend"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "multi_hop",
+      "difficulty": "hard",
+      "question": "Why does Kemper lose money and how should a price increase be handled?",
+      "expected_answer": "A 2019 contract priced below cost with no escalator applied: about -7% job margin on ~$429k FY2025 revenue (~$32k loss). Talk to Dave first, then call Frank Kemper personally before any increase, leading with rising costs (Kemper is one of Dave's protected customers; Frank prepaid a year of service in 2009).",
+      "key_points": [
+        "2019 contract below cost",
+        "about -7% margin, ~$32k loss",
+        "talk to Dave, then call Frank personally",
+        "protected customer history"
+      ],
+      "anchors": [
+        {
+          "subject": "Kemper Plastics Corp.",
+          "predicate": "negative_margin"
+        },
+        {
+          "subject": "Kemper Plastics Corp.",
+          "predicate": "price_change"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "multimodal",
+      "difficulty": "hard",
+      "question": "Which pump at Blue Ridge Hamilton keeps failing and what fixed it?",
+      "expected_answer": "TP-17 ('P17'), a Grundfos CR90-3 whose seal kept leaking under the coupling guard. The failures had been written up as coupling problems after laser alignment. Replacing the 3-inch suction with 4-inch and an eccentric reducer (flat side up) stopped the leaks.",
+      "key_points": [
+        "TP-17 / P17, Grundfos CR90-3",
+        "repeated seal leaks",
+        "misdiagnosed as coupling",
+        "4-inch suction + eccentric reducer flat side up"
+      ],
+      "anchors": [
+        {
+          "subject": "TP-17",
+          "predicate": "recurring_failure"
+        },
+        {
+          "subject": "Hamilton Plant",
+          "predicate": "pump_17"
+        },
+        {
+          "subject": "Hamilton Plant",
+          "predicate": "misdiagnosis"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "exception",
+      "difficulty": "medium",
+      "question": "Is the Ohio Valley Cold Storage Monroe building billed correctly?",
+      "expected_answer": "No, the PM agreement covers only the West Chester facility, so the Monroe building (opened April 2026) is being billed time-and-materials when it should be on PM.",
+      "key_points": [
+        "PM covers West Chester only",
+        "Monroe opened April 2026",
+        "Monroe billed T&M, should be PM"
+      ],
+      "anchors": [
+        {
+          "subject": "Ohio Valley Cold Storage",
+          "predicate": "pm_covered_site"
+        },
+        {
+          "subject": "Ohio Valley Cold Storage",
+          "predicate": "opened_second_site"
+        }
+      ]
+    },
+    {
+      "kind": "question",
+      "category": "key_person",
+      "difficulty": "hard",
+      "question": "Who can sign R-stamp repairs after Dave leaves?",
+      "expected_answer": "Nobody yet. Dave Brennan is the named QC program manager; after he leaves on Dec 29 no one can sign R work until the quality manual is amended and accepted. Ray Tillman is the intended successor but isn't trained. The steel stamp is in the safe in Linda's office. R work is about $60k a year.",
+      "key_points": [
+        "Dave is QC program manager",
+        "gap after Dec 29 until manual amended",
+        "Ray intended but untrained",
+        "stamp in Linda's safe",
+        "~$60k/yr"
+      ],
+      "anchors": [
+        {
+          "subject": "Oakley HQ & Main Shop",
+          "predicate": "r_stamp_qc"
+        },
+        {
+          "subject": "Ray Tillman",
+          "predicate": "qc_successor"
+        },
+        {
+          "subject": "Oakley HQ & Main Shop",
+          "predicate": "r_stamp_storage"
+        }
+      ]
+    }
+  ]
+}

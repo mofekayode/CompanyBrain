@@ -1,0 +1,238 @@
+{
+  "name": "Retrieval probes v1",
+  "description": "Search-only probes written from Riverton's evidence: one capability each (aliases, jargon, typos, exact codes, audio, video, OCR, photos, email, tables, time, access). Pass = the expected thing is in the top results.",
+  "items": [
+    {
+      "kind": "question",
+      "category": "alias",
+      "question": "Big Blue payment terms",
+      "retrieval": {
+        "entity": "Blue Ridge Food Processing LLC",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "alias",
+      "question": "Fifer night work",
+      "retrieval": {
+        "entity": "Pfeiffer Brothers Meats",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "alias",
+      "question": "K-Plate open balance",
+      "retrieval": {
+        "entity": "Kentuckiana Plating Works",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "jargon",
+      "question": "who still buys bearings from Tri-County in J-town",
+      "retrieval": {
+        "entity": "Louisville Branch (Jeffersontown)",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "jargon",
+      "question": "what counts as a hot job",
+      "retrieval": {
+        "entity": "Emergency Labor (Hot Job)",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "misspelling",
+      "question": "Kentuckianna Plateing Works",
+      "retrieval": {
+        "entity": "Kentuckiana Plating Works",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "misspelling",
+      "question": "Olentangi glass IS machines",
+      "retrieval": {
+        "entity": "Olentangy Glass Container",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "exact",
+      "question": "TP-17",
+      "retrieval": {
+        "entity": "TP-17",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "exact",
+      "question": "Q26-1104 pump skid quote",
+      "retrieval": {
+        "text": "Q26-1104",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "audio",
+      "question": "Frank Kemper prepaid a year of service to help make payroll",
+      "retrieval": {
+        "kind": "transcript_segment",
+        "text": "Kemper",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "audio",
+      "question": "shim behind the impeller to restore clearance on the ZX",
+      "retrieval": {
+        "kind": "transcript_segment",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "video",
+      "question": "screen recording of the Mill Creek work order and QuickBooks invoice",
+      "retrieval": {
+        "kind": "video_segment",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "video",
+      "question": "pump seal leaking again under the coupling guard",
+      "retrieval": {
+        "kind": "video_segment",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "ocr",
+      "question": "bank release of personal guaranty on the line of credit",
+      "retrieval": {
+        "kind": "ocr",
+        "path": "Scan_00602",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "photo",
+      "question": "FieldLine dispatch board screenshot",
+      "retrieval": {
+        "kind": "image",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "email",
+      "question": "Harmon payment plan payments off schedule",
+      "retrieval": {
+        "kind": "email_body",
+        "text": "Harmon",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "table",
+      "question": "Kroll Logistics account owner",
+      "retrieval": {
+        "text": "Kroll",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal",
+      "question": "standard labor rate in 2025",
+      "retrieval": {
+        "text": "125",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal",
+      "question": "current standard labor rate",
+      "retrieval": {
+        "text": "132",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "semantic",
+      "question": "who knows how to fix the old discontinued pumps nobody else understands",
+      "retrieval": {
+        "entity": "Mike Hargrove",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "semantic",
+      "question": "customers we lose money on",
+      "retrieval": {
+        "entity": "Kemper Plastics Corp.",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "permission",
+      "persona": "Jamal Whitaker",
+      "question": "comp review 2026 salary increases",
+      "retrieval": {
+        "forbid_path": "Comp review 2026",
+        "top": 10
+      }
+    },
+    {
+      "kind": "question",
+      "category": "permission",
+      "persona": "Jamal Whitaker",
+      "question": "Northgate letter of intent exclusivity",
+      "retrieval": {
+        "forbid_path": "Owners & Execs/",
+        "top": 10
+      }
+    },
+    {
+      "kind": "question",
+      "category": "permission",
+      "persona": "Erin Haddad",
+      "question": "Bluegrass proposal signed",
+      "retrieval": {
+        "forbid_path": "Louisville/Customers",
+        "top": 10
+      }
+    },
+    {
+      "kind": "question",
+      "category": "permission",
+      "persona": "Mike Hargrove",
+      "question": "Bluegrass proposal signed",
+      "retrieval": {
+        "path": "Louisville/Customers",
+        "top": 10
+      }
+    }
+  ]
+}

@@ -1,0 +1,1146 @@
+{
+  "name": "Temporal (all timelines) auto",
+  "description": "Generated from every fact timeline: one as-of question per period and one current question per chain. Era ordering must be right.",
+  "items": [
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the job closeout policy of Oakley HQ & Main Shop in August 2025?",
+      "expected_answer": "Every job closed out on the FieldLine tablet before leaving the site (2025-03-10 → 2026-01-05)",
+      "key_points": [
+        "Every job closed out on the FieldLine tablet before leaving the site"
+      ],
+      "retrieval": {
+        "text": "FieldLine",
+        "above": "same",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the job closeout policy of Oakley HQ & Main Shop in February 2026?",
+      "expected_answer": "Every job closed on the tablet same day with notes a stranger could follow (2026-01-05 → now)",
+      "key_points": [
+        "Every job closed on the tablet same day with notes a stranger could follow"
+      ],
+      "retrieval": {
+        "text": "same",
+        "above": "FieldLine",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the job closeout policy of Oakley HQ & Main Shop now?",
+      "expected_answer": "Every job closed on the tablet same day with notes a stranger could follow since 2026-01-05; before: Every job closed out on the FieldLine tablet before leaving the site",
+      "key_points": [
+        "Every job closed on the tablet same day with notes a stranger could follow",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "same",
+        "above": "FieldLine",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the account manager of Kemper Plastics Corp. in January 2026?",
+      "expected_answer": "Greg Whitfield (… → 2026-02-18)",
+      "key_points": [
+        "Greg Whitfield"
+      ],
+      "retrieval": {
+        "text": "Greg",
+        "above": "Priya",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the account manager of Kemper Plastics Corp. in April 2026?",
+      "expected_answer": "Priya Shah (2026-02-18 → now)",
+      "key_points": [
+        "Priya Shah"
+      ],
+      "retrieval": {
+        "text": "Priya",
+        "above": "Greg",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the account manager of Kemper Plastics Corp. now?",
+      "expected_answer": "Priya Shah since 2026-02-18; before: Greg Whitfield",
+      "key_points": [
+        "Priya Shah",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "Priya",
+        "above": "Greg",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the parts vendor of Louisville Branch (Jeffersontown) in November 2025?",
+      "expected_answer": "Tri-County Bearing & Supply (same-day parts from Dana, 15 minutes away) (… → 2026-01-01)",
+      "key_points": [
+        "Tri-County Bearing & Supply (same-day parts from Dana, 15 minutes away)"
+      ],
+      "retrieval": {
+        "text": "Bearing",
+        "above": "Kinetic",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the parts vendor of Louisville Branch (Jeffersontown) in February 2026?",
+      "expected_answer": "Kinetic Parts Direct required from 2026-01-01, no phase-in; Tri-County only for genuine emergencies with PO exception note; Marcus owns compliance (2026-01-01 → now)",
+      "key_points": [
+        "Kinetic Parts Direct required from 2026-01-01, no phase-in; Tri-County only for genuine emergencies with PO exception note; Marcus owns compliance"
+      ],
+      "retrieval": {
+        "text": "Kinetic",
+        "above": "Bearing",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the parts vendor of Louisville Branch (Jeffersontown) now?",
+      "expected_answer": "Kinetic Parts Direct required from 2026-01-01, no phase-in; Tri-County only for genuine emergencies with PO exception note; Marcus owns compliance since 2026-01-01; before: Tri-County Bearing & Supply (same-day parts from Dana, 15 minutes away)",
+      "key_points": [
+        "Kinetic Parts Direct required from 2026-01-01, no phase-in; Tri-County only for genuine emergencies with PO exception note; Marcus owns compliance",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "Kinetic",
+        "above": "Bearing",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the role of Sarah Okafor in January 2020?",
+      "expected_answer": "Operations Manager (2014-08-11 → 2025-06-01)",
+      "key_points": [
+        "Operations Manager"
+      ],
+      "retrieval": {
+        "text": "Operations",
+        "above": "General",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the role of Sarah Okafor in January 2026?",
+      "expected_answer": "General Manager (2025-06-01 → 2026-09-30)",
+      "key_points": [
+        "General Manager"
+      ],
+      "retrieval": {
+        "text": "General",
+        "above": "Operations",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the role of Sarah Okafor in November 2026?",
+      "expected_answer": "President (from the Northgate close) (2026-09-30 → now)",
+      "key_points": [
+        "President (from the Northgate close)"
+      ],
+      "retrieval": {
+        "text": "President",
+        "above": "Operations",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the role of Sarah Okafor now?",
+      "expected_answer": "President (from the Northgate close) since 2026-09-30; before: Operations Manager → General Manager",
+      "key_points": [
+        "President (from the Northgate close)",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "President",
+        "above": "Operations",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the work schedule of Dave Brennan in August 2026?",
+      "expected_answer": "In the office Tuesdays through Thursdays (… → 2026-09-30)",
+      "key_points": [
+        "In the office Tuesdays through Thursdays"
+      ],
+      "retrieval": {
+        "text": "office",
+        "above": "Mondays",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the work schedule of Dave Brennan in November 2026?",
+      "expected_answer": "In Mondays, Tuesdays and Thursdays through December 29, 2026, to hand off knowledge (2026-10-01 → 2026-12-29)",
+      "key_points": [
+        "In Mondays, Tuesdays and Thursdays through December 29, 2026, to hand off knowledge"
+      ],
+      "retrieval": {
+        "text": "Mondays",
+        "above": "office",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the branch manager of Columbus Branch (Grove City) in March 2023?",
+      "expected_answer": "Tom Jablonski (2021-01-01 → 2025-06-02)",
+      "key_points": [
+        "Tom Jablonski"
+      ],
+      "retrieval": {
+        "text": "Jablonski",
+        "above": "Andrea",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the branch manager of Columbus Branch (Grove City) in July 2025?",
+      "expected_answer": "Andrea Reyes (2025-06-02 → now)",
+      "key_points": [
+        "Andrea Reyes"
+      ],
+      "retrieval": {
+        "text": "Andrea",
+        "above": "Jablonski",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the branch manager of Columbus Branch (Grove City) now?",
+      "expected_answer": "Andrea Reyes since 2025-06-02; before: Tom Jablonski",
+      "key_points": [
+        "Andrea Reyes",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "Andrea",
+        "above": "Jablonski",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the hot job miscoding rate of Columbus Branch (Grove City) in May 2025?",
+      "expected_answer": "About 15% of obvious hot jobs coded as T&M (… → 2025-07-01)",
+      "key_points": [
+        "About 15% of obvious hot jobs coded as T&M"
+      ],
+      "retrieval": {
+        "text": "15%",
+        "above": "3%",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the hot job miscoding rate of Columbus Branch (Grove City) in August 2025?",
+      "expected_answer": "About 3% (3 of roughly 100) (2025-07-01 → now)",
+      "key_points": [
+        "About 3% (3 of roughly 100)"
+      ],
+      "retrieval": {
+        "text": "3%",
+        "above": "15%",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the hot job miscoding rate of Columbus Branch (Grove City) now?",
+      "expected_answer": "About 3% (3 of roughly 100) since 2025-07-01; before: About 15% of obvious hot jobs coded as T&M",
+      "key_points": [
+        "About 3% (3 of roughly 100)",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "3%",
+        "above": "15%",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the account owner of Tri State Bottling in January 2026?",
+      "expected_answer": "Greg (… → 2026-02-28)",
+      "key_points": [
+        "Greg"
+      ],
+      "retrieval": {
+        "text": "Greg",
+        "above": "Priya",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the account owner of Tri State Bottling in April 2026?",
+      "expected_answer": "Priya Shah (2026-03-02 → now)",
+      "key_points": [
+        "Priya Shah"
+      ],
+      "retrieval": {
+        "text": "Priya",
+        "above": "Greg",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the account owner of Tri State Bottling now?",
+      "expected_answer": "Priya Shah since 2026-03-02; before: Greg",
+      "key_points": [
+        "Priya Shah",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "Priya",
+        "above": "Greg",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the discount approval authority of Sarah Okafor in July 2025?",
+      "expected_answer": "Up to 15%; above 15% goes to Dave (2025-06-01 → 2025-09-01)",
+      "key_points": [
+        "Up to 15%; above 15% goes to Dave"
+      ],
+      "retrieval": {
+        "text": "15%",
+        "above": "$50,000",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the discount approval authority of Sarah Okafor in March 2026?",
+      "expected_answer": "All discounts and pricing exceptions on deals under $50,000, any discount level (2025-09-01 → 2026-10-19)",
+      "key_points": [
+        "All discounts and pricing exceptions on deals under $50,000, any discount level"
+      ],
+      "retrieval": {
+        "text": "$50,000",
+        "above": "15%",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the discount approval authority of Sarah Okafor in December 2026?",
+      "expected_answer": "Deals up to $75,000; above goes to the Northgate deal committee (2026-10-19 → now)",
+      "key_points": [
+        "Deals up to $75,000; above goes to the Northgate deal committee"
+      ],
+      "retrieval": {
+        "text": "$75,000",
+        "above": "15%",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the discount approval authority of Sarah Okafor now?",
+      "expected_answer": "Deals up to $75,000; above goes to the Northgate deal committee since 2026-10-19; before: Up to 15%; above 15% goes to Dave → All discounts and pricing exceptions on deals under $50,000, any discount level",
+      "key_points": [
+        "Deals up to $75,000; above goes to the Northgate deal committee",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "$75,000",
+        "above": "15%",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the legal name of Pinnacle 3PL in July 2025?",
+      "expected_answer": "Pinnacle Third-Party Logistics LLC (… → 2025-08-17)",
+      "key_points": [
+        "Pinnacle Third-Party Logistics LLC"
+      ],
+      "retrieval": {
+        "text": "Third-Party",
+        "above": "Ardent",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the legal name of Pinnacle 3PL in October 2025?",
+      "expected_answer": "Ardent Pinnacle Logistics LLC (2025-08-18 → now)",
+      "key_points": [
+        "Ardent Pinnacle Logistics LLC"
+      ],
+      "retrieval": {
+        "text": "Ardent",
+        "above": "Third-Party",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the legal name of Pinnacle 3PL now?",
+      "expected_answer": "Ardent Pinnacle Logistics LLC since 2025-08-18; before: Pinnacle Third-Party Logistics LLC",
+      "key_points": [
+        "Ardent Pinnacle Logistics LLC",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "Ardent",
+        "above": "Third-Party",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the nonstandard terms approval of Net 30 in January 2021?",
+      "expected_answer": "Other terms need Controller and owner approval, noted in customer file (2016-03-01 → 2025-12-08)",
+      "key_points": [
+        "Other terms need Controller and owner approval, noted in customer file"
+      ],
+      "retrieval": {
+        "text": "need",
+        "above": "must",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the nonstandard terms approval of Net 30 in January 2026?",
+      "expected_answer": "Other terms must be in a signed customer agreement or approved in writing by the Controller (2025-12-08 → now)",
+      "key_points": [
+        "Other terms must be in a signed customer agreement or approved in writing by the Controller"
+      ],
+      "retrieval": {
+        "text": "must",
+        "above": "need",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the nonstandard terms approval of Net 30 now?",
+      "expected_answer": "Other terms must be in a signed customer agreement or approved in writing by the Controller since 2025-12-08; before: Other terms need Controller and owner approval, noted in customer file",
+      "key_points": [
+        "Other terms must be in a signed customer agreement or approved in writing by the Controller",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "must",
+        "above": "need",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the account owner of Kroll Logistics - Tri-County DC in May 2026?",
+      "expected_answer": "Priya Shah (temporary until hire) (2026-04-02 → 2026-06-07)",
+      "key_points": [
+        "Priya Shah (temporary until hire)"
+      ],
+      "retrieval": {
+        "text": "Priya",
+        "above": "Tyler",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the account owner of Kroll Logistics - Tri-County DC in July 2026?",
+      "expected_answer": "Tyler (2026-06-08 → now)",
+      "key_points": [
+        "Tyler"
+      ],
+      "retrieval": {
+        "text": "Tyler",
+        "above": "Priya",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the account owner of Kroll Logistics - Tri-County DC now?",
+      "expected_answer": "Tyler since 2026-06-08; before: Priya Shah (temporary until hire)",
+      "key_points": [
+        "Tyler",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "Tyler",
+        "above": "Priya",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the amount of Emergency Dispatch Fee in July 2008?",
+      "expected_answer": "$95 emergency call-out plus labor (2006-01-01 → 2011-01-01)",
+      "key_points": [
+        "$95 emergency call-out plus labor"
+      ],
+      "retrieval": {
+        "text": "$95",
+        "above": "$125.00",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the amount of Emergency Dispatch Fee in August 2014?",
+      "expected_answer": "$125.00 emergency call-out (2011 QuickBooks item list) (2011-01-01 → 2018-03-01)",
+      "key_points": [
+        "$125.00 emergency call-out (2011 QuickBooks item list)"
+      ],
+      "retrieval": {
+        "text": "$125.00",
+        "above": "$95",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the amount of Emergency Dispatch Fee in August 2021?",
+      "expected_answer": "$200 per Hot Job (2018-03-01 → 2025-01-01)",
+      "key_points": [
+        "$200 per Hot Job"
+      ],
+      "retrieval": {
+        "text": "$200",
+        "above": "$95",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the amount of Emergency Dispatch Fee in February 2025?",
+      "expected_answer": "$250 per Hot Job (2025-01-01 → now)",
+      "key_points": [
+        "$250 per Hot Job"
+      ],
+      "retrieval": {
+        "text": "$250",
+        "above": "$95",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the amount of Emergency Dispatch Fee now?",
+      "expected_answer": "$250 per Hot Job since 2025-01-01; before: $95 emergency call-out plus labor → $125.00 emergency call-out (2011 QuickBooks item list) → $200 per Hot Job",
+      "key_points": [
+        "$250 per Hot Job",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "$250",
+        "above": "$95",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the credit hold of Harmon Auto Parts DC (Obetz) in February 2026?",
+      "expected_answer": "On credit hold under Credit & Collections v2 (invoices >75 days, balance well over $25,000); no work without written approval from Dave or Sarah (2025-12-08 → 2026-05-14)",
+      "key_points": [
+        "On credit hold under Credit & Collections v2 (invoices >75 days, balance well over $25,000); no work without written approval from Dave or Sarah"
+      ],
+      "retrieval": {
+        "text": "$25,000",
+        "above": "Remains",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the credit hold of Harmon Auto Parts DC (Obetz) in June 2026?",
+      "expected_answer": "Remains on credit hold until the plan has been current two consecutive months; emergency work only with written approval (2026-05-14 → now)",
+      "key_points": [
+        "Remains on credit hold until the plan has been current two consecutive months; emergency work only with written approval"
+      ],
+      "retrieval": {
+        "text": "Remains",
+        "above": "$25,000",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the credit hold of Harmon Auto Parts DC (Obetz) now?",
+      "expected_answer": "Remains on credit hold until the plan has been current two consecutive months; emergency work only with written approval since 2026-05-14; before: On credit hold under Credit & Collections v2 (invoices >75 days, balance well over $25,000); no work without written approval from Dave or Sarah",
+      "key_points": [
+        "Remains on credit hold until the plan has been current two consecutive months; emergency work only with written approval",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "Remains",
+        "above": "$25,000",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the rate of Shop Labor in January 2016?",
+      "expected_answer": "$65.00/hr (2006-01-01 → 2026-01-04)",
+      "key_points": [
+        "$65.00/hr"
+      ],
+      "retrieval": {
+        "text": "$65.00",
+        "above": "$122.00",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the rate of Shop Labor in February 2026?",
+      "expected_answer": "$122.00/hr (2026-01-05 → now)",
+      "key_points": [
+        "$122.00/hr"
+      ],
+      "retrieval": {
+        "text": "$122.00",
+        "above": "$65.00",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the rate of Shop Labor now?",
+      "expected_answer": "$122.00/hr since 2026-01-05; before: $65.00/hr",
+      "key_points": [
+        "$122.00/hr",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "$122.00",
+        "above": "$65.00",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the dispatch fee of Emergency Labor (Hot Job) in August 2021?",
+      "expected_answer": "$200 per Hot Job (2018-03-01 → 2024-12-31)",
+      "key_points": [
+        "$200 per Hot Job"
+      ],
+      "retrieval": {
+        "text": "$200",
+        "above": "$250",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the dispatch fee of Emergency Labor (Hot Job) in February 2025?",
+      "expected_answer": "$250 per Hot Job (2025-01-01 → now)",
+      "key_points": [
+        "$250 per Hot Job"
+      ],
+      "retrieval": {
+        "text": "$250",
+        "above": "$200",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the dispatch fee of Emergency Labor (Hot Job) now?",
+      "expected_answer": "$250 per Hot Job since 2025-01-01; before: $200 per Hot Job",
+      "key_points": [
+        "$250 per Hot Job",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "$250",
+        "above": "$200",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the preferred vendor status of Tri-County Bearing & Supply in December 2016?",
+      "expected_answer": "Preferred vendor for bearings and power transmission (2008-01-01 → 2025-12-31)",
+      "key_points": [
+        "Preferred vendor for bearings and power transmission"
+      ],
+      "retrieval": {
+        "text": "vendor",
+        "above": "replaced",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the preferred vendor status of Tri-County Bearing & Supply in February 2026?",
+      "expected_answer": "Not preferred; replaced as default by Kinetic Parts Direct for bearings, seals and power transmission (2026-01-01 → now)",
+      "key_points": [
+        "Not preferred; replaced as default by Kinetic Parts Direct for bearings, seals and power transmission"
+      ],
+      "retrieval": {
+        "text": "replaced",
+        "above": "vendor",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the preferred vendor status of Tri-County Bearing & Supply now?",
+      "expected_answer": "Not preferred; replaced as default by Kinetic Parts Direct for bearings, seals and power transmission since 2026-01-01; before: Preferred vendor for bearings and power transmission",
+      "key_points": [
+        "Not preferred; replaced as default by Kinetic Parts Direct for bearings, seals and power transmission",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "replaced",
+        "above": "vendor",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the bank reconciliation owner of Oakley HQ & Main Shop in October 2025?",
+      "expected_answer": "Linda (after Holly left); vendor statements to Beth Ann; Columbus billing review to Jasmine with Rhonda (2025-09-26 → 2025-11-03)",
+      "key_points": [
+        "Linda (after Holly left); vendor statements to Beth Ann; Columbus billing review to Jasmine with Rhonda"
+      ],
+      "retrieval": {
+        "text": "Linda",
+        "above": "Nora",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the bank reconciliation owner of Oakley HQ & Main Shop in December 2025?",
+      "expected_answer": "Nora Feld (bank recs and month-end accruals; backs up billing review) (2025-11-03 → now)",
+      "key_points": [
+        "Nora Feld (bank recs and month-end accruals; backs up billing review)"
+      ],
+      "retrieval": {
+        "text": "Nora",
+        "above": "Linda",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the bank reconciliation owner of Oakley HQ & Main Shop now?",
+      "expected_answer": "Nora Feld (bank recs and month-end accruals; backs up billing review) since 2025-11-03; before: Linda (after Holly left); vendor statements to Beth Ann; Columbus billing review to Jasmine with Rhonda",
+      "key_points": [
+        "Nora Feld (bank recs and month-end accruals; backs up billing review)",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "Nora",
+        "above": "Linda",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the rate of Standard labor rate in November 2025?",
+      "expected_answer": "$125/hr standard (… → 2026-01-04)",
+      "key_points": [
+        "$125/hr standard"
+      ],
+      "retrieval": {
+        "text": "$125",
+        "above": "$132",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the rate of Standard labor rate in February 2026?",
+      "expected_answer": "$132/hr standard / $198/hr overtime (2026-01-05 → now)",
+      "key_points": [
+        "$132/hr standard / $198/hr overtime"
+      ],
+      "retrieval": {
+        "text": "$132",
+        "above": "$125",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the rate of Standard labor rate now?",
+      "expected_answer": "$132/hr standard / $198/hr overtime since 2026-01-05; before: $125/hr standard",
+      "key_points": [
+        "$132/hr standard / $198/hr overtime",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "$132",
+        "above": "$125",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the pm labor discount of Blue Ridge Food Processing LLC in December 2023?",
+      "expected_answer": "Blue Book standard rate less 5% (2022-07-01 → 2025-06-30)",
+      "key_points": [
+        "Blue Book standard rate less 5%"
+      ],
+      "retrieval": {
+        "text": "5%",
+        "above": "8%",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the pm labor discount of Blue Ridge Food Processing LLC in December 2026?",
+      "expected_answer": "8% off Blue Book PM labor (2025-07-01 → 2028-06-30)",
+      "key_points": [
+        "8% off Blue Book PM labor"
+      ],
+      "retrieval": {
+        "text": "8%",
+        "above": "5%",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the standard rate of Service Labor in July 2008?",
+      "expected_answer": "$72.00/hr field labor (7am-4pm M-F) (2006-01-01 → 2011-01-01)",
+      "key_points": [
+        "$72.00/hr field labor (7am-4pm M-F)"
+      ],
+      "retrieval": {
+        "text": "$72.00",
+        "above": "$85.00",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the standard rate of Service Labor in January 2018?",
+      "expected_answer": "$85.00/hr field labor - standard (2011 QuickBooks item list) (2011-01-01 → 2025-01-01)",
+      "key_points": [
+        "$85.00/hr field labor - standard (2011 QuickBooks item list)"
+      ],
+      "retrieval": {
+        "text": "$85.00",
+        "above": "$72.00",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the standard rate of Service Labor in July 2025?",
+      "expected_answer": "$125/hr standard, $187.50/hr OT (2025-01-01 → 2026-01-05)",
+      "key_points": [
+        "$125/hr standard, $187.50/hr OT"
+      ],
+      "retrieval": {
+        "text": "$125",
+        "above": "$72.00",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the standard rate of Service Labor in February 2026?",
+      "expected_answer": "$132/hr standard (2026-01-05 → now)",
+      "key_points": [
+        "$132/hr standard"
+      ],
+      "retrieval": {
+        "text": "$132",
+        "above": "$72.00",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the standard rate of Service Labor now?",
+      "expected_answer": "$132/hr standard since 2026-01-05; before: $72.00/hr field labor (7am-4pm M-F) → $85.00/hr field labor - standard (2011 QuickBooks item list) → $125/hr standard, $187.50/hr OT",
+      "key_points": [
+        "$132/hr standard",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "$132",
+        "above": "$72.00",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the pm agreement term of Blue Ridge Food Processing LLC in December 2026?",
+      "expected_answer": "2025-07-01 through 2028-06-30, no auto-renewal; meet 90 days before expiration (2025-07-01 → 2028-06-30)",
+      "key_points": [
+        "2025-07-01 through 2028-06-30, no auto-renewal; meet 90 days before expiration"
+      ],
+      "retrieval": {
+        "text": "meet",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the role of Priya Shah in August 2024?",
+      "expected_answer": "Senior Account Manager (2023-01-01 → 2026-04-01)",
+      "key_points": [
+        "Senior Account Manager"
+      ],
+      "retrieval": {
+        "text": "Senior",
+        "above": "Sales",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the role of Priya Shah in May 2026?",
+      "expected_answer": "Sales Manager (Sales); Kevin, Lauren and Chris report to her (2026-04-01 → now)",
+      "key_points": [
+        "Sales Manager (Sales); Kevin, Lauren and Chris report to her"
+      ],
+      "retrieval": {
+        "text": "Sales",
+        "above": "Account",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the role of Priya Shah now?",
+      "expected_answer": "Sales Manager (Sales); Kevin, Lauren and Chris report to her since 2026-04-01; before: Account Manager → Senior Account Manager",
+      "key_points": [
+        "Sales Manager (Sales); Kevin, Lauren and Chris report to her",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "Sales",
+        "above": "Account",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the ot rate of Service Labor - OT in July 2008?",
+      "expected_answer": "$108.00/hr (overtime/nights/weekends) (2006-01-01 → 2011-01-01)",
+      "key_points": [
+        "$108.00/hr (overtime/nights/weekends)"
+      ],
+      "retrieval": {
+        "text": "$108.00",
+        "above": "$127.50",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the ot rate of Service Labor - OT in January 2018?",
+      "expected_answer": "$127.50/hr field labor - OT (2011 QuickBooks item list) (2011-01-01 → 2025-01-01)",
+      "key_points": [
+        "$127.50/hr field labor - OT (2011 QuickBooks item list)"
+      ],
+      "retrieval": {
+        "text": "$127.50",
+        "above": "$108.00",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the ot rate of Service Labor - OT in July 2025?",
+      "expected_answer": "$187.50/hr (time and a half on $125) (2025-01-01 → 2026-01-05)",
+      "key_points": [
+        "$187.50/hr (time and a half on $125)"
+      ],
+      "retrieval": {
+        "text": "$187.50",
+        "above": "$108.00",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the ot rate of Service Labor - OT in February 2026?",
+      "expected_answer": "$198.00/hr (time and a half) (2026-01-05 → now)",
+      "key_points": [
+        "$198.00/hr (time and a half)"
+      ],
+      "retrieval": {
+        "text": "$198.00",
+        "above": "$108.00",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_current",
+      "question": "What is the ot rate of Service Labor - OT now?",
+      "expected_answer": "$198.00/hr (time and a half) since 2026-01-05; before: $108.00/hr (overtime/nights/weekends) → $127.50/hr field labor - OT (2011 QuickBooks item list) → $187.50/hr (time and a half on $125)",
+      "key_points": [
+        "$198.00/hr (time and a half)",
+        "mentions the previous value"
+      ],
+      "retrieval": {
+        "text": "$198.00",
+        "above": "$108.00",
+        "top": 3
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the approves discounts above of Dave Brennan in April 2022?",
+      "expected_answer": "Discounts above 10% require Dave (2019-02-04 → 2025-05-31)",
+      "key_points": [
+        "Discounts above 10% require Dave"
+      ],
+      "retrieval": {
+        "text": "10%",
+        "above": "15%",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the approves discounts above of Dave Brennan in July 2025?",
+      "expected_answer": "Discounts above 15% require Dave (2025-06-01 → 2025-09-01)",
+      "key_points": [
+        "Discounts above 15% require Dave"
+      ],
+      "retrieval": {
+        "text": "15%",
+        "above": "10%",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the discount approval policy of Oakley HQ & Main Shop in July 2025?",
+      "expected_answer": "Over 10% up to 15%: Sarah Okafor; above 15%: Dave Brennan (2025-06-05 → 2025-09-01)",
+      "key_points": [
+        "Over 10% up to 15%: Sarah Okafor; above 15%: Dave Brennan"
+      ],
+      "retrieval": {
+        "text": "15%",
+        "above": "$50",
+        "top": 5
+      }
+    },
+    {
+      "kind": "question",
+      "category": "temporal:auto_as_of",
+      "question": "What was the discount approval policy of Oakley HQ & Main Shop in March 2026?",
+      "expected_answer": "GM Sarah Okafor approves all discounts on deals under $50k; $50k+ go to Dave; Sales Manager up to 10% on deals under $50k; record in HubSpot deal notes (2025-09-01 → 2026-10-19)",
+      "key_points": [
+        "GM Sarah Okafor approves all discounts on deals under $50k; $50k+ go to Dave; Sales Manager up to 10% on deals under $50k; record in HubSpot deal notes"
+      ],
+      "retrieval": {
+        "text": "$50",
+        "above": "15%",
+        "top": 5
+      }
+    }
+  ]
+}

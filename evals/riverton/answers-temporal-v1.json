@@ -1,0 +1,228 @@
+{
+  "answered_by": "claude-code-opus-5.5-from-context-packs",
+  "mode": "rag",
+  "note": "Phase 19.5: each answer written only from the reranked context pack (sources + 'What changed' lines), with the change callout. Graded against the Temporal v1 key points. Re-run after merging legacy QuickBooks item codes (LABOR-OT → Service Labor - OT) and adding Sarah's President version.",
+  "answers": [
+    {
+      "question": "What were Blue Ridge's payment terms in 2023?",
+      "answer": "Net 30, under the original 2022 PM agreement (July 2022 – June 2025). Changed since: Net 60 from July 1, 2025.",
+      "key_points_hit": [
+        "Net 30",
+        "2022 agreement period",
+        "mentions later change to Net 60"
+      ]
+    },
+    {
+      "question": "What are Blue Ridge's payment terms now?",
+      "answer": "Net 60, since the July 2025 renewal (Amendment No. 1). It was Net 30 until June 2025, and QuickBooks still shows Net 30, so aging reports look late when they aren't.",
+      "key_points_hit": [
+        "Net 60",
+        "since July 1 2025",
+        "was Net 30 before"
+      ]
+    },
+    {
+      "question": "What was the emergency dispatch fee in 2020?",
+      "answer": "$200 per hot job (March 2018 – end of 2024). It is $250 now, since January 2025.",
+      "key_points_hit": [
+        "$200",
+        "2018–2024 period",
+        "now $250"
+      ]
+    },
+    {
+      "question": "What did an emergency call-out cost in 2010?",
+      "answer": "$95 call-out plus labor, per the 2006 price list (in force until March 2018). Later $200, and $250 since 2025.",
+      "key_points_hit": [
+        "$95",
+        "plus labor",
+        "2006 price list"
+      ]
+    },
+    {
+      "question": "What is the emergency dispatch fee today?",
+      "answer": "$250 per hot job since January 1, 2025, with all hours at 1.5×; exceptions only with Dave's or Sarah's written OK. It was $200 from March 2018 (and $95 on the 2006 list).",
+      "key_points_hit": [
+        "$250",
+        "since Jan 2025",
+        "was $200 before"
+      ]
+    },
+    {
+      "question": "What was the standard labor rate in 2025?",
+      "answer": "$125/hr standard ($187.50 overtime) in 2025. It went to $132 on January 5, 2026.",
+      "key_points_hit": [
+        "$125",
+        "now $132 from Jan 2026"
+      ]
+    },
+    {
+      "question": "What overtime rate did Riverton bill in 2025?",
+      "answer": "$187.50/hr, time and a half on the $125 standard rate (2025 rates email). It had been $127.50 on the 2011 QuickBooks list, and is $198 since January 5, 2026.",
+      "key_points_hit": [
+        "$187.50",
+        "time and a half",
+        "now $198"
+      ]
+    },
+    {
+      "question": "Who ran the Columbus branch in 2024?",
+      "answer": "Tom Jablonski, who built and ran Columbus from 2021 until he retired at the end of June 2025. Andrea Reyes has run it since June 2, 2025.",
+      "key_points_hit": [
+        "Tom Jablonski",
+        "until June 2025",
+        "Andrea now"
+      ]
+    },
+    {
+      "question": "Who runs the Columbus branch now?",
+      "answer": "Andrea Reyes, since June 2, 2025. Changed: Tom Jablonski ran it from 2021 until then.",
+      "key_points_hit": [
+        "Andrea Reyes",
+        "since June 2025",
+        "was Tom Jablonski"
+      ]
+    },
+    {
+      "question": "What was Sarah Okafor's job in 2020?",
+      "answer": "Operations Manager, she joined in that role on August 11, 2014. She became General Manager in June 2025.",
+      "key_points_hit": [
+        "Operations Manager",
+        "GM from June 2025"
+      ],
+      "notes": "Missed: President from Sept 30, 2026 (the pack's role chain ends at General Manager)."
+    },
+    {
+      "question": "What was Priya Shah's title in 2024?",
+      "answer": "Senior Account Manager (January 2023 – April 2026). Before that Account Manager; since April 2026 Sales Manager, with Kevin, Lauren and Chris reporting to her.",
+      "key_points_hit": [
+        "Senior Account Manager",
+        "Sales Manager since April 2026"
+      ]
+    },
+    {
+      "question": "Where did Louisville buy bearings in 2025?",
+      "answer": "Tri-County Bearing & Supply, same-day parts from Dana, 15 minutes away. From January 1, 2026 Kinetic Parts Direct is required (Tri-County only for genuine emergencies).",
+      "key_points_hit": [
+        "Tri-County",
+        "Kinetic from Jan 2026"
+      ]
+    },
+    {
+      "question": "How many PTO days do employees get now?",
+      "answer": "12 days a year after one year of service (since 2023); requests two weeks ahead except illness. Changed: it was 10 days a year from 2017 to 2023.",
+      "key_points_hit": [
+        "12 days",
+        "2023 handbook",
+        "was 10 days"
+      ]
+    },
+    {
+      "question": "How has the emergency dispatch fee changed over the years?",
+      "answer": "$95 call-out plus labor (2006 price list) → $200 per hot job from March 2018 → $250 from January 1, 2025.",
+      "key_points_hit": [
+        "$95 in 2006",
+        "$200 from 2018",
+        "$250 from 2025"
+      ]
+    },
+    {
+      "question": "When did the standard labor rate go up to $132?",
+      "answer": "January 5, 2026, from $125 (overtime from $187.50 to $198). The Louisville and Columbus FieldLine tables were only updated in May 2026.",
+      "key_points_hit": [
+        "Jan 5 2026",
+        "from $125",
+        "Louisville/Columbus lagged until May"
+      ]
+    },
+    {
+      "question": "How has Sarah Okafor's discount authority changed?",
+      "answer": "June 2025: up to 15%, above to Dave. September 2025 (policy v3): every discount on deals under $50,000. October 19, 2026 (Northgate policy): deals up to $75,000, above that the Northgate deal committee.",
+      "key_points_hit": [
+        "15% from June 2025",
+        "deals under $50k from Sept 2025",
+        "up to $75k from Oct 19 2026, above Northgate committee"
+      ]
+    },
+    {
+      "question": "When did Blue Ridge Mills become Blue Ridge Food Processing?",
+      "answer": "March 17, 2025, Blue Ridge Mills, Inc. was renamed Blue Ridge Food Processing LLC under its new parent Harvest Plains Foods (domain blueridgefp.com).",
+      "key_points_hit": [
+        "March 17 2025",
+        "Harvest Plains Foods"
+      ],
+      "notes": "Missed: QuickBooks switched with April invoices. The rename fact ranked #4, behind the agreement and terms timelines."
+    },
+    {
+      "question": "When did Pinnacle 3PL change its legal name?",
+      "answer": "August 18, 2025: Pinnacle Third-Party Logistics LLC became Ardent Pinnacle Logistics LLC. QuickBooks keeps the old name until year-end.",
+      "key_points_hit": [
+        "Aug 18 2025",
+        "Ardent Pinnacle Logistics"
+      ]
+    },
+    {
+      "question": "How did hot-job miscoding in Columbus change?",
+      "answer": "About 15% of obvious hot jobs were coded T&M before July 2025; after Andrea's fix and the weekly Monday review it fell to about 3 in 100.",
+      "key_points_hit": [
+        "~15% before",
+        "~3% after July 2025",
+        "Monday review"
+      ]
+    },
+    {
+      "question": "What were Dave's office days before the sale closed, and after?",
+      "answer": "Before the Sept 30, 2026 close: Tuesdays through Thursdays. After: Mondays, Tuesdays and Thursdays through December 29, 2026, to hand off knowledge.",
+      "key_points_hit": [
+        "Tue–Thu before",
+        "Mon/Tue/Thu after",
+        "through Dec 29 2026"
+      ]
+    },
+    {
+      "question": "Who owned the Tri State Bottling account before Priya?",
+      "answer": "Greg, until he left in February 2026. Priya Shah has owned it since March 2, 2026 (QuickBooks still shows Greg).",
+      "key_points_hit": [
+        "Greg Whitfield",
+        "Priya since March 2026"
+      ]
+    },
+    {
+      "question": "Who covered the Kroll Logistics account before Tyler took it over?",
+      "answer": "Priya Shah, temporarily, from April 2 to June 7, 2026, then Tyler from June 8.",
+      "key_points_hit": [
+        "Priya Shah temporarily",
+        "April–June 2026",
+        "Tyler from June 8"
+      ]
+    },
+    {
+      "question": "Who can approve a discount over 10% today?",
+      "answer": "Since Northgate's policy took effect on October 19, 2026: Sarah Okafor approves deals up to $75,000, the Northgate deal committee above that; Priya can approve up to 10% on deals under $25,000. Changed: under policy v3 (Sept 2025 – Oct 2026) Sarah owned all discounts under $50k and $50k+ went to Dave, no longer in force.",
+      "key_points_hit": [
+        "Sarah up to $75k",
+        "Northgate deal committee above",
+        "since Oct 19 2026",
+        "previous policy v3 / 2019 Dave rule outdated"
+      ]
+    },
+    {
+      "question": "Is Harmon Auto Parts on credit hold right now?",
+      "answer": "Yes. Since the May 2026 payment plan it stays on hold until the plan has been current for two consecutive months; emergency work only with written approval. Before that: on hold since December 2025 under Credit & Collections v2.",
+      "key_points_hit": [
+        "yes, on hold",
+        "until two consecutive current months",
+        "on hold since Dec 2025"
+      ]
+    },
+    {
+      "question": "What does Midwest Galvanizing owe us?",
+      "answer": "Not certain: the November 4, 2025 aging shows $107,908.88 open ($863.63 over 60 days, $413.86 over 90), while an undated QuickBooks snapshot shows $14,203.67, the two disagree and need the export date.",
+      "key_points_hit": [
+        "$107,908.88 as of Nov 2025",
+        "$14,203.67 undated",
+        "flags the disagreement"
+      ]
+    }
+  ]
+}

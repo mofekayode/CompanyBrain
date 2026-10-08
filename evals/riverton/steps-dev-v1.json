@@ -1,0 +1,28 @@
+{
+  "name": "Riverton steps (dev) v1",
+  "purpose": "Per-step checks for the steps we own: question understanding (which things, which time) and the instant answer's lead fact. DEV SET: written from evidence and used while tuning, so passing it is not proof. The held-out verdict is the ground-truth evaluation.",
+  "items": [
+    { "q": "What are Big Blue payment terms?", "entities": ["Blue Ridge Food Processing LLC"], "headline_any": ["net 60"] },
+    { "q": "What are Blue Ridge Food Processing's payment terms?", "entities": ["Blue Ridge Food Processing LLC"], "headline_any": ["net 60"] },
+    { "q": "BRM net terms", "entities": ["Blue Ridge Food Processing LLC"], "headline_any": ["net 60"] },
+    { "q": "What were Big Blue's payment terms in 2023?", "entities": ["Blue Ridge Food Processing LLC"], "time": "as_of", "headline_any": ["net 30"] },
+    { "q": "Who approves discounts now?", "time": "current", "headline_any": ["75,000"] },
+    { "q": "Who approved discounts in March 2025?", "time": "as_of", "headline_any": ["10%"], "headline_none_of": ["75,000"] },
+    { "q": "What was wrong with pump 17 and is it fixed?", "entities": ["TP-17"], "headline_any": ["suction"] },
+    { "q": "What was wrong with seventeen?", "entities": ["TP-17"], "headline_any": ["suction", "cavitation", "seal"] },
+    { "q": "Who diagnosed the pump 17 problem?", "entities": ["TP-17"], "headline_any": ["mike hargrove"] },
+    { "q": "Does Harmon have a payment plan and are they keeping up?", "entities": ["Harmon Auto Parts DC (Obetz)"], "headline_any": ["payment plan status", "off schedule"] },
+    { "q": "Is Harmon Auto Parts DC still on credit hold?", "entities": ["Harmon Auto Parts DC (Obetz)"], "headline_any": ["credit hold"] },
+    { "q": "What is the T&M rate for Ohio Valley Cold Storage?", "entities": ["Ohio Valley Cold Storage"], "headline_any": ["blue book"] },
+    { "q": "When does the Northgate deal close?", "headline_any": ["sept 30", "september 30", "2026-09-30"], "headline_none_of": ["employment status", "· role"] },
+    { "q": "What is the parts markup for Blue Ridge?", "entities": ["Blue Ridge Food Processing LLC"], "headline_any": ["33%"] },
+    { "q": "What is the PM labor discount for Big Blue?", "entities": ["Blue Ridge Food Processing LLC"], "headline_any": ["8%"] },
+    { "q": "Who is Big Blue's day-to-day contact?", "entities": ["Blue Ridge Food Processing LLC"], "headline_any": ["donna keel"] },
+    { "q": "Who owns the Kroll Logistics account now?", "time": "current", "headline_any": ["account owner"] },
+    { "q": "What is Priya Shah's role now?", "entities": ["Priya Shah"], "time": "current", "headline_any": ["sales manager"] },
+    { "q": "How does a two person lockout work?", "headline_any": ["two-person", "two person"] },
+    { "q": "What's the weather in Paris?", "headline": null },
+    { "q": "asdf qwerty zxcv", "headline": null },
+    { "q": "How have discount approval limits changed over time?", "time": "change" }
+  ]
+}
