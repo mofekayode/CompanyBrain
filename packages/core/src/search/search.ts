@@ -9,9 +9,10 @@
 
 import type { estypes } from '@elastic/elasticsearch'
 import type { Sql } from '../storage/raw'
+import { type KnowledgeView, viewAliases, viewContent } from '../access/knowledge-view'
 import { embedQuery, rerankScores } from './embed'
 import { es, indexAlias } from './es'
-import { type Dictionary, type LinkedEntity, linkText, loadDictionary } from './linker'
+import { type Dictionary, type LinkedEntity, linkText, loadDictionary, normalize } from './linker'
 import { parseTime, type TimeIntent } from './time'
 
 export interface SearchOptions {
@@ -30,6 +31,10 @@ export interface SearchOptions {
   only?: 'bm25' | 'knn'
   /** At most this many results from one file (default 3). */
   perSource?: number
+  /** Only what was known by a cutoff (evaluation, "as the Brain stood on…"): enforced in the query like access. */
+  view?: KnowledgeView
+  /** The question's "today" (YYYY-MM-DD); default: the client's latest dated evidence. */
+  today?: string
 }
 
 export interface SearchHit {
@@ -123,7 +128,12 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
   const t0 = performance.now()
   const limit = Math.min(opts.limit ?? 10, 50)
   const dict = await dictionary(sql, tenantId)
-  const u = understand(dict, query, opts.asOf, await clientNow(sql, tenantId))
+  const u = understand(dict, query, opts.asOf, opts.today ? new Date(`${opts.today}T12:00:00Z`) : await clientNow(sql, tenantId))
+  // A view only resolves names it could have known (not a nickname first heard in a later interview).
+  if (opts.view) {
+    const view = opts.view
+    u.entities = u.entities.filter((e) => !view.hiddenDocs.has(`e:${e.id}`) && (normalize(e.matched) === normalize(e.name) || !view.hiddenAliases.has(normalize(e.matched))))
+  }
   const slug0 = await slugOf(sql, tenantId)
   // "before the sale closed": date the event from the company's own dated facts.
   // "before Priya": a person or thing, not an event → a history question (the version before hers).
@@ -177,6 +187,7 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
   if (opts.kinds?.length) filter.push({ terms: { kind: opts.kinds } })
   if (opts.sourceObjectId) filter.push({ term: { source_object_id: opts.sourceObjectId } })
   if (opts.entityIds?.length) filter.push({ terms: { entity_ids: opts.entityIds } })
+  if (opts.view) filter.push({ bool: { must_not: [{ terms: { source_object_id: [...opts.view.hiddenObjects] } }, { ids: { values: [...opts.view.hiddenDocs] } }] } })
   if (opts.asOf) {
     // Facts must be valid on the date; passages must exist by then (undated ones pass).
     filter.push({
@@ -285,6 +296,13 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
     ? ranked.filter(([, v], i) => i < Math.max(40, limit * 3) || (v.bm25 !== null && v.bm25 <= 20) || (v.knn !== null && v.knn <= 20))
     : ranked.slice(0, Math.max(40, limit * 3))
   let hits: SearchHit[] = pool.map(([id, v]) => toHit(id, v.src, v.highlight, query, { bm25: v.bm25, knn: v.knn, fused: ranked.findIndex(([x]) => x === id) + 1 }, v.score))
+  // As known by the view's cutoff: whether a fact was current then, and its history as far as it went.
+  if (opts.view) {
+    const view = opts.view
+    hits = hits.map((h) =>
+      h.doc_type === 'fact' && view.facts.has(h.id) ? { ...h, is_current: view.facts.get(h.id)!.is_current, content: viewContent(view, h.id, h.content) } : h.doc_type === 'entity' ? { ...h, content: viewAliases(view, h.content) } : h,
+    )
+  }
 
   // ---- optional cross-encoder rerank of the head of the list
   let rerankMs = 0

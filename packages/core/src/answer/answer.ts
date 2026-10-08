@@ -15,6 +15,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import { apiAllowed, claude, PIPELINE_MODEL, structured } from '../claude'
 import { search, type SearchResult } from '../search/search'
 import type { Sql } from '../storage/raw'
+import type { KnowledgeView } from '../access/knowledge-view'
 import { humanDate, humanPeriod } from '../text'
 import { citeLabel, factLabel, getCurrentFacts, getFactHistory, runTool, TOOL_SPECS, type ToolCtx } from './tools'
 
@@ -54,11 +55,12 @@ Rules:
 - Lead with the direct answer in one sentence, then the supporting detail. Keep it short.
 - Never use em dashes. Use commas, colons, periods or parentheses instead.`
 
-export async function buildContext(sql: Sql, tenantId: string, question: string, opts: { as?: string | null; asOf?: string; limit?: number; prefetched?: SearchResult } = {}): Promise<ContextPack> {
+export async function buildContext(sql: Sql, tenantId: string, question: string, opts: { as?: string | null; asOf?: string; limit?: number; prefetched?: SearchResult; view?: KnowledgeView; today?: string } = {}): Promise<ContextPack> {
   const t0 = performance.now()
-  const ctx: ToolCtx = { sql, tenantId, as: opts.as ?? null }
+  const ctx: ToolCtx = { sql, tenantId, as: opts.as ?? null, view: opts.view, today: opts.today }
+  const today = opts.today ?? new Date().toISOString().slice(0, 10)
   // Answers get the reranked list: 40/41 retrieval checks vs 37/41 without, for ~1 s more.
-  const r = opts.prefetched ?? (await search(sql, tenantId, question, { as: opts.as, asOf: opts.asOf, limit: opts.limit ?? 12, rerank: true }))
+  const r = opts.prefetched ?? (await search(sql, tenantId, question, { as: opts.as, asOf: opts.asOf, limit: opts.limit ?? 12, rerank: true, view: opts.view, today: opts.today }))
 
   // Facts about the entities the question names (visible to this reader only).
   const facts: ContextPack['facts'] = []
@@ -67,7 +69,7 @@ export async function buildContext(sql: Sql, tenantId: string, question: string,
   for (const [k, e] of ents.entries()) {
     const [cur, hist] = loaded[k]
     if ('error' in cur || 'error' in hist) continue
-    const old = hist.history.filter((h) => h.status === 'superseded' || (h.to && h.to < new Date().toISOString().slice(0, 10)))
+    const old = hist.history.filter((h) => (opts.view ? !opts.view.facts.get(`f:${h.id}`)?.is_current : h.status === 'superseded') || (h.to && h.to < today))
     facts.push({
       entity: `${e.name} (${e.type})`,
       current: cur.facts.slice(0, 25).map((f) => `${f.fact}${f.since ? ` (since ${humanDate(f.since)})` : ''}${f.status === 'disputed' ? ' [DISPUTED]' : ''}`),

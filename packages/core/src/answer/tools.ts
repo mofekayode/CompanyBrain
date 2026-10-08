@@ -13,6 +13,7 @@
 //
 // Every tool takes the reader (`as`): results are limited to what that person may open.
 
+import type { KnowledgeView } from '../access/knowledge-view'
 import { humanPeriod } from '../text'
 import { search } from '../search/search'
 import { principalsOf } from '../search/search'
@@ -23,6 +24,10 @@ export interface ToolCtx {
   tenantId: string
   /** Principal id of the person asking; null = FDE (sees everything). */
   as: string | null
+  /** Only what was known by a cutoff (see access/knowledge-view). */
+  view?: KnowledgeView
+  /** The question's "today" (YYYY-MM-DD); default: the real date. */
+  today?: string
 }
 
 /** Event dates arrive as 2025-03-10, 03/10/2025 or 3/9/25 depending on the system. */
@@ -34,6 +39,13 @@ end)`
 
 /** Search documents (cards) this reader may see, by id. FDE: all. */
 export async function visible(ctx: ToolCtx, docIds: string[]): Promise<Set<string>> {
+  if (ctx.view) {
+    // Not yet known by the view's cutoff: hidden like a restricted file.
+    const view = ctx.view
+    const objs = (await ctx.sql.query<{ id: string; so: string | null }>(`select id, source_object_id so from public.search_documents where tenant_id = $1 and id = any($2::text[])`, [ctx.tenantId, docIds])).rows
+    const so = new Map(objs.map((r) => [r.id, r.so]))
+    docIds = docIds.filter((id) => !view.hiddenDocs.has(id) && !(so.get(id) && view.hiddenObjects.has(so.get(id)!)))
+  }
   if (!ctx.as) return new Set(docIds)
   const principals = await principalsOf(ctx.sql, ctx.tenantId, ctx.as)
   const rows = (
@@ -93,6 +105,8 @@ async function entityOrError(ctx: ToolCtx, ref: string) {
 export async function searchCompany(ctx: ToolCtx, a: { query: string; kinds?: string[]; doc_types?: ('passage' | 'entity' | 'fact')[]; as_of?: string; entity?: string; limit?: number }) {
   const entity = a.entity ? await resolveEntity(ctx, a.entity) : null
   const r = await search(ctx.sql, ctx.tenantId, a.query, {
+    view: ctx.view,
+    today: ctx.today,
     as: ctx.as,
     kinds: a.kinds,
     docTypes: a.doc_types,
@@ -206,8 +220,11 @@ async function facts(ctx: ToolCtx, entityId: string, where: string, params: unkn
 export async function getCurrentFacts(ctx: ToolCtx, a: { entity: string }) {
   const e = await entityOrError(ctx, a.entity)
   if ('error' in e) return e
-  const today = new Date().toISOString().slice(0, 10)
-  const rows = await facts(ctx, e.id, `f.status in ('accepted', 'disputed') and (f.valid_to is null or f.valid_to > $3::date)`, [today])
+  const today = ctx.today ?? new Date().toISOString().slice(0, 10)
+  // With a knowledge view, "current" is as known then (a later replacement may not be known yet).
+  const rows = ctx.view
+    ? (await facts(ctx, e.id, `f.status <> 'rejected'`)).filter((f) => ctx.view!.facts.get(`f:${f.id}`)?.is_current)
+    : await facts(ctx, e.id, `f.status in ('accepted', 'disputed') and (f.valid_to is null or f.valid_to > $3::date)`, [today])
   return {
     entity: e,
     facts: rows.map((f) => ({ id: f.id, fact: `${f.predicate.replaceAll('_', ' ')}: ${f.value}`, since: f.valid_from, status: f.status, source: f.authority, note: f.note ?? undefined })),
