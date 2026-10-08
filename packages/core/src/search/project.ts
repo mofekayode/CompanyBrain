@@ -194,6 +194,21 @@ export function cutPassages(rows: EvRow[]): Omit<SearchDoc, 'entity_ids'>[] {
   return out
 }
 
+/** For each file: the access lists of its identical copies (same checksum, not deleted), its own included. */
+export async function twinAcls(sql: Sql, tenantId: string, soIds: string[]): Promise<Map<string, string[]>> {
+  if (!soIds.length) return new Map()
+  const rows = (
+    await sql.query<{ id: string; acls: string[] }>(
+      `select a.id, array_agg(distinct b.acl_id) filter (where b.acl_id is not null) acls
+       from public.source_objects a join public.source_objects b on b.tenant_id = a.tenant_id and b.sha256 = a.sha256 and b.deleted_at is null
+       where a.tenant_id = $1 and a.id = any($2::uuid[]) and a.sha256 is not null
+       group by a.id having count(*) > 1`,
+      [tenantId, soIds],
+    )
+  ).rows
+  return new Map(rows.map((r) => [r.id, r.acls ?? []]))
+}
+
 async function passagesFor(sql: Sql, tenantId: string, dict: Dictionary, dvIds: string[]): Promise<SearchDoc[]> {
   const rows = (
     await sql.query<EvRow>(
@@ -211,9 +226,12 @@ async function passagesFor(sql: Sql, tenantId: string, dict: Dictionary, dvIds: 
   ).rows
   const byDv = new Map<string, EvRow[]>()
   for (const r of rows) byDv.set(r.dv, [...(byDv.get(r.dv) ?? []), r])
+  // An identical copy of a file is read once; its content is readable by anyone who may open any copy.
+  const twins = await twinAcls(sql, tenantId, [...new Set(rows.map((r) => r.so_id))])
   const out: SearchDoc[] = []
   for (const group of byDv.values())
     for (const p of cutPassages(group)) {
+      if (p.source_object_id && twins.has(p.source_object_id)) p.acl_ids = [...new Set([...p.acl_ids, ...twins.get(p.source_object_id)!])]
       // A copy in someone's private mailbox keeps that mailbox's access, even when the message
       // went to a distribution list: the stricter of the source's permission and the sensitivity
       // label wins. (Recipients see it through their own copies.)
@@ -341,6 +359,7 @@ async function factCards(sql: Sql, tenantId: string, ids: string[] | null, dict?
       quotes: { q: string; a: string }[] | null
       evidence: string[] | null
       acls: string[] | null
+      files: string[] | null
     }>(
       `select f.id, s.id subject_id, s.canonical_name subject, t.name type, f.predicate, f.value #>> '{}' value, f.valid_from::text, f.valid_to::text, f.status, f.authority, f.note,
               f.metadata ->> 'summary' summary, f.metadata ->> 'kind' fkind,
@@ -349,13 +368,22 @@ async function factCards(sql: Sql, tenantId: string, ids: string[] | null, dict?
               (select array_agg(distinct l.evidence_id) from public.evidence_links l
                 where l.fact_id = f.id or l.fact_id in (select claim_id from public.fact_claims where canonical_id = f.id)) evidence,
               (select array_remove(array_agg(distinct e.acl_id), null) from public.evidence_links l join public.evidence e on e.id = l.evidence_id
-                where l.fact_id = f.id or l.fact_id in (select claim_id from public.fact_claims where canonical_id = f.id)) acls
+                where l.fact_id = f.id or l.fact_id in (select claim_id from public.fact_claims where canonical_id = f.id)) acls,
+              (select array_agg(distinct dv.source_object_id) from public.evidence_links l join public.evidence e on e.id = l.evidence_id
+                 join public.document_versions dv on dv.id = e.document_version_id
+                where l.fact_id = f.id or l.fact_id in (select claim_id from public.fact_claims where canonical_id = f.id)) files
        from public.facts f join public.entities s on s.id = f.subject_entity_id join public.entity_types t on t.id = s.entity_type_id
        where f.tenant_id = $1 and f.metadata ->> 'layer' = 'canonical' and f.status <> 'rejected' and ($2::uuid[] is null or f.id = any($2::uuid[]))`,
       [tenantId, ids],
     )
   ).rows
   if (!facts.length) return []
+  // Readers of an identical copy of an evidence file may read what was read from it.
+  const twins = await twinAcls(sql, tenantId, [...new Set(facts.flatMap((f) => f.files ?? []))])
+  for (const f of facts) {
+    const extra = (f.files ?? []).flatMap((so) => twins.get(so) ?? [])
+    if (extra.length) f.acls = [...new Set([...(f.acls ?? []), ...extra])]
+  }
   // Facts backed only by system fields inherit their subject's visibility.
   const subjAcl = await entityAcls(sql, tenantId, [...new Set(facts.filter((f) => !f.acls?.length).map((f) => f.subject_id))])
   const today = new Date().toISOString().slice(0, 10)
@@ -495,7 +523,8 @@ async function aclPrincipals(sql: Sql, tenantId: string): Promise<Map<string, st
 export async function indexPending(sql: Sql, tenantId: string, opts: { dict?: Dictionary; onProgress?: (n: number) => void } = {}): Promise<{ indexed: number; embedded: number }> {
   const slug = (await sql.query<{ slug: string }>(`select slug from public.tenants where id = $1`, [tenantId])).rows[0].slug
   const dict = opts.dict ?? (await loadDictionary(sql, tenantId))
-  const acl = await aclPrincipals(sql, tenantId)
+  // Re-read who may read each list per batch: access can change while a long run is going.
+  let acl = await aclPrincipals(sql, tenantId)
   const paths = new Map<string, { path: string; source: string | null }>()
   let n = 0
   let embedded = 0
@@ -507,6 +536,7 @@ export async function indexPending(sql: Sql, tenantId: string, opts: { dict?: Di
       )
     ).rows
     if (!rows.length) return { indexed: n, embedded }
+    if (n) acl = await aclPrincipals(sql, tenantId)
     const missing = [...new Set(rows.map((r) => r.source_object_id).filter((x): x is string => !!x && !paths.has(x)))]
     if (missing.length)
       for (const p of (

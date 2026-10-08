@@ -84,18 +84,36 @@ export async function refsFor(ctx: ToolCtx, files: Map<string, FileInfo>, ids: s
   for (const r of mentionRows) if (!ctx.view?.hiddenDocs.has(r.id)) mentions.set(r.entity, [...(mentions.get(r.entity) ?? []), r])
   // Under a knowledge view, evidence from files not yet available is never cited.
   const ok = (so: string | null) => !!so && !!files.get(so)?.path && !ctx.view?.hiddenObjects.has(so)
+  // Identical copies of a file share one reading: cite the copy this reader may open (their own
+  // first), never one they can't.
+  const used = [...new Set([...docs.map((d) => d.source_object_id), ...ev.map((e) => e.so), ...mentionRows.map((r) => r.so)].filter((x): x is string => !!x))]
+  const principals = ctx.as ? await principalsOf(ctx.sql, ctx.tenantId, ctx.as) : null
+  const copies = (
+    await ctx.sql.query<{ id: string; copy: string; mine: boolean }>(
+      `select a.id, b.id copy, (b.id = a.id) mine
+       from public.source_objects a join public.source_objects b on b.tenant_id = a.tenant_id and (b.id = a.id or (a.sha256 is not null and b.sha256 = a.sha256 and b.deleted_at is null))
+       where a.tenant_id = $1 and a.id = any($2::uuid[])
+         and ($3::uuid[] is null or exists (select 1 from public.acl_entries ae where ae.acl_id = b.acl_id and ae.principal_id = any($3::uuid[])))
+       order by a.id, (b.id = a.id) desc, b.original_path`,
+      [ctx.tenantId, used, principals],
+    )
+  ).rows
+  const copyOf = new Map<string, string>()
+  for (const c of copies) if (!copyOf.has(c.id) && ok(c.copy)) copyOf.set(c.id, c.copy)
+  /** The path to cite for content read from this file (null: no copy this reader may open). */
+  const cite = (so: string | null) => (so && copyOf.has(so) ? files.get(copyOf.get(so)!)!.path! : null)
 
   for (const d of docs) {
     const refs: Ref[] = []
-    if (d.doc_type === 'passage' && ok(d.source_object_id)) {
-      const path = files.get(d.source_object_id!)!.path!
+    if (d.doc_type === 'passage' && cite(d.source_object_id)) {
+      const path = cite(d.source_object_id)!
       refs.push({ source: path, locator: locatorOf(path, d.citation), quote: d.content.slice(0, 240) })
     } else if (d.doc_type === 'fact') {
       const seen = new Set<string>()
       for (const id of d.evidence_ids) {
         const e = evById.get(id)
-        if (!e || !ok(e.so) || !readable.has(e.id)) continue
-        const path = files.get(e.so)!.path!
+        if (!e || !readable.has(e.id) || !cite(e.so)) continue
+        const path = cite(e.so)!
         const locator = locatorOf(path, { ...e.locator, page_number: e.page_number, start_ms: e.start_ms ?? e.locator.start_ms, end_ms: e.end_ms ?? e.locator.end_ms })
         if (seen.has(path + locator)) continue
         seen.add(path + locator)
@@ -107,7 +125,7 @@ export async function refsFor(ctx: ToolCtx, files: Map<string, FileInfo>, ids: s
       if (e?.file_id && ok(e.file_id) && readableFiles.has(e.file_id)) refs.push({ source: files.get(e.file_id)!.path!, locator: e.row ? `row=${e.row}` : '' })
       // Records made from links between rows have no file of their own: cite the system rows
       // (and then other passages) that mention them, as far as the reader can open them.
-      for (const p of mentions.get(d.id.slice(2)) ?? []) if (refs.length < perFact && ok(p.so)) refs.push({ source: files.get(p.so)!.path!, locator: locatorOf(files.get(p.so)!.path!, p.citation), quote: p.content.slice(0, 240) })
+      for (const p of mentions.get(d.id.slice(2)) ?? []) if (refs.length < perFact && cite(p.so)) refs.push({ source: cite(p.so)!, locator: locatorOf(cite(p.so)!, p.citation), quote: p.content.slice(0, 240) })
     }
     out.set(d.id, refs)
   }
