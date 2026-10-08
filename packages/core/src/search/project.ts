@@ -211,40 +211,14 @@ async function passagesFor(sql: Sql, tenantId: string, dict: Dictionary, dvIds: 
   ).rows
   const byDv = new Map<string, EvRow[]>()
   for (const r of rows) byDv.set(r.dv, [...(byDv.get(r.dv) ?? []), r])
-  const audiences = await groupAudiences(sql, tenantId)
   const out: SearchDoc[] = []
   for (const group of byDv.values())
     for (const p of cutPassages(group)) {
-      // An email sent to a distribution list ("All Staff", "Columbus Techs") is readable by that
-      // group, even when the only copy we have sits in someone's private mailbox.
-      if (p.kind === 'email_body') {
-        const head = p.content.split('\n\n')[0]
-        const to = (head.match(/^(To|Cc):(.*)$/gim) ?? []).join(' ').toLowerCase()
-        for (const [name, acl] of audiences) if (to.includes(name)) p.acl_ids = [...new Set([...p.acl_ids, acl])]
-      }
+      // A copy in someone's private mailbox keeps that mailbox's access, even when the message
+      // went to a distribution list: the stricter of the source's permission and the sensitivity
+      // label wins. (Recipients see it through their own copies.)
       out.push({ ...p, entity_ids: linkText(dict, `${p.title}\n${p.content}`).map((e) => e.id) })
     }
-  return out
-}
-
-/** Distribution-list name → an access list that admits exactly that group (created on first use). */
-async function groupAudiences(sql: Sql, tenantId: string): Promise<Map<string, string>> {
-  const groups = (
-    await sql.query<{ id: string; name: string }>(
-      `select id, lower(display_name) name from public.principals
-       where tenant_id = $1 and kind = 'group' and coalesce(metadata ->> 'group_type', '') = 'system_group' and not metadata ? 'stale' and display_name !~* 'administrator'`,
-      [tenantId],
-    )
-  ).rows
-  const out = new Map<string, string>()
-  for (const g of groups) {
-    let acl = (await sql.query<{ id: string }>(`select id from public.acls where tenant_id = $1 and name = $2`, [tenantId, `audience:${g.id}`])).rows[0]?.id
-    if (!acl) {
-      acl = (await sql.query<{ id: string }>(`insert into public.acls (tenant_id, name, origin) values ($1, $2, $3) returning id`, [tenantId, `audience:${g.id}`, JSON.stringify({ email_audience: g.name })])).rows[0].id
-      await sql.query(`insert into public.acl_entries (tenant_id, acl_id, principal_id) values ($1, $2, $3)`, [tenantId, acl, g.id])
-    }
-    out.set(g.name, acl)
-  }
   return out
 }
 

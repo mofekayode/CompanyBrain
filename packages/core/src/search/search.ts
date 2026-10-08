@@ -93,6 +93,37 @@ export async function principalsOf(sql: Sql, tenantId: string, principalId: stri
   ).rows.map((r) => r.id)
 }
 
+/**
+ * The evidence (of those given) a reader can actually open: evidence counts only through a
+ * passage that holds it and that the reader may see (and, under a knowledge view, that existed).
+ */
+export async function readableEvidence(sql: Sql, tenantId: string, principalId: string | null, evidenceIds: string[], view?: KnowledgeView): Promise<Set<string>> {
+  if (!evidenceIds.length) return new Set()
+  const principals = principalId ? await principalsOf(sql, tenantId, principalId) : null
+  const rows = (
+    await sql.query<{ id: string; evidence_ids: string[]; so: string | null }>(
+      `select d.id, d.evidence_ids, d.source_object_id so from public.search_documents d
+       where d.tenant_id = $1 and d.doc_type = 'passage' and d.evidence_ids && $2::uuid[]
+         and ($3::uuid[] is null or exists (select 1 from public.acl_entries ae where ae.acl_id = any(d.acl_ids) and ae.principal_id = any($3::uuid[])))`,
+      [tenantId, evidenceIds, principals],
+    )
+  ).rows
+  const out = new Set<string>()
+  const want = new Set(evidenceIds)
+  for (const r of rows) {
+    if (view && (view.hiddenDocs.has(r.id) || (r.so && view.hiddenObjects.has(r.so)))) continue
+    for (const e of r.evidence_ids) if (want.has(e)) out.add(e)
+  }
+  return out
+}
+
+/** A fact's statement, dates, status and history, without quotes, summary or notes (which may come from evidence the reader can't open). */
+export const statementOnly = (content: string) =>
+  content
+    .split('\n')
+    .filter((l, i) => i === 0 || /^(Valid |Status: |Timeline: )/.test(l))
+    .join('\n')
+
 /** The client's "today": the date of their latest records (interviews can postdate the machine clock). */
 const nowCache = new Map<string, { at: number; now: Date }>()
 async function clientNow(sql: Sql, tenantId: string): Promise<Date> {
@@ -296,6 +327,18 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
     ? ranked.filter(([, v], i) => i < Math.max(40, limit * 3) || (v.bm25 !== null && v.bm25 <= 20) || (v.knn !== null && v.knn <= 20))
     : ranked.slice(0, Math.max(40, limit * 3))
   let hits: SearchHit[] = pool.map(([id, v]) => toHit(id, v.src, v.highlight, query, { bm25: v.bm25, knn: v.knn, fused: ranked.findIndex(([x]) => x === id) + 1 }, v.score))
+  // A reader sees a fact if they can open some of the evidence behind it; when some of it is
+  // restricted for them, they get the statement only (quotes and notes may come from the rest).
+  if (opts.as) {
+    const facts = hits.filter((h) => h.doc_type === 'fact' && h.kind !== 'timeline')
+    const ev = (
+      await sql.query<{ id: string; evidence_ids: string[] }>(`select id, evidence_ids from public.search_documents where tenant_id = $1 and id = any($2::text[])`, [tenantId, facts.map((h) => h.id)])
+    ).rows
+    const all = [...new Set(ev.flatMap((r) => r.evidence_ids))]
+    const readable = await readableEvidence(sql, tenantId, opts.as, all, opts.view)
+    const partial = new Set(ev.filter((r) => r.evidence_ids.some((e) => !readable.has(e))).map((r) => r.id))
+    hits = hits.map((h) => (partial.has(h.id) ? { ...h, content: statementOnly(h.content) } : h))
+  }
   // As known by the view's cutoff: whether a fact was current then, and its history as far as it went.
   if (opts.view) {
     const view = opts.view

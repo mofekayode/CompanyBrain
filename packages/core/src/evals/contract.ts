@@ -4,6 +4,7 @@
 
 import type { FileInfo } from '../access/knowledge-view'
 import type { ToolCtx } from '../answer/tools'
+import { principalsOf, readableEvidence } from '../search/search'
 
 export interface Ref {
   source: string
@@ -44,11 +45,43 @@ export async function refsFor(ctx: ToolCtx, files: Map<string, FileInfo>, ids: s
       ).rows
     : []
   const evById = new Map(ev.map((e) => [e.id, e]))
+  // Only evidence this reader can open (and that existed by the view's cutoff) is ever cited.
+  const readable = await readableEvidence(ctx.sql, ctx.tenantId, ctx.as, ev.map((e) => e.id), ctx.view)
   const entIds = docs.filter((d) => d.doc_type === 'entity').map((d) => d.id.slice(2))
   const ents = entIds.length
     ? (await ctx.sql.query<{ id: string; file_id: string | null; row: string | null }>(`select id, metadata #>> '{source,file_id}' file_id, metadata #>> '{source,row}' row from public.entities where id = any($1::uuid[])`, [entIds])).rows
     : []
   const entById = new Map(ents.map((e) => [e.id, e]))
+  // A record's source file is cited only if the reader can open some passage of that file.
+  const fileIds = ents.map((e) => e.file_id).filter((x): x is string => !!x)
+  const readableFiles = new Set(
+    fileIds.length
+      ? (
+          await ctx.sql.query<{ so: string }>(
+            `select distinct d.source_object_id so from public.search_documents d where d.tenant_id = $1 and d.doc_type = 'passage' and d.source_object_id = any($2::uuid[])
+               and ($3::uuid[] is null or exists (select 1 from public.acl_entries ae where ae.acl_id = any(d.acl_ids) and ae.principal_id = any($3::uuid[])))`,
+            [ctx.tenantId, fileIds, ctx.as ? await principalsOf(ctx.sql, ctx.tenantId, ctx.as) : null],
+          )
+        ).rows.map((r) => r.so)
+      : [],
+  )
+  const needMentions = ents.filter((e) => !e.file_id || !readableFiles.has(e.file_id)).map((e) => e.id)
+  const mentionRows = needMentions.length
+    ? (
+        await ctx.sql.query<{ entity: string; id: string; so: string; citation: Record<string, unknown>; content: string }>(
+          `select x.entity, d.id, d.source_object_id so, d.citation, d.content
+           from unnest($2::uuid[]) as x(entity)
+           cross join lateral (
+             select d.id, d.source_object_id, d.citation, d.content from public.search_documents d
+             where d.tenant_id = $1 and d.doc_type = 'passage' and d.entity_ids @> array[x.entity] and d.source_object_id is not null
+               and ($3::uuid[] is null or exists (select 1 from public.acl_entries ae where ae.acl_id = any(d.acl_ids) and ae.principal_id = any($3::uuid[])))
+             order by (d.kind = 'table') desc, d.id limit 6) d`,
+          [ctx.tenantId, needMentions, ctx.as ? await principalsOf(ctx.sql, ctx.tenantId, ctx.as) : null],
+        )
+      ).rows
+    : []
+  const mentions = new Map<string, typeof mentionRows>()
+  for (const r of mentionRows) if (!ctx.view?.hiddenDocs.has(r.id)) mentions.set(r.entity, [...(mentions.get(r.entity) ?? []), r])
   // Under a knowledge view, evidence from files not yet available is never cited.
   const ok = (so: string | null) => !!so && !!files.get(so)?.path && !ctx.view?.hiddenObjects.has(so)
 
@@ -61,7 +94,7 @@ export async function refsFor(ctx: ToolCtx, files: Map<string, FileInfo>, ids: s
       const seen = new Set<string>()
       for (const id of d.evidence_ids) {
         const e = evById.get(id)
-        if (!e || !ok(e.so)) continue
+        if (!e || !ok(e.so) || !readable.has(e.id)) continue
         const path = files.get(e.so)!.path!
         const locator = locatorOf(path, { ...e.locator, page_number: e.page_number, start_ms: e.start_ms ?? e.locator.start_ms, end_ms: e.end_ms ?? e.locator.end_ms })
         if (seen.has(path + locator)) continue
@@ -71,7 +104,10 @@ export async function refsFor(ctx: ToolCtx, files: Map<string, FileInfo>, ids: s
       }
     } else if (d.doc_type === 'entity') {
       const e = entById.get(d.id.slice(2))
-      if (e?.file_id && ok(e.file_id)) refs.push({ source: files.get(e.file_id)!.path!, locator: e.row ? `row=${e.row}` : '' })
+      if (e?.file_id && ok(e.file_id) && readableFiles.has(e.file_id)) refs.push({ source: files.get(e.file_id)!.path!, locator: e.row ? `row=${e.row}` : '' })
+      // Records made from links between rows have no file of their own: cite the system rows
+      // (and then other passages) that mention them, as far as the reader can open them.
+      for (const p of mentions.get(d.id.slice(2)) ?? []) if (refs.length < perFact && ok(p.so)) refs.push({ source: files.get(p.so)!.path!, locator: locatorOf(files.get(p.so)!.path!, p.citation), quote: p.content.slice(0, 240) })
     }
     out.set(d.id, refs)
   }
