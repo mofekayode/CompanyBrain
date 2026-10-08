@@ -1,0 +1,220 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@source "../../node_modules/streamdown/dist/*.js";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    --font-heading: var(--font-sans);
+    --font-sans: var(--font-sans);
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+    --color-ring: var(--ring);
+    --color-input: var(--input);
+    --color-border: var(--border);
+    --color-destructive: var(--destructive);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+    /* Brand palette shared with the marketing site (apps/site). */
+    --paper: #f7f7f4;
+    --ink: #111318;
+    --navy: #16243a;
+    --cobalt: #4169e1;
+    --cobalt-soft: #eaf0ff;
+    --verified: #1f8a5b;
+    --verified-soft: #e5f4ec;
+    --stale: #b0651a;
+    --stale-soft: #fbf0e4;
+
+    --background: var(--paper);
+    --foreground: var(--ink);
+    --card: #ffffff;
+    --card-foreground: var(--ink);
+    --popover: #ffffff;
+    --popover-foreground: var(--ink);
+    --primary: var(--ink);
+    --primary-foreground: #ffffff;
+    --secondary: #ecece7;
+    --secondary-foreground: var(--ink);
+    --muted: #efefea;
+    --muted-foreground: #5d6170;
+    --accent: var(--cobalt-soft);
+    --accent-foreground: var(--navy);
+    --destructive: #c4372c;
+    --border: #e3e3dd;
+    --input: #dcdcd5;
+    --ring: var(--cobalt);
+    --chart-1: #4169e1;
+    --chart-2: #1f8a5b;
+    --chart-3: #b0651a;
+    --chart-4: #16243a;
+    --chart-5: #8a8f9c;
+    --radius: 0.625rem;
+    --sidebar: #fbfbf9;
+    --sidebar-foreground: var(--ink);
+    --sidebar-primary: var(--ink);
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #ffffff;
+    --sidebar-accent-foreground: var(--ink);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--cobalt);
+}
+
+.dark {
+    --paper: #0e1116;
+    --ink: #eceef2;
+    --navy: #c9d6f2;
+    --cobalt: #7b9bff;
+    --cobalt-soft: #1a2440;
+    --verified: #4cc08a;
+    --verified-soft: #12291f;
+    --stale: #e09a52;
+    --stale-soft: #2e2214;
+
+    --background: var(--paper);
+    --foreground: var(--ink);
+    --card: #151920;
+    --card-foreground: var(--ink);
+    --popover: #151920;
+    --popover-foreground: var(--ink);
+    --primary: #eceef2;
+    --primary-foreground: #111318;
+    --secondary: #1d222b;
+    --secondary-foreground: var(--ink);
+    --muted: #1b2029;
+    --muted-foreground: #9399a6;
+    --accent: var(--cobalt-soft);
+    --accent-foreground: var(--navy);
+    --destructive: #e8675c;
+    --border: #262c36;
+    --input: #2c333e;
+    --ring: var(--cobalt);
+    --chart-1: #7b9bff;
+    --chart-2: #4cc08a;
+    --chart-3: #e09a52;
+    --chart-4: #c9d6f2;
+    --chart-5: #6b7280;
+    --sidebar: #11151b;
+    --sidebar-foreground: var(--ink);
+    --sidebar-primary: var(--ink);
+    --sidebar-primary-foreground: #111318;
+    --sidebar-accent: #1b2029;
+    --sidebar-accent-foreground: var(--ink);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--cobalt);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "cv11";
+    }
+  ::selection { background: var(--cobalt-soft); color: var(--navy); }
+  html {
+    @apply font-sans;
+    }
+}
+/* ---- Workbench additions ---- */
+@theme inline {
+  --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-newsreader);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-navy: var(--navy);
+  --color-cobalt: var(--cobalt);
+  --color-cobalt-soft: var(--cobalt-soft);
+  --color-verified: var(--verified);
+  --color-verified-soft: var(--verified-soft);
+  --color-stale: var(--stale);
+  --color-stale-soft: var(--stale-soft);
+  --color-signal: var(--signal);
+  --color-signal-foreground: var(--signal-foreground);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+}
+
+:root, .dark {
+  /* The accent the workbench uses for "act here / AI working" is the brand cobalt. */
+  --signal: var(--cobalt);
+  --signal-foreground: #ffffff;
+  --ok: var(--verified);
+  --warn: var(--stale);
+}
+.dark { --signal-foreground: #0e1116; }
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+.shimmer-text {
+  background: linear-gradient(90deg, var(--muted-foreground) 0%, var(--foreground) 50%, var(--muted-foreground) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 2.2s linear infinite;
+}
+
+.prose-workbench :where(p, ul, ol, table, pre, blockquote) { margin-block: 0.5rem; }
+.prose-workbench :where(ul) { list-style: disc; padding-left: 1.25rem; }
+.prose-workbench :where(ol) { list-style: decimal; padding-left: 1.25rem; }
+.prose-workbench :where(li) { margin-block: 0.15rem; }
+.prose-workbench :where(h1, h2, h3, h4) { font-weight: 600; margin-top: 0.9rem; margin-bottom: 0.35rem; }
+.prose-workbench :where(code) { font-family: var(--font-mono); font-size: 0.85em; background: var(--muted); padding: 0.05rem 0.3rem; border-radius: 0.25rem; }
+.prose-workbench :where(pre) { background: var(--muted); padding: 0.75rem; border-radius: 0.5rem; overflow-x: auto; }
+.prose-workbench :where(pre code) { background: transparent; padding: 0; }
+.prose-workbench :where(table) { width: 100%; border-collapse: collapse; font-size: 0.85em; }
+.prose-workbench :where(th, td) { border-bottom: 1px solid var(--border); padding: 0.3rem 0.5rem; text-align: left; vertical-align: top; }
+.prose-workbench :where(strong) { font-weight: 600; }
+.prose-workbench :where(a) { text-decoration: underline; text-underline-offset: 2px; }
+
+/* Site-style labels: small mono caps in cobalt ("ANSWER · 3 SOURCES"). */
+@layer utilities {
+  .eyebrow { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cobalt); }
+  .eyebrow-muted { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); }
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--ink) 6%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--ink) 6%, transparent) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+}
+.dark { --logo-tile: #2a3140; }
