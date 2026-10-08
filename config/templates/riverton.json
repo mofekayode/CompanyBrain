@@ -1,0 +1,489 @@
+{
+  "format": "companybrain.tenant/v1",
+  "mode": "template",
+  "exported_at": "2026-10-06T17:18:56.954Z",
+  "tenant": {
+    "slug": "riverton",
+    "name": "Riverton"
+  },
+  "rules": {},
+  "ontology": {
+    "entity_types": [
+      {
+        "name": "Account Owner Change",
+        "description": null,
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Asset",
+        "description": "Customer equipment that Riverton maintains: pumps, conveyors, compressors, refrigeration, heat exchangers. Carries the customer's own tag, make/model/serial and a PM interval.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Bill",
+        "description": "Vendor bill or expense line coded to a GL account and a branch location.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Branch",
+        "description": "Operating branch or shop. Oakley is HQ and the Main/rebuild shop in Cincinnati. Louisville is also called 'J-town' and came from Falls City Pump. Columbus is Grove City (Gantz Rd). Branch drives labor rates, site assignment, dispatch and bill coding.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "CRM Note",
+        "description": "Logged sales/account activity in HubSpot.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Customer",
+        "description": "Industrial plant operator that buys PM agreements, T&M repair, Hot Jobs, parts and projects. Names drift across systems: QBO upper-case abbreviations, FieldLine full legal names, legacy short names, renames.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Customer Contact",
+        "description": "A person at a customer: maintenance managers and planners, purchasing, AP. Sales calls on purchasing; techs work with maintenance staff.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Deal",
+        "description": "HubSpot sales opportunity in the Projects or Renewals pipeline.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Fixed Asset",
+        "description": "Riverton-owned shop equipment on the depreciation register, mainly the Oakley rebuild shop.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "GL Account",
+        "description": "QuickBooks chart-of-accounts line, including bank accounts and revenue streams such as PM contract vs T&M revenue.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Invoice",
+        "description": "QuickBooks Online customer invoice, made of lines per service item. References WOs only through a free-text memo.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Labor Rate",
+        "description": "Hourly price by branch and rate type with effective dates (the 'Blue Book'). FieldLine pulls it at WO completion. Hot Job = 1.5x standard plus a $250 dispatch fee.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Loaner Unit",
+        "description": "Riverton-owned rental/loaner equipment placed at customer sites during repairs. Legacy customer 'RIVERTON LOANER'; RIS-LOANER-xx tags.",
+        "status": "proposed",
+        "parent": "Asset"
+      },
+      {
+        "name": "On-Call Week",
+        "description": null,
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "OSHA Recordable",
+        "description": null,
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Payment",
+        "description": "Customer payment received and applied to one or more invoices, then deposited to a bank account.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Person",
+        "description": "Riverton employees and ex-employees: technicians, dispatchers, branch managers, sales, office and owners. Already modelled with departments and branches. Legacy dispatch keys techs by initials; FieldLine and QBO/HubSpot use full names.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "PM Agreement",
+        "description": "Signed preventive maintenance and service contract. Covers listed sites/equipment (Exhibit A) for a monthly fee, with labor discounts and parts markup. Work outside it is billed T&M.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Service Item",
+        "description": "QuickBooks product/service billed on invoice lines. Mirrors FieldLine billing codes PM / T&M / HOT / PARTS / CALLBACK / PROJECT.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Site",
+        "description": "A customer plant or facility where work is done (FieldLine 'Location'). Each has a serving branch and access rules such as gate codes or 48-hr notice.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Term",
+        "description": "Company vocabulary: jargon, nicknames and internal terms, with what they mean",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Vehicle",
+        "description": "Service truck, mostly leased from Keystone, assigned to a tech and home branch, with a fuel card.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Vendor",
+        "description": "Supplier or payee: parts houses, fleet lessor, landlords, IT, payroll. Each has a preferred-vendor status.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Work Order",
+        "description": "A unit of field or shop work: PM, Repair/Service (T&M), Emergency (Hot Job), Project, Parts or Callback. FieldLine 'WO #' since 2025; legacy dispatch WONum and paper 'work tickets' before that.",
+        "status": "proposed",
+        "parent": null
+      }
+    ],
+    "relationship_types": [
+      {
+        "name": "account_owner",
+        "description": "Sales/account owner of the customer",
+        "source_type": "Customer",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "agreement_with",
+        "description": "PM agreement signed with customer",
+        "source_type": "PM Agreement",
+        "target_type": "Customer",
+        "status": "proposed"
+      },
+      {
+        "name": "applied_to",
+        "description": "Payment applied to invoice",
+        "source_type": "Payment",
+        "target_type": "Invoice",
+        "status": "proposed"
+      },
+      {
+        "name": "assigned_to",
+        "description": "Truck assigned to a person",
+        "source_type": "Vehicle",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "at_site",
+        "description": "Work order performed at this site",
+        "source_type": "Work Order",
+        "target_type": "Site",
+        "status": "proposed"
+      },
+      {
+        "name": "based_at",
+        "description": "Employee's home branch/shop",
+        "source_type": "Person",
+        "target_type": "Branch",
+        "status": "proposed"
+      },
+      {
+        "name": "belongs_to",
+        "description": "Site is a facility of the customer",
+        "source_type": "Site",
+        "target_type": "Customer",
+        "status": "proposed"
+      },
+      {
+        "name": "billed_on",
+        "description": "Work order invoiced on this QBO invoice (typed in by billing, weak link)",
+        "source_type": "Work Order",
+        "target_type": "Invoice",
+        "status": "proposed"
+      },
+      {
+        "name": "bills_customer",
+        "description": "Invoice is billed to this customer",
+        "source_type": "Invoice",
+        "target_type": "Customer",
+        "status": "proposed"
+      },
+      {
+        "name": "bills_item",
+        "description": "Invoice line bills this service item",
+        "source_type": "Invoice",
+        "target_type": "Service Item",
+        "status": "proposed"
+      },
+      {
+        "name": "callback_of",
+        "description": "Return visit for an earlier work order",
+        "source_type": "Work Order",
+        "target_type": "Work Order",
+        "status": "proposed"
+      },
+      {
+        "name": "coded_to",
+        "description": "Bill line posted to GL account",
+        "source_type": "Bill",
+        "target_type": "GL Account",
+        "status": "proposed"
+      },
+      {
+        "name": "contact_owned_by",
+        "description": "Riverton owner of the contact relationship",
+        "source_type": "Customer Contact",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "customer_served_by",
+        "description": "Customer account is handled by a branch",
+        "source_type": "Customer",
+        "target_type": "Branch",
+        "status": "proposed"
+      },
+      {
+        "name": "deal_for",
+        "description": "Deal is with this customer",
+        "source_type": "Deal",
+        "target_type": "Customer",
+        "status": "proposed"
+      },
+      {
+        "name": "deal_owned_by",
+        "description": "Salesperson owning the deal",
+        "source_type": "Deal",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "deployed_at",
+        "description": "Loaner unit currently placed at a customer site",
+        "source_type": "Loaner Unit",
+        "target_type": "Site",
+        "status": "proposed"
+      },
+      {
+        "name": "deposited_to",
+        "description": "Payment deposited to bank GL account",
+        "source_type": "Payment",
+        "target_type": "GL Account",
+        "status": "proposed"
+      },
+      {
+        "name": "dispatched_from",
+        "description": "Branch that owns the work order",
+        "source_type": "Work Order",
+        "target_type": "Branch",
+        "status": "proposed"
+      },
+      {
+        "name": "for_branch",
+        "description": "Bill expense coded to branch location",
+        "source_type": "Bill",
+        "target_type": "Branch",
+        "status": "proposed"
+      },
+      {
+        "name": "for_customer",
+        "description": "Work order is for this customer",
+        "source_type": "Work Order",
+        "target_type": "Customer",
+        "status": "proposed"
+      },
+      {
+        "name": "from_vendor",
+        "description": "Bill owed to vendor",
+        "source_type": "Bill",
+        "target_type": "Vendor",
+        "status": "proposed"
+      },
+      {
+        "name": "home_branch",
+        "description": "Truck's home branch",
+        "source_type": "Vehicle",
+        "target_type": "Branch",
+        "status": "proposed"
+      },
+      {
+        "name": "injured_person",
+        "description": "Employee involved in OSHA recordable",
+        "source_type": "OSHA Recordable",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "kept_at",
+        "description": "Shop equipment located at branch",
+        "source_type": "Fixed Asset",
+        "target_type": "Branch",
+        "status": "proposed"
+      },
+      {
+        "name": "last_edited_by",
+        "description": "Person who last edited the rate",
+        "source_type": "Labor Rate",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "leased_from",
+        "description": "Truck leased from vendor (Keystone)",
+        "source_type": "Vehicle",
+        "target_type": "Vendor",
+        "status": "proposed"
+      },
+      {
+        "name": "located_at",
+        "description": "Equipment is installed at a site",
+        "source_type": "Asset",
+        "target_type": "Site",
+        "status": "proposed"
+      },
+      {
+        "name": "logged_by",
+        "description": "Person who wrote the CRM note",
+        "source_type": "CRM Note",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "new_owner",
+        "description": "Person who became account owner",
+        "source_type": "Account Owner Change",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "note_about",
+        "description": "CRM note logged against a customer",
+        "source_type": "CRM Note",
+        "target_type": "Customer",
+        "status": "proposed"
+      },
+      {
+        "name": "note_about_contact",
+        "description": "CRM note about a contact",
+        "source_type": "CRM Note",
+        "target_type": "Customer Contact",
+        "status": "proposed"
+      },
+      {
+        "name": "note_about_deal",
+        "description": "CRM note about a deal",
+        "source_type": "CRM Note",
+        "target_type": "Deal",
+        "status": "proposed"
+      },
+      {
+        "name": "occurred_at_branch",
+        "description": "Branch of the OSHA recordable",
+        "source_type": "OSHA Recordable",
+        "target_type": "Branch",
+        "status": "proposed"
+      },
+      {
+        "name": "on_asset",
+        "description": "Work order performed on this equipment",
+        "source_type": "Work Order",
+        "target_type": "Asset",
+        "status": "proposed"
+      },
+      {
+        "name": "on_call",
+        "description": "Person on call for the week",
+        "source_type": "On-Call Week",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "owned_by_customer",
+        "description": "Equipment belongs to the customer",
+        "source_type": "Asset",
+        "target_type": "Customer",
+        "status": "proposed"
+      },
+      {
+        "name": "owner_change_for",
+        "description": "Account owner change applies to customer",
+        "source_type": "Account Owner Change",
+        "target_type": "Customer",
+        "status": "proposed"
+      },
+      {
+        "name": "paid_by",
+        "description": "Payment received from customer",
+        "source_type": "Payment",
+        "target_type": "Customer",
+        "status": "proposed"
+      },
+      {
+        "name": "performed_by",
+        "description": "Technician(s) who did the work",
+        "source_type": "Work Order",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "posted_by",
+        "description": "Person who posted the on-call schedule",
+        "source_type": "On-Call Week",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "posts_to",
+        "description": "Service item posts revenue to GL account",
+        "source_type": "Service Item",
+        "target_type": "GL Account",
+        "status": "proposed"
+      },
+      {
+        "name": "rate_for_branch",
+        "description": "Labor rate applies to branch",
+        "source_type": "Labor Rate",
+        "target_type": "Branch",
+        "status": "proposed"
+      },
+      {
+        "name": "refers_to",
+        "description": "A company term and the thing it names",
+        "source_type": null,
+        "target_type": null,
+        "status": "active"
+      },
+      {
+        "name": "reports_to",
+        "description": "Manager in the HR system",
+        "source_type": "Person",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "served_by",
+        "description": "Site is serviced out of a branch",
+        "source_type": "Site",
+        "target_type": "Branch",
+        "status": "proposed"
+      },
+      {
+        "name": "works_at",
+        "description": "Contact is employed by the customer",
+        "source_type": "Customer Contact",
+        "target_type": "Customer",
+        "status": "proposed"
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "$comment": "Phase 3 landing manifest: one entry per pile the company handed over, exactly as delivered. Paths are relative to corpus_root.",
+  "tenant": { "slug": "riverton", "name": "Riverton" },
+  "corpus_root": "riverton-data",
+  "sources": [
+    { "slug": "northgate-handoff-note", "name": "Northgate handoff README", "kind": "handoff_note", "root": "company-as-found/README_FROM_NORTHGATE.txt", "batch": "2026-10-10-handoff", "description": "Cover note from the acquirer describing the piles" },
+    { "slug": "ridgeline-vdr", "name": "Ridgeline VDR download 10-2-26", "kind": "data_room", "root": "company-as-found/Ridgeline VDR download 10-2-26", "batch": "2026-10-10-handoff", "description": "Download of the diligence data room" },
+    { "slug": "sharepoint-shared-documents", "name": "SharePoint - Shared Documents (copy)", "kind": "sharepoint", "root": "company-as-found/SharePoint - Shared Documents (copy)", "batch": "2026-10-10-handoff", "description": "Copy of the SharePoint document library" },
+    { "slug": "fileserver2", "name": "fileserver2 (old S drive)", "kind": "fileserver", "root": "company-as-found/fileserver2 (old S drive)", "batch": "2026-10-10-handoff", "description": "What remained on the old file server" },
+    { "slug": "onedrive-exports", "name": "OneDrive exports", "kind": "onedrive", "root": "company-as-found/OneDrive exports", "batch": "2026-10-10-handoff", "description": "OneDrive exports" },
+    { "slug": "dave-onedrive-laptop", "name": "Dave - OneDrive + old laptop", "kind": "personal_device", "root": "company-as-found/Dave - OneDrive + old laptop", "batch": "2026-10-10-handoff", "description": "Dave's OneDrive and old laptop" },
+    { "slug": "linda-usb", "name": "From Linda - USB", "kind": "removable_media", "root": "company-as-found/From Linda - USB", "batch": "2026-10-10-handoff", "description": "USB stick from Linda" },
+    { "slug": "it-exports", "name": "IT exports 10-2", "kind": "system_export", "root": "company-as-found/IT exports 10-2", "batch": "2026-10-10-handoff", "description": "Exports produced by IT" },
+    { "slug": "phone-uploads", "name": "Phone uploads", "kind": "phone", "root": "company-as-found/Phone uploads", "batch": "2026-10-10-handoff", "description": "Photos and videos uploaded from phones" },
+    { "slug": "mock-api", "name": "mock-api", "kind": "api", "root": "company-as-found/mock-api", "batch": "2026-10-10-handoff", "description": "Documentation for the live system APIs (connected separately)" },
+    { "slug": "fde-interviews", "name": "FDE interview recordings", "kind": "interview", "root": "fde-captures/audio", "batch": "fde-captures", "description": "Audio interviews recorded by the FDE" },
+    { "slug": "fde-inbox", "name": "FDE inbox", "kind": "fde_capture", "root": "fde-captures/inbox", "batch": "fde-captures", "description": "Other captures sent to the FDE (screen recordings, ...)" }
+  ]
+}

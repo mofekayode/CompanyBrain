@@ -1,0 +1,5303 @@
+{
+  "format": "companybrain.tenant/v1",
+  "mode": "full",
+  "exported_at": "2026-10-06T17:18:58.685Z",
+  "tenant": {
+    "slug": "riverton",
+    "name": "Riverton"
+  },
+  "rules": {
+    "prompts": {
+      "company_context": "Industrial field-service company (pumps, motors, gearboxes, ammonia refrigeration) with a rebuild/machine shop. Three branches: Oakley (Cincinnati HQ and main shop), Louisville/Jeffersontown (acquired 2012 as Falls City Pump & Repair, still runs some of its old practices) and Columbus/Grove City (opened 2021). Being acquired by Northgate Industrial Partners; the founder (Dave Brennan) is handing over. Two technicians are both 'Mike H' (Hargis at Oakley, Hargrove at Louisville) and are often confused.",
+      "system_examples": [
+        "FieldLine",
+        "legacy dispatch DB (Access)",
+        "QuickBooks Online",
+        "QuickBooks Desktop",
+        "HubSpot",
+        "ADP",
+        "Microsoft 365",
+        "SharePoint",
+        "Blue Book"
+      ],
+      "vocabulary_examples": [
+        "hot job",
+        "the board",
+        "the cage",
+        "J-town",
+        "green sheets",
+        "Big Blue",
+        "Blue Book",
+        "R stamp"
+      ]
+    }
+  },
+  "ontology": {
+    "entity_types": [
+      {
+        "name": "Account Owner Change",
+        "description": null,
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Asset",
+        "description": "Customer equipment that Riverton maintains: pumps, conveyors, compressors, refrigeration, heat exchangers. Carries the customer's own tag, make/model/serial and a PM interval.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Bill",
+        "description": "Vendor bill or expense line coded to a GL account and a branch location.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Branch",
+        "description": "Operating branch or shop. Oakley is HQ and the Main/rebuild shop in Cincinnati. Louisville is also called 'J-town' and came from Falls City Pump. Columbus is Grove City (Gantz Rd). Branch drives labor rates, site assignment, dispatch and bill coding.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "CRM Note",
+        "description": "Logged sales/account activity in HubSpot.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Customer",
+        "description": "Industrial plant operator that buys PM agreements, T&M repair, Hot Jobs, parts and projects. Names drift across systems: QBO upper-case abbreviations, FieldLine full legal names, legacy short names, renames.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Customer Contact",
+        "description": "A person at a customer: maintenance managers and planners, purchasing, AP. Sales calls on purchasing; techs work with maintenance staff.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Deal",
+        "description": "HubSpot sales opportunity in the Projects or Renewals pipeline.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Fixed Asset",
+        "description": "Riverton-owned shop equipment on the depreciation register, mainly the Oakley rebuild shop.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "GL Account",
+        "description": "QuickBooks chart-of-accounts line, including bank accounts and revenue streams such as PM contract vs T&M revenue.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Invoice",
+        "description": "QuickBooks Online customer invoice, made of lines per service item. References WOs only through a free-text memo.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Labor Rate",
+        "description": "Hourly price by branch and rate type with effective dates (the 'Blue Book'). FieldLine pulls it at WO completion. Hot Job = 1.5x standard plus a $250 dispatch fee.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Loaner Unit",
+        "description": "Riverton-owned rental/loaner equipment placed at customer sites during repairs. Legacy customer 'RIVERTON LOANER'; RIS-LOANER-xx tags.",
+        "status": "proposed",
+        "parent": "Asset"
+      },
+      {
+        "name": "On-Call Week",
+        "description": null,
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "OSHA Recordable",
+        "description": null,
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Payment",
+        "description": "Customer payment received and applied to one or more invoices, then deposited to a bank account.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Person",
+        "description": "Riverton employees and ex-employees: technicians, dispatchers, branch managers, sales, office and owners. Already modelled with departments and branches. Legacy dispatch keys techs by initials; FieldLine and QBO/HubSpot use full names.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "PM Agreement",
+        "description": "Signed preventive maintenance and service contract. Covers listed sites/equipment (Exhibit A) for a monthly fee, with labor discounts and parts markup. Work outside it is billed T&M.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Service Item",
+        "description": "QuickBooks product/service billed on invoice lines. Mirrors FieldLine billing codes PM / T&M / HOT / PARTS / CALLBACK / PROJECT.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Site",
+        "description": "A customer plant or facility where work is done (FieldLine 'Location'). Each has a serving branch and access rules such as gate codes or 48-hr notice.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Term",
+        "description": "Company vocabulary: jargon, nicknames and internal terms, with what they mean",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Vehicle",
+        "description": "Service truck, mostly leased from Keystone, assigned to a tech and home branch, with a fuel card.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Vendor",
+        "description": "Supplier or payee: parts houses, fleet lessor, landlords, IT, payroll. Each has a preferred-vendor status.",
+        "status": "proposed",
+        "parent": null
+      },
+      {
+        "name": "Work Order",
+        "description": "A unit of field or shop work: PM, Repair/Service (T&M), Emergency (Hot Job), Project, Parts or Callback. FieldLine 'WO #' since 2025; legacy dispatch WONum and paper 'work tickets' before that.",
+        "status": "proposed",
+        "parent": null
+      }
+    ],
+    "relationship_types": [
+      {
+        "name": "account_owner",
+        "description": "Sales/account owner of the customer",
+        "source_type": "Customer",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "agreement_with",
+        "description": "PM agreement signed with customer",
+        "source_type": "PM Agreement",
+        "target_type": "Customer",
+        "status": "proposed"
+      },
+      {
+        "name": "applied_to",
+        "description": "Payment applied to invoice",
+        "source_type": "Payment",
+        "target_type": "Invoice",
+        "status": "proposed"
+      },
+      {
+        "name": "assigned_to",
+        "description": "Truck assigned to a person",
+        "source_type": "Vehicle",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "at_site",
+        "description": "Work order performed at this site",
+        "source_type": "Work Order",
+        "target_type": "Site",
+        "status": "proposed"
+      },
+      {
+        "name": "based_at",
+        "description": "Employee's home branch/shop",
+        "source_type": "Person",
+        "target_type": "Branch",
+        "status": "proposed"
+      },
+      {
+        "name": "belongs_to",
+        "description": "Site is a facility of the customer",
+        "source_type": "Site",
+        "target_type": "Customer",
+        "status": "proposed"
+      },
+      {
+        "name": "billed_on",
+        "description": "Work order invoiced on this QBO invoice (typed in by billing, weak link)",
+        "source_type": "Work Order",
+        "target_type": "Invoice",
+        "status": "proposed"
+      },
+      {
+        "name": "bills_customer",
+        "description": "Invoice is billed to this customer",
+        "source_type": "Invoice",
+        "target_type": "Customer",
+        "status": "proposed"
+      },
+      {
+        "name": "bills_item",
+        "description": "Invoice line bills this service item",
+        "source_type": "Invoice",
+        "target_type": "Service Item",
+        "status": "proposed"
+      },
+      {
+        "name": "callback_of",
+        "description": "Return visit for an earlier work order",
+        "source_type": "Work Order",
+        "target_type": "Work Order",
+        "status": "proposed"
+      },
+      {
+        "name": "coded_to",
+        "description": "Bill line posted to GL account",
+        "source_type": "Bill",
+        "target_type": "GL Account",
+        "status": "proposed"
+      },
+      {
+        "name": "contact_owned_by",
+        "description": "Riverton owner of the contact relationship",
+        "source_type": "Customer Contact",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "customer_served_by",
+        "description": "Customer account is handled by a branch",
+        "source_type": "Customer",
+        "target_type": "Branch",
+        "status": "proposed"
+      },
+      {
+        "name": "deal_for",
+        "description": "Deal is with this customer",
+        "source_type": "Deal",
+        "target_type": "Customer",
+        "status": "proposed"
+      },
+      {
+        "name": "deal_owned_by",
+        "description": "Salesperson owning the deal",
+        "source_type": "Deal",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "deployed_at",
+        "description": "Loaner unit currently placed at a customer site",
+        "source_type": "Loaner Unit",
+        "target_type": "Site",
+        "status": "proposed"
+      },
+      {
+        "name": "deposited_to",
+        "description": "Payment deposited to bank GL account",
+        "source_type": "Payment",
+        "target_type": "GL Account",
+        "status": "proposed"
+      },
+      {
+        "name": "dispatched_from",
+        "description": "Branch that owns the work order",
+        "source_type": "Work Order",
+        "target_type": "Branch",
+        "status": "proposed"
+      },
+      {
+        "name": "for_branch",
+        "description": "Bill expense coded to branch location",
+        "source_type": "Bill",
+        "target_type": "Branch",
+        "status": "proposed"
+      },
+      {
+        "name": "for_customer",
+        "description": "Work order is for this customer",
+        "source_type": "Work Order",
+        "target_type": "Customer",
+        "status": "proposed"
+      },
+      {
+        "name": "from_vendor",
+        "description": "Bill owed to vendor",
+        "source_type": "Bill",
+        "target_type": "Vendor",
+        "status": "proposed"
+      },
+      {
+        "name": "home_branch",
+        "description": "Truck's home branch",
+        "source_type": "Vehicle",
+        "target_type": "Branch",
+        "status": "proposed"
+      },
+      {
+        "name": "injured_person",
+        "description": "Employee involved in OSHA recordable",
+        "source_type": "OSHA Recordable",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "kept_at",
+        "description": "Shop equipment located at branch",
+        "source_type": "Fixed Asset",
+        "target_type": "Branch",
+        "status": "proposed"
+      },
+      {
+        "name": "last_edited_by",
+        "description": "Person who last edited the rate",
+        "source_type": "Labor Rate",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "leased_from",
+        "description": "Truck leased from vendor (Keystone)",
+        "source_type": "Vehicle",
+        "target_type": "Vendor",
+        "status": "proposed"
+      },
+      {
+        "name": "located_at",
+        "description": "Equipment is installed at a site",
+        "source_type": "Asset",
+        "target_type": "Site",
+        "status": "proposed"
+      },
+      {
+        "name": "logged_by",
+        "description": "Person who wrote the CRM note",
+        "source_type": "CRM Note",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "new_owner",
+        "description": "Person who became account owner",
+        "source_type": "Account Owner Change",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "note_about",
+        "description": "CRM note logged against a customer",
+        "source_type": "CRM Note",
+        "target_type": "Customer",
+        "status": "proposed"
+      },
+      {
+        "name": "note_about_contact",
+        "description": "CRM note about a contact",
+        "source_type": "CRM Note",
+        "target_type": "Customer Contact",
+        "status": "proposed"
+      },
+      {
+        "name": "note_about_deal",
+        "description": "CRM note about a deal",
+        "source_type": "CRM Note",
+        "target_type": "Deal",
+        "status": "proposed"
+      },
+      {
+        "name": "occurred_at_branch",
+        "description": "Branch of the OSHA recordable",
+        "source_type": "OSHA Recordable",
+        "target_type": "Branch",
+        "status": "proposed"
+      },
+      {
+        "name": "on_asset",
+        "description": "Work order performed on this equipment",
+        "source_type": "Work Order",
+        "target_type": "Asset",
+        "status": "proposed"
+      },
+      {
+        "name": "on_call",
+        "description": "Person on call for the week",
+        "source_type": "On-Call Week",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "owned_by_customer",
+        "description": "Equipment belongs to the customer",
+        "source_type": "Asset",
+        "target_type": "Customer",
+        "status": "proposed"
+      },
+      {
+        "name": "owner_change_for",
+        "description": "Account owner change applies to customer",
+        "source_type": "Account Owner Change",
+        "target_type": "Customer",
+        "status": "proposed"
+      },
+      {
+        "name": "paid_by",
+        "description": "Payment received from customer",
+        "source_type": "Payment",
+        "target_type": "Customer",
+        "status": "proposed"
+      },
+      {
+        "name": "performed_by",
+        "description": "Technician(s) who did the work",
+        "source_type": "Work Order",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "posted_by",
+        "description": "Person who posted the on-call schedule",
+        "source_type": "On-Call Week",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "posts_to",
+        "description": "Service item posts revenue to GL account",
+        "source_type": "Service Item",
+        "target_type": "GL Account",
+        "status": "proposed"
+      },
+      {
+        "name": "rate_for_branch",
+        "description": "Labor rate applies to branch",
+        "source_type": "Labor Rate",
+        "target_type": "Branch",
+        "status": "proposed"
+      },
+      {
+        "name": "refers_to",
+        "description": "A company term and the thing it names",
+        "source_type": null,
+        "target_type": null,
+        "status": "active"
+      },
+      {
+        "name": "reports_to",
+        "description": "Manager in the HR system",
+        "source_type": "Person",
+        "target_type": "Person",
+        "status": "proposed"
+      },
+      {
+        "name": "served_by",
+        "description": "Site is serviced out of a branch",
+        "source_type": "Site",
+        "target_type": "Branch",
+        "status": "proposed"
+      },
+      {
+        "name": "works_at",
+        "description": "Contact is employed by the customer",
+        "source_type": "Customer Contact",
+        "target_type": "Customer",
+        "status": "proposed"
+      }
+    ],
+    "table_mappings": [
+      {
+        "path": "Invoices_Transaction_Detail_2024-01-01_to_2026-10-09.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "events",
+        "links": [
+          {
+            "match": "name",
+            "column": "Customer",
+            "system": "QuickBooks Online",
+            "target_type": "Customer",
+            "relationship": "bills_customer"
+          },
+          {
+            "match": "name",
+            "column": "Product/Service",
+            "system": "QuickBooks Online",
+            "target_type": "Service Item",
+            "relationship": "bills_item"
+          }
+        ],
+        "system": "QuickBooks Online",
+        "id_column": null,
+        "event_type": "Invoice",
+        "date_column": "Date",
+        "entity_type": null,
+        "name_column": null,
+        "amount_column": "Amount",
+        "event_id_column": "No.",
+        "property_columns": [
+          "Transaction type",
+          "Terms",
+          "Due date",
+          "P.O. number",
+          "Memo",
+          "Description",
+          "Qty",
+          "Rate"
+        ]
+      },
+      {
+        "path": "Bills_and_Expenses_2024-01-01_to_2026-10-09.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "events",
+        "links": [
+          {
+            "match": "name",
+            "column": "Vendor",
+            "system": "QuickBooks Online",
+            "target_type": "Vendor",
+            "relationship": "from_vendor"
+          },
+          {
+            "match": "name",
+            "column": "Location",
+            "system": null,
+            "target_type": "Branch",
+            "relationship": "for_branch"
+          },
+          {
+            "match": "name",
+            "column": "Account",
+            "system": "QuickBooks Online",
+            "target_type": "GL Account",
+            "relationship": "coded_to"
+          }
+        ],
+        "system": "QuickBooks Online",
+        "id_column": null,
+        "event_type": "Bill",
+        "date_column": "Date",
+        "entity_type": null,
+        "name_column": null,
+        "amount_column": "Line amount",
+        "event_id_column": "No.",
+        "property_columns": [
+          "Transaction type",
+          "Due date",
+          "Line description",
+          "Qty",
+          "Rate",
+          "Total",
+          "Memo"
+        ]
+      },
+      {
+        "path": "dispatch db/WorkOrders.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "events",
+        "links": [
+          {
+            "match": "name",
+            "column": "Customer",
+            "system": "Legacy dispatch DB",
+            "target_type": "Customer",
+            "relationship": "for_customer"
+          },
+          {
+            "match": "name",
+            "column": "Site",
+            "system": "Legacy dispatch DB",
+            "target_type": "Site",
+            "relationship": "at_site"
+          },
+          {
+            "match": "id",
+            "column": "Equip",
+            "system": "Legacy dispatch DB",
+            "target_type": "Asset",
+            "relationship": "on_asset"
+          },
+          {
+            "match": "name",
+            "column": "Tech",
+            "system": null,
+            "target_type": "Person",
+            "relationship": "performed_by"
+          },
+          {
+            "match": "id",
+            "column": "QBInv",
+            "system": "QuickBooks Online",
+            "target_type": "Invoice",
+            "relationship": "billed_on"
+          }
+        ],
+        "system": "Legacy dispatch DB",
+        "id_column": null,
+        "event_type": "Work Order",
+        "date_column": "DateIn",
+        "entity_type": null,
+        "name_column": null,
+        "amount_column": null,
+        "event_id_column": "WONum",
+        "property_columns": [
+          "DateSched",
+          "DateDone",
+          "Type",
+          "Hrs",
+          "OTHrs",
+          "Parts",
+          "Notes",
+          "Billed"
+        ]
+      },
+      {
+        "path": "export.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "events",
+        "links": [
+          {
+            "match": "id",
+            "column": "Customer ID",
+            "system": "FieldLine",
+            "target_type": "Customer",
+            "relationship": "for_customer"
+          },
+          {
+            "match": "id",
+            "column": "Location ID",
+            "system": "FieldLine",
+            "target_type": "Site",
+            "relationship": "at_site"
+          },
+          {
+            "match": "id",
+            "column": "Asset ID(s)",
+            "system": "FieldLine",
+            "target_type": "Asset",
+            "relationship": "on_asset"
+          },
+          {
+            "match": "name",
+            "column": "Technician(s)",
+            "system": null,
+            "target_type": "Person",
+            "relationship": "performed_by"
+          },
+          {
+            "match": "name",
+            "column": "Branch",
+            "system": null,
+            "target_type": "Branch",
+            "relationship": "dispatched_from"
+          },
+          {
+            "match": "id",
+            "column": "Callback Of",
+            "system": "FieldLine",
+            "target_type": "Work Order",
+            "relationship": "callback_of"
+          },
+          {
+            "match": "id",
+            "column": "QB Invoice #",
+            "system": "QuickBooks Online",
+            "target_type": "Invoice",
+            "relationship": "billed_on"
+          }
+        ],
+        "system": "FieldLine",
+        "id_column": null,
+        "event_type": "Work Order",
+        "date_column": "Created",
+        "entity_type": null,
+        "name_column": null,
+        "amount_column": "Quote Amount",
+        "event_id_column": "WO #",
+        "property_columns": [
+          "Status",
+          "Job Type",
+          "Billing Code",
+          "After Hours",
+          "Reg Hrs",
+          "OT Hrs",
+          "Shop Hrs",
+          "Tech Notes"
+        ]
+      },
+      {
+        "path": "Payments_Received_2024-01-01_to_2026-10-09.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "events",
+        "links": [
+          {
+            "match": "name",
+            "column": "Customer",
+            "system": "QuickBooks Online",
+            "target_type": "Customer",
+            "relationship": "paid_by"
+          },
+          {
+            "match": "id",
+            "column": "Applied to invoice no.",
+            "system": "QuickBooks Online",
+            "target_type": "Invoice",
+            "relationship": "applied_to"
+          },
+          {
+            "match": "name",
+            "column": "Deposit to",
+            "system": "QuickBooks Online",
+            "target_type": "GL Account",
+            "relationship": "deposited_to"
+          }
+        ],
+        "system": "QuickBooks Online",
+        "id_column": null,
+        "event_type": "Payment",
+        "date_column": "Date",
+        "entity_type": null,
+        "name_column": null,
+        "amount_column": "Amount applied",
+        "event_id_column": "Payment no.",
+        "property_columns": [
+          "Payment method",
+          "Ref no.",
+          "Total amount",
+          "Invoice date"
+        ]
+      },
+      {
+        "path": "export (1).csv",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [
+          {
+            "match": "id",
+            "column": "Location ID",
+            "system": "FieldLine",
+            "target_type": "Site",
+            "relationship": "located_at"
+          },
+          {
+            "match": "name",
+            "column": "Customer",
+            "system": "FieldLine",
+            "target_type": "Customer",
+            "relationship": "owned_by_customer"
+          }
+        ],
+        "system": "FieldLine",
+        "id_column": "Asset ID",
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "Asset",
+        "name_column": "Customer Tag",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "Equipment Type",
+          "Manufacturer",
+          "Model",
+          "Serial #",
+          "HP",
+          "Install Date",
+          "PM Interval (days)",
+          "Ownership"
+        ]
+      },
+      {
+        "path": "dispatch db/Equipment.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [
+          {
+            "match": "name",
+            "column": "Customer",
+            "system": "Legacy dispatch DB",
+            "target_type": "Customer",
+            "relationship": "owned_by_customer"
+          },
+          {
+            "match": "name",
+            "column": "Location",
+            "system": "Legacy dispatch DB",
+            "target_type": "Site",
+            "relationship": "located_at"
+          }
+        ],
+        "system": "Legacy dispatch DB",
+        "id_column": "EquipID",
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "Asset",
+        "name_column": "Tag",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "Description",
+          "Serial",
+          "Notes"
+        ]
+      },
+      {
+        "path": "dispatch db/Customers.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [],
+        "system": "Legacy dispatch DB",
+        "id_column": "CustID",
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "Customer",
+        "name_column": "CustName",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "Address",
+          "Contact",
+          "Notes"
+        ]
+      },
+      {
+        "path": "Customers.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [
+          {
+            "match": "name",
+            "column": "Rep",
+            "system": null,
+            "target_type": "Person",
+            "relationship": "account_owner"
+          }
+        ],
+        "system": "QuickBooks Online",
+        "id_column": "Customer ID",
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "Customer",
+        "name_column": "Customer",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "Billing city",
+          "Billing state",
+          "Email",
+          "Terms",
+          "Customer type",
+          "Status",
+          "Open balance",
+          "Created"
+        ]
+      },
+      {
+        "path": "export (2).csv",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [
+          {
+            "match": "id",
+            "column": "Customer ID",
+            "system": "FieldLine",
+            "target_type": "Customer",
+            "relationship": "belongs_to"
+          },
+          {
+            "match": "name",
+            "column": "Branch",
+            "system": null,
+            "target_type": "Branch",
+            "relationship": "served_by"
+          }
+        ],
+        "system": "FieldLine",
+        "id_column": "Location ID",
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "Site",
+        "name_column": "Location Name",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "Address",
+          "Site Notes",
+          "Created"
+        ]
+      },
+      {
+        "path": "crm/all-contacts.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [
+          {
+            "match": "id",
+            "column": "Associated Company IDs",
+            "system": "HubSpot",
+            "target_type": "Customer",
+            "relationship": "works_at"
+          },
+          {
+            "match": "name",
+            "column": "Contact owner",
+            "system": null,
+            "target_type": "Person",
+            "relationship": "contact_owned_by"
+          }
+        ],
+        "system": "HubSpot",
+        "id_column": "Record ID",
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "Customer Contact",
+        "name_column": "Email",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "First Name",
+          "Last Name",
+          "Job Title",
+          "Lifecycle Stage",
+          "Phone Number",
+          "Create Date"
+        ]
+      },
+      {
+        "path": "crm/notes.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "events",
+        "links": [
+          {
+            "match": "name",
+            "column": "Created by",
+            "system": null,
+            "target_type": "Person",
+            "relationship": "logged_by"
+          },
+          {
+            "match": "id",
+            "column": "Associated Company ID",
+            "system": "HubSpot",
+            "target_type": "Customer",
+            "relationship": "note_about"
+          },
+          {
+            "match": "name",
+            "column": "Associated Contact",
+            "system": "HubSpot",
+            "target_type": "Customer Contact",
+            "relationship": "note_about_contact"
+          },
+          {
+            "match": "name",
+            "column": "Associated Deal",
+            "system": "HubSpot",
+            "target_type": "Deal",
+            "relationship": "note_about_deal"
+          }
+        ],
+        "system": "HubSpot",
+        "id_column": null,
+        "event_type": "CRM Note",
+        "date_column": "Activity date",
+        "entity_type": null,
+        "name_column": null,
+        "amount_column": null,
+        "event_id_column": "Record ID",
+        "property_columns": [
+          "Note body"
+        ]
+      },
+      {
+        "path": "crm/all-deals.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "events",
+        "links": [
+          {
+            "match": "name",
+            "column": "Deal owner",
+            "system": null,
+            "target_type": "Person",
+            "relationship": "deal_owned_by"
+          },
+          {
+            "match": "id",
+            "column": "Associated Company ID",
+            "system": "HubSpot",
+            "target_type": "Customer",
+            "relationship": "deal_for"
+          }
+        ],
+        "system": "HubSpot",
+        "id_column": null,
+        "event_type": "Deal",
+        "date_column": "Close Date",
+        "entity_type": null,
+        "name_column": null,
+        "amount_column": "Amount",
+        "event_id_column": "Record ID",
+        "property_columns": [
+          "Deal Name",
+          "Pipeline",
+          "Deal Stage",
+          "Create Date"
+        ]
+      },
+      {
+        "path": "dispatch db/Techs.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [
+          {
+            "match": "name",
+            "column": "Shop",
+            "system": null,
+            "target_type": "Branch",
+            "relationship": "based_at"
+          }
+        ],
+        "system": "Legacy dispatch DB",
+        "id_column": "Initials",
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "Person",
+        "name_column": "TechName",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "Active"
+        ]
+      },
+      {
+        "path": "Operations/Fleet/keystone_unit_list_aug2026.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [],
+        "system": "Keystone Fleet (lessor list)",
+        "id_column": "CUST UNIT",
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "Vehicle",
+        "name_column": "CUST UNIT",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "VIN6",
+          "YR",
+          "MAKE",
+          "MODEL",
+          "PLATE",
+          "STATUS"
+        ]
+      },
+      {
+        "path": "tom.jablonski/laptop image/Desktop/on call 2024.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "events",
+        "links": [
+          {
+            "match": "name",
+            "column": "on_call",
+            "system": null,
+            "target_type": "Person",
+            "relationship": "on_call"
+          },
+          {
+            "match": "name",
+            "column": "posted_by",
+            "system": null,
+            "target_type": "Person",
+            "relationship": "posted_by"
+          }
+        ],
+        "system": "Spreadsheet (Columbus branch)",
+        "id_column": null,
+        "event_type": "On-Call Week",
+        "date_column": "week_of",
+        "entity_type": null,
+        "name_column": null,
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": []
+      },
+      {
+        "path": "crm/owner changes.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "events",
+        "links": [
+          {
+            "match": "id",
+            "column": "Record ID",
+            "system": "HubSpot",
+            "target_type": "Customer",
+            "relationship": "owner_change_for"
+          },
+          {
+            "match": "name",
+            "column": "Value",
+            "system": null,
+            "target_type": "Person",
+            "relationship": "new_owner"
+          }
+        ],
+        "system": "HubSpot",
+        "id_column": null,
+        "event_type": "Account Owner Change",
+        "date_column": "Changed at",
+        "entity_type": null,
+        "name_column": null,
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "Property",
+          "Source"
+        ]
+      },
+      {
+        "path": "QB/Customer List.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [],
+        "system": "QuickBooks Desktop",
+        "id_column": "List ID",
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "Customer",
+        "name_column": "Customer",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "Active Status",
+          "Bill to",
+          "Terms",
+          "Balance Total"
+        ]
+      },
+      {
+        "path": "crm/all-companies.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [
+          {
+            "match": "name",
+            "column": "Company owner",
+            "system": null,
+            "target_type": "Person",
+            "relationship": "account_owner"
+          },
+          {
+            "match": "name",
+            "column": "Branch (custom)",
+            "system": null,
+            "target_type": "Branch",
+            "relationship": "customer_served_by"
+          }
+        ],
+        "system": "HubSpot",
+        "id_column": "Record ID",
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "Customer",
+        "name_column": "Company name",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "Lifecycle Stage",
+          "Industry",
+          "City",
+          "State/Region",
+          "Company Domain Name",
+          "Create Date",
+          "Last Activity Date"
+        ]
+      },
+      {
+        "path": "Vendors.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [],
+        "system": "QuickBooks Online",
+        "id_column": "Vendor ID",
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "Vendor",
+        "name_column": "Vendor",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "Terms",
+          "Open balance",
+          "Status",
+          "Created"
+        ]
+      },
+      {
+        "path": "Chart_of_Accounts.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [],
+        "system": "QuickBooks Online",
+        "id_column": null,
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "GL Account",
+        "name_column": "Account",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "Type",
+          "Detail type",
+          "Description",
+          "Status"
+        ]
+      },
+      {
+        "path": "QB/Vendor List.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [],
+        "system": "QuickBooks Desktop",
+        "id_column": "List ID",
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "Vendor",
+        "name_column": "Vendor",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "Active Status",
+          "Terms",
+          "Vendor Type"
+        ]
+      },
+      {
+        "path": "rates.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [
+          {
+            "match": "name",
+            "column": "Branch",
+            "system": null,
+            "target_type": "Branch",
+            "relationship": "rate_for_branch"
+          },
+          {
+            "match": "name",
+            "column": "Last Edited By",
+            "system": null,
+            "target_type": "Person",
+            "relationship": "last_edited_by"
+          }
+        ],
+        "system": "FieldLine",
+        "id_column": null,
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "Labor Rate",
+        "name_column": "Rate Type",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "Rate",
+          "Effective From",
+          "Effective To",
+          "Last Edited"
+        ]
+      },
+      {
+        "path": "QBD exports/ItemList_2011.csv",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [
+          {
+            "match": "name",
+            "column": "Account",
+            "system": "QuickBooks Desktop",
+            "target_type": "GL Account",
+            "relationship": "posts_to"
+          }
+        ],
+        "system": "QuickBooks Desktop",
+        "id_column": "Item",
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "Service Item",
+        "name_column": "Item",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "Description",
+          "Type",
+          "Price"
+        ]
+      },
+      {
+        "path": "Pricing/Blue Book 2026.xlsx",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [],
+        "system": "Blue Book (SharePoint Pricing)",
+        "id_column": null,
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "Labor Rate",
+        "name_column": "Rate type",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "Rate",
+          "Unit",
+          "Notes"
+        ]
+      },
+      {
+        "path": "Sales/Key account owners 2026.xlsx",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [
+          {
+            "match": "name",
+            "column": "Account owner",
+            "system": null,
+            "target_type": "Person",
+            "relationship": "account_owner"
+          },
+          {
+            "match": "name",
+            "column": "Branch",
+            "system": null,
+            "target_type": "Branch",
+            "relationship": "customer_served_by"
+          }
+        ],
+        "system": "SharePoint spreadsheet",
+        "id_column": null,
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "Customer",
+        "name_column": "Customer",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "Notes"
+        ]
+      },
+      {
+        "path": "Operations/Vendors/Preferred vendor list 2026.xlsx",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [],
+        "system": "SharePoint spreadsheet",
+        "id_column": null,
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "Vendor",
+        "name_column": "Vendor",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "Category",
+          "Preferred from",
+          "Preferred to",
+          "Status 1/1/2026"
+        ]
+      },
+      {
+        "path": "HR/Safety Records/osha 2026.xlsx",
+        "why": "restored from the earlier proposal",
+        "kind": "events",
+        "links": [
+          {
+            "match": "name",
+            "column": "Employee",
+            "system": null,
+            "target_type": "Person",
+            "relationship": "injured_person"
+          },
+          {
+            "match": "name",
+            "column": "Branch",
+            "system": null,
+            "target_type": "Branch",
+            "relationship": "occurred_at_branch"
+          }
+        ],
+        "system": "SharePoint spreadsheet (HR)",
+        "id_column": null,
+        "event_type": "OSHA Recordable",
+        "date_column": "Date",
+        "entity_type": null,
+        "name_column": null,
+        "amount_column": null,
+        "event_id_column": "Case",
+        "property_columns": [
+          "Job title",
+          "Description",
+          "Classification",
+          "Days away",
+          "Days restricted"
+        ]
+      },
+      {
+        "path": "05 Operations & Safety/Fixed Asset Register 12.31.25.xlsx",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [
+          {
+            "match": "name",
+            "column": "Location",
+            "system": null,
+            "target_type": "Branch",
+            "relationship": "kept_at"
+          }
+        ],
+        "system": "Fixed asset register (VDR)",
+        "id_column": "Asset #",
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "Fixed Asset",
+        "name_column": "Description",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "In service",
+          "Cost",
+          "Life (yrs)",
+          "Accum. depr. 12/31/25",
+          "NBV 12/31/25",
+          "Note"
+        ]
+      },
+      {
+        "path": "03 Customers & Contracts/Customer Contract Summary.xlsx",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [
+          {
+            "match": "name",
+            "column": "Customer",
+            "system": null,
+            "target_type": "Customer",
+            "relationship": "agreement_with"
+          }
+        ],
+        "system": "Ridgeline VDR",
+        "id_column": null,
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "PM Agreement",
+        "name_column": "Agreement",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "Signed",
+          "Term",
+          "Pricing",
+          "Renewal",
+          "Notes"
+        ]
+      },
+      {
+        "path": "05 Operations & Safety/Fleet List 9.15.26.xlsx",
+        "why": "restored from the earlier proposal",
+        "kind": "entities",
+        "links": [
+          {
+            "match": "name",
+            "column": "Assigned to",
+            "system": null,
+            "target_type": "Person",
+            "relationship": "assigned_to"
+          },
+          {
+            "match": "name",
+            "column": "Home branch",
+            "system": null,
+            "target_type": "Branch",
+            "relationship": "home_branch"
+          }
+        ],
+        "system": "Fleet list (VDR)",
+        "id_column": "Unit #",
+        "event_type": null,
+        "date_column": null,
+        "entity_type": "Vehicle",
+        "name_column": "Unit #",
+        "amount_column": null,
+        "event_id_column": null,
+        "property_columns": [
+          "Year",
+          "Make",
+          "Model",
+          "VIN (last 6)",
+          "Plate",
+          "Owned / Leased",
+          "Fuel card",
+          "Notes"
+        ]
+      }
+    ],
+    "notes": []
+  },
+  "directory_mappings": [
+    {
+      "path": "_admin reports/VDR_User_Access_Report_2026-10-09.csv",
+      "mapping": {
+        "role": "people",
+        "notes": "Virtual data room user access report listing users, their organization, permission group and last login.",
+        "system": "Virtual data room",
+        "columns": {
+          "name": "User",
+          "email": "Email",
+          "status": "Status"
+        },
+        "file_id": "85ff12a0-f3f9-4c56-a5af-c0c9551c1d35",
+        "authority": 3,
+        "mapped_at": "2026-10-06T12:58:42.618Z",
+        "mapped_by": "ai"
+      }
+    },
+    {
+      "path": "admin_roles.csv",
+      "mapping": {
+        "role": "group_membership",
+        "notes": "Microsoft 365 admin role assignments, one row per role-user pair.",
+        "system": "Microsoft 365",
+        "columns": {
+          "group": "Role",
+          "member_name": "Display name",
+          "member_email": "User principal name"
+        },
+        "file_id": "7425abc7-5c27-4359-beb8-b4a9fbb480de",
+        "authority": 2,
+        "mapped_at": "2026-10-06T12:58:42.909Z",
+        "mapped_by": "ai"
+      }
+    },
+    {
+      "path": "crm/all-contacts.csv",
+      "mapping": {
+        "role": "none",
+        "notes": "CRM export of customer contacts, not an internal directory.",
+        "system": "HubSpot CRM",
+        "columns": {},
+        "file_id": "efaa9e90-cf62-484a-b117-523de1a5e5f7",
+        "authority": 3,
+        "mapped_at": "2026-10-06T12:58:42.813Z",
+        "mapped_by": "ai"
+      }
+    },
+    {
+      "path": "Customers.csv",
+      "mapping": {
+        "role": "none",
+        "notes": "Accounting customer list with billing addresses and balances, not a directory.",
+        "system": "QuickBooks",
+        "columns": {},
+        "file_id": "f6ecf859-2776-452c-a9c8-f6b93cc59539",
+        "authority": 3,
+        "mapped_at": "2026-10-06T12:58:43.005Z",
+        "mapped_by": "ai"
+      }
+    },
+    {
+      "path": "group_members.csv",
+      "mapping": {
+        "role": "group_membership",
+        "notes": "Microsoft 365 group membership export, one row per group-member pair.",
+        "system": "Microsoft 365",
+        "columns": {
+          "group": "Group",
+          "member_name": "Member",
+          "member_email": "UPN"
+        },
+        "file_id": "4f58e095-9e5d-4425-878e-4b9fe8186336",
+        "authority": 2,
+        "mapped_at": "2026-10-06T12:58:42.521Z",
+        "mapped_by": "ai"
+      }
+    },
+    {
+      "path": "guest_users.csv",
+      "mapping": {
+        "role": "guests",
+        "notes": "Microsoft 365 external guest users with invitation details and access per sharing report.",
+        "system": "Microsoft 365",
+        "columns": {
+          "name": "Display name",
+          "email": "Mail"
+        },
+        "file_id": "7d7a0622-12ba-4fe7-9adb-411034a2ace8",
+        "authority": 2,
+        "mapped_at": "2026-10-06T12:58:42.716Z",
+        "mapped_by": "ai"
+      }
+    },
+    {
+      "path": "payroll stuff/adp_employee_detail.csv",
+      "mapping": {
+        "role": "people",
+        "notes": "ADP HR employee detail export with employment status, titles, departments, managers and termination dates.",
+        "system": "ADP",
+        "columns": {
+          "email": "Work Email",
+          "title": "Job Title",
+          "status": "Position Status",
+          "manager": "Reports To",
+          "end_date": "Termination Date",
+          "location": "Location",
+          "last_name": "Last Name",
+          "department": "Home Department",
+          "first_name": "First Name",
+          "external_id": "File Number",
+          "preferred_name": "Preferred Name"
+        },
+        "file_id": "4b61e204-c1ee-4d04-871a-01d058949b15",
+        "authority": 1,
+        "mapped_at": "2026-10-06T12:58:43.098Z",
+        "mapped_by": "ai"
+      }
+    },
+    {
+      "path": "users (1).csv",
+      "mapping": {
+        "role": "people",
+        "notes": "User list from an operational app (likely field service/dispatch), with app roles, branches and deactivation dates.",
+        "system": "Field service app",
+        "columns": {
+          "name": "Name",
+          "email": "Login",
+          "title": "Title",
+          "status": "Status",
+          "end_date": "Deactivated",
+          "location": "Branch",
+          "external_id": "User ID"
+        },
+        "file_id": "c70639c0-adda-4088-8065-ebea42914f5f",
+        "authority": 3,
+        "mapped_at": "2026-10-06T12:58:41.789Z",
+        "mapped_by": "ai"
+      }
+    },
+    {
+      "path": "users.csv",
+      "mapping": {
+        "role": "people",
+        "notes": "Microsoft 365 user account export with licenses, sign-in activity, and directory attributes.",
+        "system": "Microsoft 365",
+        "columns": {
+          "name": "Display name",
+          "email": "User principal name",
+          "title": "Title",
+          "aliases": "Proxy aliases",
+          "enabled": "Account enabled",
+          "location": "Office",
+          "department": "Department",
+          "account_type": "Recipient type"
+        },
+        "file_id": "13cc1cb9-5fdd-4e4b-b234-99f2ca5cb1f4",
+        "authority": 2,
+        "mapped_at": "2026-10-06T12:58:43.192Z",
+        "mapped_by": "ai"
+      }
+    }
+  ],
+  "vocabulary": [
+    {
+      "entity_type": "Asset",
+      "entity": "PUMP-17",
+      "alias": "P17",
+      "kind": "jargon",
+      "status": "rejected"
+    },
+    {
+      "entity_type": "Asset",
+      "entity": "TP-17",
+      "alias": "North Pump",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Asset",
+      "entity": "TP-17",
+      "alias": "P17",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Asset",
+      "entity": "TP-17",
+      "alias": "Pump 17",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Asset",
+      "entity": "TP-17",
+      "alias": "Seventeen",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Branch",
+      "entity": "Columbus Branch (Grove City)",
+      "alias": "Gantz Road",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Branch",
+      "entity": "Louisville Branch (Jeffersontown)",
+      "alias": "Fall City",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Branch",
+      "entity": "Louisville Branch (Jeffersontown)",
+      "alias": "Falls City Pump",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Branch",
+      "entity": "Louisville Branch (Jeffersontown)",
+      "alias": "J-town / Jeffersontown",
+      "kind": "jargon",
+      "status": "rejected"
+    },
+    {
+      "entity_type": "Branch",
+      "entity": "Louisville Branch (Jeffersontown)",
+      "alias": "Jeffersontown",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Branch",
+      "entity": "Louisville Branch (Jeffersontown)",
+      "alias": "the Kentucky shop",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Branch",
+      "entity": "Oakley HQ & Main Shop",
+      "alias": "loaner pool",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Branch",
+      "entity": "Oakley HQ & Main Shop",
+      "alias": "Oakley",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Branch",
+      "entity": "Oakley HQ & Main Shop",
+      "alias": "Oakley parts cage",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Branch",
+      "entity": "Oakley HQ & Main Shop",
+      "alias": "parts cage",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Branch",
+      "entity": "Oakley HQ & Main Shop",
+      "alias": "the cage",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Blue Ridge Food Processing LLC",
+      "alias": "Big Blue",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Blue Ridge Food Processing LLC",
+      "alias": "Blue Ridge Mills",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Blue Ridge Food Processing LLC",
+      "alias": "BRM",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Blue Ridge Food Processing LLC",
+      "alias": "P17",
+      "kind": "jargon",
+      "status": "rejected"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Blue Ridge Food Processing LLC",
+      "alias": "Seventeen",
+      "kind": "jargon",
+      "status": "rejected"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "BLUEGRASS DISTILLING CO",
+      "alias": "Bluegrass",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Darby Creek Pet Foods",
+      "alias": "the pet food plant",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Harmon Auto Parts DC (Obetz)",
+      "alias": "Plan Balance",
+      "kind": "jargon",
+      "status": "rejected"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Hartwell Precision Castings",
+      "alias": "the foundry",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Kemper Plastics Corp.",
+      "alias": "Kemper is Kemper",
+      "kind": "jargon",
+      "status": "rejected"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Kemper Plastics Corp.",
+      "alias": "Kemper Molding",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Kentuckiana Plating Works",
+      "alias": "K-Plate",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Midwest Galvanizing",
+      "alias": "Midwest Gals",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Midwest Galvanizing",
+      "alias": "the galvanizer",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Ohio River Dairy Cooperative",
+      "alias": "the dairy",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Ohio Valley Cold Storage",
+      "alias": "Big Blue / the freezer",
+      "kind": "jargon",
+      "status": "rejected"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Ohio Valley Cold Storage",
+      "alias": "OVCS",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Ohio Valley Cold Storage",
+      "alias": "the freezer",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Olentangy Glass Container",
+      "alias": "the glass plant",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Pfeiffer Brothers Meats",
+      "alias": "Fifer",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Queen City Paper & Packaging",
+      "alias": "QC",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Customer",
+      "entity": "Tri State Bottling",
+      "alias": "the bottler",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Person",
+      "entity": "Bri Kessler",
+      "alias": "Kessler",
+      "kind": "jargon",
+      "status": "rejected"
+    },
+    {
+      "entity_type": "Person",
+      "entity": "Dee Collins",
+      "alias": "Dee",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Person",
+      "entity": "Greg Whitfield",
+      "alias": "GW",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Person",
+      "entity": "Kev Doyle",
+      "alias": "Kev",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Person",
+      "entity": "Mike Hargis",
+      "alias": "Little Mike",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Person",
+      "entity": "Mike Hargis",
+      "alias": "Mike H",
+      "kind": "jargon",
+      "status": "rejected"
+    },
+    {
+      "entity_type": "Person",
+      "entity": "Mike Hargrove",
+      "alias": "J-town Mike",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Service Item",
+      "entity": "Emergency Dispatch Fee",
+      "alias": "no disp fee",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Service Item",
+      "entity": "Emergency Dispatch Fee",
+      "alias": "trip charge",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Service Item",
+      "entity": "Emergency Labor (Hot Job)",
+      "alias": "HOT",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Service Item",
+      "entity": "Emergency Labor (Hot Job)",
+      "alias": "hot job",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Service Item",
+      "entity": "Emergency Labor (Hot Job)",
+      "alias": "hot job / hot one",
+      "kind": "jargon",
+      "status": "rejected"
+    },
+    {
+      "entity_type": "Service Item",
+      "entity": "Emergency Labor (Hot Job)",
+      "alias": "Hot Jobs",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Service Item",
+      "entity": "Emergency Labor (Hot Job)",
+      "alias": "hot one",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Site",
+      "entity": "Columbus Glass Plant",
+      "alias": "the glass plant",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Site",
+      "entity": "Hamilton Plant",
+      "alias": "17",
+      "kind": "jargon",
+      "status": "rejected"
+    },
+    {
+      "entity_type": "Site",
+      "entity": "Hamilton Plant",
+      "alias": "Blue Ridge Hamilton",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Site",
+      "entity": "Hamilton Plant",
+      "alias": "North Pump",
+      "kind": "jargon",
+      "status": "rejected"
+    },
+    {
+      "entity_type": "Site",
+      "entity": "Hamilton Plant",
+      "alias": "P17",
+      "kind": "jargon",
+      "status": "rejected"
+    },
+    {
+      "entity_type": "Site",
+      "entity": "Hamilton Plant",
+      "alias": "Pump 17",
+      "kind": "jargon",
+      "status": "rejected"
+    },
+    {
+      "entity_type": "Site",
+      "entity": "Hamilton Plant",
+      "alias": "Seventeen",
+      "kind": "jargon",
+      "status": "rejected"
+    },
+    {
+      "entity_type": "Site",
+      "entity": "Obetz Distribution Center",
+      "alias": "Obetz DC",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Vendor",
+      "entity": "Cincinnati Pump & Fluid Systems",
+      "alias": "Cincy Pump",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Vendor",
+      "entity": "FieldLine Software",
+      "alias": "FieldLine",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Vendor",
+      "entity": "FieldLine Software",
+      "alias": "FL",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Vendor",
+      "entity": "Ohio Pump Salvage",
+      "alias": "Gary",
+      "kind": "jargon",
+      "status": "rejected"
+    },
+    {
+      "entity_type": "Vendor",
+      "entity": "Ohio Pump Salvage",
+      "alias": "ZX parts",
+      "kind": "jargon",
+      "status": "rejected"
+    },
+    {
+      "entity_type": "Vendor",
+      "entity": "Tri-County Bearing & Supply",
+      "alias": "Dana at Tri-County",
+      "kind": "jargon",
+      "status": "candidate"
+    },
+    {
+      "entity_type": "Vendor",
+      "entity": "Tri-County Bearing & Supply",
+      "alias": "TriCounty",
+      "kind": "jargon",
+      "status": "candidate"
+    }
+  ],
+  "merges": [
+    {
+      "entity_type": "Branch",
+      "kept": "Columbus Branch (Grove City)",
+      "merged": [
+        "Grove City"
+      ]
+    },
+    {
+      "entity_type": "Branch",
+      "kept": "Louisville Branch (Jeffersontown)",
+      "merged": [
+        "J-town"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Ballard Plastics",
+      "merged": [
+        "Balard Plastics"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Barrett Ice Cream Co.",
+      "merged": [
+        "BarrettIce Cream Co."
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Barrett Laundry",
+      "merged": [
+        "Barrett aundry"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Batavia Paper Box",
+      "merged": [
+        "BATAVIA PAPER"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Big Walnut Ag Equipment",
+      "merged": [
+        "Big Walnt Ag Equipment",
+        "Big Walnut Ag",
+        "Big Walnut Ag Equpment",
+        "Big Walnut Ag Euipment",
+        "Big Wanut Ag Equipment",
+        "Big Wlnut Ag Equipment"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Blue Ridge Food Processing LLC",
+      "merged": [
+        "Blue Ridge (Hamilton)",
+        "Blue Ridge Foods",
+        "Blue Ridge Mills",
+        "BR Florence",
+        "BRM"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Brownsboro Rubber Products",
+      "merged": [
+        "Bronsboro Rubber",
+        "Brownboro Rubber",
+        "Brownsboo Rubber",
+        "Brownsbor Rubber",
+        "Brownsboro Rbber",
+        "Brownsboro Rubber",
+        "Brownsboro Rubbr",
+        "Brownsboro Ruber",
+        "Brownsboro ubber",
+        "BrownsboroRubber",
+        "BROWNSBRO RUBBER",
+        "Brownsoro Rubber",
+        "Browsboro Rubber"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Buckeye Polymer Compounding",
+      "merged": [
+        "BUCKEE POLYMER",
+        "Buckey Polymer",
+        "Buckeye olymer",
+        "BUCKEYE PLYMER",
+        "BUCKEYE POLYER",
+        "Buckeye Polymer",
+        "Buckeye Polymr",
+        "Buckeye Poymer",
+        "BuckeyePolymer",
+        "Buckye Polymer"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Carthage Chemical Blending",
+      "merged": [
+        "Carhage Chem",
+        "Cartage Chem",
+        "Carthae Chem",
+        "Carthage Cem",
+        "Carthage Chem",
+        "Carthage Chemical",
+        "Carthage hem",
+        "Carthge Chem"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Circleville Meats",
+      "merged": [
+        "Circleille Meats"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Clarksville Ice Cream Co.",
+      "merged": [
+        "Clarksille Ice Cream Co.",
+        "CLARKSVILLE ICE CRAM CO."
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Combs & Sons Concrete",
+      "merged": [
+        "Combs & Sons Cocrete"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Combs Sheet Metal",
+      "merged": [
+        "CombsSheet Metal"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Darby Creek Pet Foods",
+      "merged": [
+        "Darb Creek",
+        "Darby Ceek",
+        "Darby Creek",
+        "DARBY CREK",
+        "DarbyCreek",
+        "Dary Creek"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Delaware Tool & Die LLC",
+      "merged": [
+        "DELAWARE TOOL"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Derby City Cold Storage",
+      "merged": [
+        "Deby Cold",
+        "Derb Cold",
+        "Derby Cld",
+        "Derby Cod",
+        "Derby Cold",
+        "Derby old",
+        "DerbyCold",
+        "Dery Cold"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Deters Feed & Seed",
+      "merged": [
+        "Deters Fed & Seed"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Dorsey & Sons Plastics",
+      "merged": [
+        "DORSEY PLASTICS"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Dorsey Hydraulics",
+      "merged": [
+        "DORSEY HYDRAUICS"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Evendale Concrete Products",
+      "merged": [
+        "Evendal Concrete",
+        "Evendale Block",
+        "Evendale Concree",
+        "Evendale Concrete"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Fairfield Fastener & Wire",
+      "merged": [
+        "Faifield Fastener",
+        "Fairfied Fastener",
+        "Fairfiel Fastener",
+        "Fairfield astener",
+        "FAIRFIELD FASENER",
+        "Fairfield Fasteer",
+        "Fairfield Fastener",
+        "Fairfield Fastenr",
+        "Fairfield Fastner",
+        "Fairfield Fstener",
+        "FairfieldFastener",
+        "Fairfild Fastener",
+        "Fairield Fastener",
+        "Farfield Fastener"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Falls City Fabrication",
+      "merged": [
+        "Fall City Fab",
+        "Falls Cit Fab",
+        "Falls City ab",
+        "Falls City Fb",
+        "Falls CityFab",
+        "Falls Ciy Fab",
+        "Falls Cty Fab",
+        "Falls ity Fab",
+        "FallsCity Fab",
+        "Fals City Fab"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Feldkamp Plating",
+      "merged": [
+        "Feldkamp Pating"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Great Miami Grain Cooperative",
+      "merged": [
+        "GM Grain",
+        "Great Mami Grain",
+        "Great Miai Grain",
+        "Great Miam Grain",
+        "Great Miami Gain",
+        "Great Miami Grain",
+        "GREAT MIAMI GRAIN COOP",
+        "Great Miami Grin",
+        "Great Miami rain",
+        "Great Mimi Grain"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Gruenwald Bakery",
+      "merged": [
+        "Grunwald Bakery"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Harmon Auto Parts DC (Obetz)",
+      "merged": [
+        "Hamon DC Obetz",
+        "Harmn DC Obetz",
+        "Harmo DC Obetz",
+        "Harmon",
+        "Harmon Auto Parts",
+        "Harmon C Obetz",
+        "Harmon D Obetz",
+        "Harmon DC Obetz",
+        "HARMON DC OBTZ",
+        "Harmon DC Oetz",
+        "Harmon DCObetz"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Harrison Coatings",
+      "merged": [
+        "Harrison Coatigs"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Hartwell Precision Castings",
+      "merged": [
+        "Hartwel Castings",
+        "Hartwell",
+        "Hartwell astings",
+        "Hartwell Casings",
+        "Hartwell Castigs",
+        "Hartwell Castings",
+        "Hartwell Castins",
+        "Hartwell Castngs",
+        "Hartwell Catings",
+        "Hartwell Cstings"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Highlands Commercial Bakery",
+      "merged": [
+        "Highlands Bakery"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Hilliard Hydraulics",
+      "merged": [
+        "Hillard Hydraulics",
+        "HILLIAD HYDRAULICS",
+        "HILLIAR HYDRAULICS",
+        "Hilliard Hdraulics",
+        "Hilliard Hydaulics",
+        "Hilliard Hydraulcs",
+        "Hilliard Hydraulis",
+        "Hilliard Hydrulics",
+        "Hilliard ydraulics",
+        "Hillird Hydraulics"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Hilliard Tool & Die",
+      "merged": [
+        "Hilliard Tol & Die"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Jeffersonville Coatings",
+      "merged": [
+        "Jeffersonville Coaings"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Jeffersonville Sheet Metal",
+      "merged": [
+        "Jefersonville Sheet Metal"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Kemper Plastics Corp.",
+      "merged": [
+        "Kemper",
+        "Kemper Molding"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Kentuckiana Plating Works",
+      "merged": [
+        "K-Plate",
+        "Kentuciana Plating",
+        "Kentuckana Plating",
+        "Kentuckiaa Plating",
+        "KENTUCKIANA LATING",
+        "Kentuckiana Pating",
+        "KENTUCKIANA PLAING",
+        "Kentuckiana Platig",
+        "Kentuckiana Plating",
+        "Kentuckiana Platng",
+        "KentuckianaPlating",
+        "Kentuckina Plating",
+        "Kentukiana Plating",
+        "Ketuckiana Plating"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Kroll Logistics - Tri-County DC",
+      "merged": [
+        "Kroll Logistics",
+        "KROLL TRI-COUNY",
+        "Tr-County DC",
+        "Tri-County DC",
+        "Tri-Couny DC",
+        "Tri-Couty DC",
+        "TriCounty DC"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "La Grange Plating",
+      "merged": [
+        "La Grange Pating"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Lancaster Corrugated",
+      "merged": [
+        "Lacaster Corr",
+        "Lanaster Corr",
+        "Lancaste Corr",
+        "Lancaster Cor",
+        "Lancaster Corr",
+        "Lancaster Crr",
+        "LANCASTERCORR",
+        "Lancster Corr"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Little Miami Regional Water Authority",
+      "merged": [
+        "Litle Miami Water",
+        "Little Mami Water",
+        "Little Miam Water",
+        "LITTLE MIAMI ATER",
+        "LITTLE MIAMI REG WATER AUTH",
+        "Little Miami Water",
+        "Little Miami Wter",
+        "LITTLE MIAMIWATER",
+        "Little Mimi Water",
+        "LittleMiami Water",
+        "LMRWA"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Lunken Aerospace Components",
+      "merged": [
+        "Luken",
+        "Lunken"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Mason Medical Packaging",
+      "merged": [
+        "Masn Medical",
+        "Maso Medical",
+        "Mason edical",
+        "Mason Mdical",
+        "Mason Medcal",
+        "Mason Medial",
+        "Mason Medical",
+        "Mason Medicl",
+        "Mason Meical"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Mid-Ohio Produce Terminal",
+      "merged": [
+        "Mi-Ohio Produce Terminal",
+        "Mid-Ohio Produce",
+        "Mid-Ohio Produce Teminal",
+        "Mid-Ohio Produce Trminal",
+        "Mid-Ohio roduce Terminal"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Midwest Galvanizing",
+      "merged": [
+        "Midest Galv",
+        "Midwes Galv",
+        "Midwest alv",
+        "Midwest Galv",
+        "Midwest Gav",
+        "Midwest Glv",
+        "MidwestGalv",
+        "Midwst Galv",
+        "Miwest Galv",
+        "MW alvanizing",
+        "MW Galvaizing",
+        "MW Galvaniing",
+        "MW Galvanizig",
+        "MW Galvanizing"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Mill Creek Rendering",
+      "merged": [
+        "Mil Creek",
+        "Mill Ceek",
+        "Mill Creek",
+        "Mill Crek",
+        "Mill reek",
+        "MillCreek"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Norwood Coil Coating",
+      "merged": [
+        "Norood Coil",
+        "Norwod Coil",
+        "Norwoo Coil",
+        "Norwood Col",
+        "Norwood oil",
+        "NorwoodCoil",
+        "Nowood Coil"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Norwood Ice",
+      "merged": [
+        "Norood Ice",
+        "Norwod Ice",
+        "Norwoo Ice",
+        "Norwood ce",
+        "Norwood Ie",
+        "NorwoodIce",
+        "Nowood Ice"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Norwood Machine Works",
+      "merged": [
+        "NORWOD MACHINE WORKS"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Obetz Coatings",
+      "merged": [
+        "Obetz Catings"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Ohio Falls Paperboard",
+      "merged": [
+        "OF Paperboard",
+        "OHI FALLS",
+        "OHIO ALLS",
+        "Ohio Falls",
+        "OHIO FALS",
+        "Ohio Flls",
+        "OhioFalls",
+        "OHO FALLS"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Ohio River Dairy Cooperative",
+      "merged": [
+        "Ohio iver Dairy",
+        "Ohio Rier Dairy",
+        "Ohio Rive Dairy",
+        "OHIO RIVER AIRY",
+        "Ohio River Dairy",
+        "OHIO RIVER DAIRY COOP",
+        "Ohio River Daiy",
+        "Ohio River Dary",
+        "Ohio River Diry",
+        "Ohio RiverDairy",
+        "OHIO RIVR DAIRY",
+        "Ohio Rver Dairy",
+        "OhioRiver Dairy",
+        "OR Dairy"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Ohio Valley Cold Storage",
+      "merged": [
+        "Ohi Valley Cold",
+        "Ohio alley Cold",
+        "Ohio Valey Cold",
+        "Ohio Valle Cold",
+        "Ohio Valley Cld",
+        "Ohio Valley Cod",
+        "Ohio Valley Cold",
+        "Ohio Valley old",
+        "Ohio ValleyCold",
+        "Ohio Vlley Cold",
+        "OV Cold Storage",
+        "OVCS"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Olentangy Glass Container",
+      "merged": [
+        "Olenangy Glass",
+        "Olentagy Glass",
+        "Olentang Glass",
+        "Olentangy Gass",
+        "Olentangy Glas",
+        "Olentangy Glass",
+        "OLENTANGY GLSS",
+        "Olentngy Glass",
+        "Oletangy Glass",
+        "Olntangy Glass"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Ott Sheet Metal",
+      "merged": [
+        "Ott Sheet etal"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Pfeiffer Brothers Meats",
+      "merged": [
+        "Pfefer Bros",
+        "Pfeffer",
+        "Pfeier Bros",
+        "Pfeife Bros",
+        "Pfeifer",
+        "Pfeifer Bros",
+        "Pfeifer ros",
+        "PFEIFERBROS",
+        "Pfeiffer",
+        "Pfeiffer Bros Meats",
+        "Pfeiffr",
+        "Pfeifr Bros",
+        "Pfiffer"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Pinnacle 3PL",
+      "merged": [
+        "Pinacle",
+        "Pinacle 3PL",
+        "PINNACE",
+        "PINNACE 3PL",
+        "Pinnacle",
+        "Pinnacle 3PL - Grove City",
+        "Pinnacle Third-Party Logistics",
+        "Pinnacle3PL",
+        "Pinnale",
+        "Pinnale 3PL"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Pohlman & Sons Dairy",
+      "merged": [
+        "Pohlma & Sons Dairy",
+        "Pohlman & ons Dairy"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Pohlman Farms",
+      "merged": [
+        "Pohlma Farms"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Pohlman Machine Works",
+      "merged": [
+        "POHLMAN MACHINE",
+        "Pohlman Machine orks"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Queen City Paper & Packaging",
+      "merged": [
+        "QC Paper",
+        "QCPP",
+        "Quee City",
+        "Queen City",
+        "Queen Ciy",
+        "Queen Cty",
+        "QueenCity",
+        "Quen City"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Reliable Die Casting",
+      "merged": [
+        "Reiable Die Cast",
+        "Relable Die Cast",
+        "Reliabe Die Cast",
+        "Reliable De Cast",
+        "Reliable Di Cast",
+        "Reliable Die ast",
+        "RELIABLE DIE CAT",
+        "Reliable Die Cst",
+        "Reliable DieCast",
+        "RELIABLE IE CAST",
+        "ReliableDie Cast",
+        "Relible Die Cast"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Rieger Printing",
+      "merged": [
+        "Riege Printing"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "River Road Asphalt Terminal",
+      "merged": [
+        "Rier Rd Asphalt",
+        "Rive Rd Asphalt",
+        "River d Asphalt",
+        "River R Asphalt",
+        "River Rd Ashalt",
+        "River Rd Aspalt",
+        "River Rd Asphalt",
+        "River Rd Asphat",
+        "River Rd Asphlt",
+        "River Rd sphalt",
+        "River RdAsphalt",
+        "River Road Asphalt",
+        "RiverRd Asphalt"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Ruehl & Sons Pallet Co.",
+      "merged": [
+        "Ruehl & Sons PalletCo."
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Schott & Sons Machine Works",
+      "merged": [
+        "SCHOTT MACHINE"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Schott Wastewater Plant",
+      "merged": [
+        "Schott Wasewater Plant"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Scioto Valley Foods",
+      "merged": [
+        "SCIOO VALLEY",
+        "Sciot Foods",
+        "Sciot Valley",
+        "Scioto alley",
+        "Scioto Fods",
+        "Scioto Foods",
+        "Scioto Foos",
+        "Scioto oods",
+        "Scioto Valey",
+        "Scioto Valley",
+        "SciotoFoods",
+        "Scito Foods",
+        "Scito Valley"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Shepherdsville Machine Works",
+      "merged": [
+        "Shepherdsvile Machine Works",
+        "Shephersville Machine Works"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Shively Feed & Grain",
+      "merged": [
+        "Shively Feed"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Stull & Sons Wastewater Plant",
+      "merged": [
+        "Stul & Sons Wastewater Plant"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Sycamore Specialty Foods",
+      "merged": [
+        "Syamore Foods",
+        "Sycamoe Foods",
+        "Sycamore Fods",
+        "Sycamore Foods",
+        "Sycamore Foos",
+        "SycamoreFoods",
+        "SYCAMRE FOODS",
+        "Sycaore Foods",
+        "Sycmore Foods"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Tolliver & Sons Paper Box",
+      "merged": [
+        "Tollive & Sons Paper Box"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Tri State Bottling",
+      "merged": [
+        "Tri Sate Bottling",
+        "Tri Stat Bottling",
+        "Tri State Botling",
+        "Tri State Botting",
+        "TRI STATE BOTTLIG",
+        "Tri State Bottlng",
+        "Tri State ottling",
+        "TRI STATEBOTTLING",
+        "Tri tate Bottling",
+        "Tri-State",
+        "TSB"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Westwood Brewing",
+      "merged": [
+        "Westood Brewing",
+        "Westwod Brewing",
+        "Weswood Brewing"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Wiedemann & Sons Machine Works",
+      "merged": [
+        "Wiedemann & Sons Mchine Works"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Wiedemann Pallet Co.",
+      "merged": [
+        "WiedemannPallet Co."
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Yates Coatings",
+      "merged": [
+        "YATES COATINGS · 1250",
+        "YATES COATINGS · 520"
+      ]
+    },
+    {
+      "entity_type": "Person",
+      "kept": "Tyler B. Brandt",
+      "merged": [
+        "Tyler Brandt"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Airport Rd Plant",
+      "merged": [
+        "Airport Rd"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Bardstown Rd Bakery",
+      "merged": [
+        "Bardstown Rd"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Camp Washington Plant",
+      "merged": [
+        "Camp Washington"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Carthage Plant",
+      "merged": [
+        "Carthage"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Florence Plant",
+      "merged": [
+        "Florence"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Hamilton Plant",
+      "merged": [
+        "Hamilton"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Harrison Ave Brewhouse",
+      "merged": [
+        "Harrison Ave"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "La Grange Plant",
+      "merged": [
+        "La Grange"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Lockland Mill",
+      "merged": [
+        "Lockland"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Lower Price Hill Plant",
+      "merged": [
+        "Lower Price Hill"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Mason Clean Room Facility",
+      "merged": [
+        "Mason"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Plain City Plant",
+      "merged": [
+        "Plain City"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Portland Mill",
+      "merged": [
+        "Portland"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Preston Hwy Plant",
+      "merged": [
+        "Preston Hwy"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Reading Rd Plant",
+      "merged": [
+        "Reading Rd"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Riverport Facility",
+      "merged": [
+        "Riverport"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Sharonville Plant",
+      "merged": [
+        "Sharonville"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Spring Grove Plant",
+      "merged": [
+        "Spring Grove"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Sunbury Plant",
+      "merged": [
+        "Sunbury"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Trenton Elevator",
+      "merged": [
+        "Trenton"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Tri-County DC",
+      "merged": [
+        "Tri-County"
+      ]
+    },
+    {
+      "entity_type": "Site",
+      "kept": "Westbelt Plant",
+      "merged": [
+        "Westbelt"
+      ]
+    },
+    {
+      "entity_type": "Vendor",
+      "kept": "Cincinnati Pump & Fluid Systems",
+      "merged": [
+        "Cinti Pump & Fluid"
+      ]
+    },
+    {
+      "entity_type": "Vendor",
+      "kept": "Hamilton & Pierce Insurance",
+      "merged": [
+        "Hamilton Pierce Insurance"
+      ]
+    },
+    {
+      "entity_type": "Vendor",
+      "kept": "Ridgeline Capital Advisors LLC",
+      "merged": [
+        "Ridgeline Capital"
+      ]
+    },
+    {
+      "entity_type": "Vendor",
+      "kept": "SafeGuard Industrial Safety Supply",
+      "merged": [
+        "Safeguard Safety"
+      ]
+    },
+    {
+      "entity_type": "Vendor",
+      "kept": "Tri-County Bearing & Supply",
+      "merged": [
+        "Tri County Bearing & Supply",
+        "TRI-COUNTY BRG"
+      ]
+    }
+  ],
+  "separate": [
+    {
+      "entity_type": "Customer",
+      "a": "Ardent Pinnacle Logistics",
+      "b": "Pinnacle 3PL"
+    },
+    {
+      "entity_type": "Customer",
+      "a": "Brwnsboro Rubber",
+      "b": "Brownsboro Rubber"
+    },
+    {
+      "entity_type": "Customer",
+      "a": "CLARKSVILLE ICE",
+      "b": "Clarksville Ice Cream Co."
+    },
+    {
+      "entity_type": "Customer",
+      "a": "Feldkamp & Sons Machine Works",
+      "b": "FELDKAMP MACHINE WORKS INC"
+    },
+    {
+      "entity_type": "Customer",
+      "a": "FELDKAMP COATINGS",
+      "b": "Feldkamp Plating"
+    },
+    {
+      "entity_type": "Customer",
+      "a": "FELDKAMP MACHINE",
+      "b": "Feldkamp & Sons Machine Works"
+    },
+    {
+      "entity_type": "Customer",
+      "a": "FELDKAMP MACHINE",
+      "b": "FELDKAMP MACHINE WORKS INC"
+    },
+    {
+      "entity_type": "Customer",
+      "a": "Fultz & Sons Wastewater Plant",
+      "b": "Fultz Wastewater Plant"
+    },
+    {
+      "entity_type": "Customer",
+      "a": "Harmon Auto Parts DC (Obetz)",
+      "b": "Harmon DC Obetz"
+    },
+    {
+      "entity_type": "Customer",
+      "a": "Haron",
+      "b": "Haron DC Obetz"
+    },
+    {
+      "entity_type": "Customer",
+      "a": "Hartwell Precision Castings",
+      "b": "Hartwell Castings"
+    },
+    {
+      "entity_type": "Customer",
+      "a": "KEPER",
+      "b": "Keper Molding"
+    },
+    {
+      "entity_type": "Customer",
+      "a": "Kroll",
+      "b": "Kroll Logistics - Tri-County DC"
+    },
+    {
+      "entity_type": "Customer",
+      "a": "Kroll Logistics - Tri-County DC",
+      "b": "Kroll Logistics - Tri-County DC"
+    },
+    {
+      "entity_type": "Customer",
+      "a": "MERZ & SONS PLASTICS LLC",
+      "b": "Merz Plastics"
+    },
+    {
+      "entity_type": "Customer",
+      "a": "Nagel & Sons Cold Storage",
+      "b": "Nagel Cold Storage"
+    },
+    {
+      "entity_type": "Customer",
+      "a": "OTT FARMS INC",
+      "b": "Schott Farms"
+    },
+    {
+      "entity_type": "Customer",
+      "a": "Rieger Printing",
+      "b": "Rieger & Sons Printing"
+    },
+    {
+      "entity_type": "Customer",
+      "a": "SHEPHERDSVILLE COATINGS",
+      "b": "Shepherdsville Pallet Co."
+    },
+    {
+      "entity_type": "Customer",
+      "a": "Stull & Sons Wastewater Plant",
+      "b": "Stull Wastewater Plant"
+    },
+    {
+      "entity_type": "Customer Contact",
+      "a": "Ward Gruber",
+      "b": "Ward Huber"
+    },
+    {
+      "entity_type": "Labor Rate",
+      "a": "Overtime / after-hours",
+      "b": "Overtime / After hours · Columbus"
+    },
+    {
+      "entity_type": "Labor Rate",
+      "a": "Overtime / after-hours",
+      "b": "Overtime / After hours · Louisville"
+    },
+    {
+      "entity_type": "Labor Rate",
+      "a": "Overtime / after-hours",
+      "b": "Overtime / After hours · Oakley"
+    },
+    {
+      "entity_type": "Person",
+      "a": "Michael Hargis",
+      "b": "Michael Hargrove"
+    },
+    {
+      "entity_type": "Service Item",
+      "a": "LABOR-OT",
+      "b": "Service Labor - OT"
+    },
+    {
+      "entity_type": "Site",
+      "a": "Batavia",
+      "b": "Batavia Plant"
+    },
+    {
+      "entity_type": "Site",
+      "a": "Blue Ash",
+      "b": "Blue Ash Plant"
+    },
+    {
+      "entity_type": "Site",
+      "a": "BR Florence",
+      "b": "Florence"
+    },
+    {
+      "entity_type": "Site",
+      "a": "BR Florence",
+      "b": "Florence Plant"
+    },
+    {
+      "entity_type": "Site",
+      "a": "Dixie Hwy",
+      "b": "Dixie Hwy Louisville"
+    },
+    {
+      "entity_type": "Site",
+      "a": "Glendale Milford",
+      "b": "Milford Treatment Plant"
+    },
+    {
+      "entity_type": "Site",
+      "a": "Groveport",
+      "b": "Groveport Freezer"
+    },
+    {
+      "entity_type": "Site",
+      "a": "Kuhlman & Sons Meats - Monroe",
+      "b": "Monroe Meats - Monroe"
+    },
+    {
+      "entity_type": "Site",
+      "a": "Lancaster Plant",
+      "b": "Strunk Wastewater Plant - Lancaster"
+    },
+    {
+      "entity_type": "Site",
+      "a": "Milford",
+      "b": "Milford Treatment Plant"
+    },
+    {
+      "entity_type": "Site",
+      "a": "Nagel & Sons Brewing Co. - Mt. Healthy",
+      "b": "Nagel & Sons Cold Storage - Mt. Healthy"
+    },
+    {
+      "entity_type": "Site",
+      "a": "New Albany",
+      "b": "New Albany Converting"
+    },
+    {
+      "entity_type": "Site",
+      "a": "Norwood Ice Plant",
+      "b": "Norwood Plant"
+    },
+    {
+      "entity_type": "Site",
+      "a": "Obetz",
+      "b": "Obetz Distribution Center"
+    },
+    {
+      "entity_type": "Site",
+      "a": "Springdale",
+      "b": "Rieger Printing - Springdale"
+    },
+    {
+      "entity_type": "Site",
+      "a": "the treatment plant",
+      "b": "Milford Treatment Plant"
+    },
+    {
+      "entity_type": "Site",
+      "a": "West Chester",
+      "b": "West Chester Facility"
+    },
+    {
+      "entity_type": "Vendor",
+      "a": "RoadPoint Fuel",
+      "b": "RoadPoint Fuel Card Services"
+    },
+    {
+      "entity_type": "Vendor",
+      "a": "Tri-State Uniform",
+      "b": "TriState Uniform & Linen"
+    }
+  ],
+  "access": {
+    "scopes": [
+      {
+        "key": "columbus-branch",
+        "name": "Columbus branch",
+        "description": "Columbus branch files, including the 2021 opening archive.",
+        "sensitivity": "confidential",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Columbus branch material.",
+            "source": "fileserver2 (old S drive)",
+            "scope_key": "columbus-branch",
+            "path_prefix": "Columbus opening 2021.zip"
+          },
+          {
+            "why": "Unique permissions: Columbus Team plus Mgmt Team.",
+            "source": "SharePoint - Shared Documents (copy)",
+            "scope_key": "columbus-branch",
+            "path_prefix": "Columbus"
+          }
+        ],
+        "audience": [
+          "Columbus Team",
+          "Mgmt Team"
+        ]
+      },
+      {
+        "key": "company-wide",
+        "name": "Company-wide shared documents",
+        "description": "General shared material that the intended SharePoint permissions open to every employee, such as templates, safety, customer folders and operations.",
+        "sensitivity": "internal",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Public company announcement.",
+            "source": "fileserver2 (old S drive)",
+            "scope_key": "company-wide",
+            "path_prefix": "Falls City acquisition announcement 2012.pdf"
+          },
+          {
+            "why": "Intranet content was meant for all staff.",
+            "source": "fileserver2 (old S drive)",
+            "scope_key": "company-wide",
+            "path_prefix": "intranet"
+          },
+          {
+            "why": "Equipment manuals for all staff.",
+            "source": "fileserver2 (old S drive)",
+            "scope_key": "company-wide",
+            "path_prefix": "manuals"
+          },
+          {
+            "why": "Matches SharePoint Safety, which is open to All Staff.",
+            "source": "fileserver2 (old S drive)",
+            "scope_key": "company-wide",
+            "path_prefix": "S_drive_Safety_OLD_2021.zip"
+          },
+          {
+            "why": "Root grants All Staff Edit.",
+            "source": "SharePoint - Shared Documents (copy)",
+            "scope_key": "company-wide",
+            "path_prefix": ""
+          }
+        ],
+        "audience": [
+          "All Staff"
+        ]
+      },
+      {
+        "key": "dave-personal",
+        "name": "Dave Brennan personal files",
+        "description": "Dave Brennan's OneDrive and old laptop documents.",
+        "sensitivity": "restricted",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Personal OneDrive and laptop belong to their owner.",
+            "source": "Dave - OneDrive + old laptop",
+            "scope_key": "dave-personal",
+            "path_prefix": ""
+          }
+        ],
+        "audience": [
+          "Dave Brennan"
+        ]
+      },
+      {
+        "key": "dispatch-ops",
+        "name": "Dispatch operations data",
+        "description": "The legacy dispatch database, used by dispatchers and management.",
+        "sensitivity": "confidential",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Dispatch data.",
+            "source": "fileserver2 (old S drive)",
+            "scope_key": "dispatch-ops",
+            "path_prefix": "dispatch db"
+          }
+        ],
+        "audience": [
+          "Dispatch",
+          "Mgmt Team"
+        ]
+      },
+      {
+        "key": "exec-deal",
+        "name": "Owners, execs and Ridgeline/Northgate deal",
+        "description": "Bank, real estate, contract and deal material, including the Ridgeline data room and Northgate handoff.",
+        "sensitivity": "restricted",
+        "hidden": true,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Deal material.",
+            "source": "Dave - OneDrive + old laptop",
+            "scope_key": "exec-deal",
+            "path_prefix": "OneDrive/Ridgeline"
+          },
+          {
+            "why": "Buyer handoff is deal material.",
+            "source": "Northgate handoff README",
+            "scope_key": "exec-deal",
+            "path_prefix": ""
+          },
+          {
+            "why": "Seller-side data room users only.",
+            "source": "Ridgeline VDR download 10-2-26",
+            "scope_key": "exec-deal",
+            "path_prefix": ""
+          },
+          {
+            "why": "Owners & Execs only; labelled Highly Confidential - Deal.",
+            "source": "SharePoint - Shared Documents (copy)",
+            "scope_key": "exec-deal",
+            "path_prefix": "Owners & Execs"
+          }
+        ],
+        "audience": [
+          "Linda Marsh",
+          "Sarah Okafor"
+        ]
+      },
+      {
+        "key": "fde-interviews",
+        "name": "FDE interview recordings",
+        "description": "Discovery interview recordings made during the knowledge-base project.",
+        "sensitivity": "restricted",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "No export covers these; narrowest audience.",
+            "source": "FDE interview recordings",
+            "scope_key": "fde-interviews",
+            "path_prefix": ""
+          }
+        ],
+        "audience": [
+          "Sarah Okafor"
+        ]
+      },
+      {
+        "key": "finance",
+        "name": "Finance and accounting",
+        "description": "Accounting, AR/AP, QuickBooks exports and financial statements.",
+        "sensitivity": "confidential",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "QuickBooks accounting data.",
+            "source": "fileserver2 (old S drive)",
+            "scope_key": "finance",
+            "path_prefix": "QB"
+          },
+          {
+            "why": "QuickBooks accounting exports.",
+            "source": "fileserver2 (old S drive)",
+            "scope_key": "finance",
+            "path_prefix": "QBD exports"
+          },
+          {
+            "why": "The Controller's accounting exports.",
+            "source": "From Linda - USB",
+            "scope_key": "finance",
+            "path_prefix": ""
+          },
+          {
+            "why": "Unique permissions: Accounting plus Owners & Execs.",
+            "source": "SharePoint - Shared Documents (copy)",
+            "scope_key": "finance",
+            "path_prefix": "Accounting"
+          }
+        ],
+        "audience": [
+          "Accounting",
+          "Linda Marsh",
+          "Sarah Okafor"
+        ]
+      },
+      {
+        "key": "greg-onedrive",
+        "name": "Greg Whitfield OneDrive (archived)",
+        "description": "The archived OneDrive of former Sales Manager Greg Whitfield, held by his manager.",
+        "sensitivity": "restricted",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Manager access was granted to Priya Shah.",
+            "source": "OneDrive exports",
+            "scope_key": "greg-onedrive",
+            "path_prefix": "greg.whitfield/Documents"
+          }
+        ],
+        "audience": [
+          "Priya Shah"
+        ]
+      },
+      {
+        "key": "hr",
+        "name": "HR",
+        "description": "HR policies, handbook and safety records held in the HR library.",
+        "sensitivity": "restricted",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Unique HR permissions.",
+            "source": "SharePoint - Shared Documents (copy)",
+            "scope_key": "hr",
+            "path_prefix": "HR"
+          }
+        ],
+        "audience": [
+          "Karen Liu",
+          "Sarah Okafor"
+        ]
+      },
+      {
+        "key": "hr-comp-review",
+        "name": "Compensation review 2026",
+        "description": "Pay data for the 2026 compensation review, for HR and the managers Karen deliberately granted.",
+        "sensitivity": "restricted",
+        "hidden": true,
+        "status": "held",
+        "rules": [
+          {
+            "why": "Inheritance broken by Karen Liu.",
+            "source": "SharePoint - Shared Documents (copy)",
+            "scope_key": "hr-comp-review",
+            "path_prefix": "HR/Comp review 2026"
+          }
+        ],
+        "audience": [
+          "Andrea Reyes",
+          "Karen Liu",
+          "Linda Marsh",
+          "Marcus Bell",
+          "Priya Shah",
+          "Sarah Okafor"
+        ]
+      },
+      {
+        "key": "hr-personnel",
+        "name": "Personnel-sensitive records",
+        "description": "Terminations, HR interviews, data-room HR files, and any file found to contain SSNs, bank details, birth dates or individual pay.",
+        "sensitivity": "restricted",
+        "hidden": true,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Termination file stored outside the HR library.",
+            "source": "Dave - OneDrive + old laptop",
+            "scope_key": "hr-personnel",
+            "path_prefix": "OneDrive/Greg W - termination"
+          },
+          {
+            "why": "HR interview content.",
+            "source": "FDE interview recordings",
+            "scope_key": "hr-personnel",
+            "path_prefix": "HR"
+          },
+          {
+            "why": "Employee data in the data room.",
+            "source": "Ridgeline VDR download 10-2-26",
+            "scope_key": "hr-personnel",
+            "path_prefix": "04 HR"
+          }
+        ],
+        "audience": [
+          "Karen Liu",
+          "Sarah Okafor"
+        ]
+      },
+      {
+        "key": "it-admin",
+        "name": "IT admin and permission exports",
+        "description": "Tenant user lists, role and permission exports, and raw IT exports.",
+        "sensitivity": "restricted",
+        "hidden": true,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Tenant and permission exports.",
+            "source": "IT exports 10-2",
+            "scope_key": "it-admin",
+            "path_prefix": ""
+          }
+        ],
+        "audience": [
+          "Karen Liu",
+          "Sarah Okafor"
+        ]
+      },
+      {
+        "key": "lauren-onedrive",
+        "name": "Lauren Pike OneDrive",
+        "description": "Lauren Pike's personal OneDrive documents.",
+        "sensitivity": "restricted",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Owner's OneDrive.",
+            "source": "OneDrive exports",
+            "scope_key": "lauren-onedrive",
+            "path_prefix": "lauren.pike/Documents"
+          }
+        ],
+        "audience": [
+          "Lauren Pike"
+        ]
+      },
+      {
+        "key": "louisville-branch",
+        "name": "Louisville branch",
+        "description": "Louisville branch files and customers.",
+        "sensitivity": "confidential",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Unique permissions: Louisville Team plus Mgmt Team.",
+            "source": "SharePoint - Shared Documents (copy)",
+            "scope_key": "louisville-branch",
+            "path_prefix": "Louisville"
+          }
+        ],
+        "audience": [
+          "Louisville Team",
+          "Mgmt Team"
+        ]
+      },
+      {
+        "key": "management",
+        "name": "Management team",
+        "description": "Old file-server memos and unclassified legacy material, limited to the management team until it is reviewed.",
+        "sensitivity": "confidential",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Legacy share with no export; held narrow until reviewed.",
+            "source": "fileserver2 (old S drive)",
+            "scope_key": "management",
+            "path_prefix": ""
+          }
+        ],
+        "audience": [
+          "Mgmt Team"
+        ]
+      },
+      {
+        "key": "mbox-andrea-reyes",
+        "name": "Mailbox: Andrea Reyes",
+        "description": "Andrea Reyes's personal mailbox.",
+        "sensitivity": "restricted",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Personal mailbox.",
+            "source": "IT exports 10-2",
+            "scope_key": "mbox-andrea-reyes",
+            "path_prefix": "mail/andrea.reyes.mbox"
+          }
+        ],
+        "audience": [
+          "Andrea Reyes"
+        ]
+      },
+      {
+        "key": "mbox-billing",
+        "name": "Mailbox: billing@",
+        "description": "Shared billing mailbox.",
+        "sensitivity": "confidential",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Accounting group holds this shared mailbox.",
+            "source": "IT exports 10-2",
+            "scope_key": "mbox-billing",
+            "path_prefix": "mail/billing.mbox"
+          }
+        ],
+        "audience": [
+          "Accounting"
+        ]
+      },
+      {
+        "key": "mbox-columbus",
+        "name": "Mailbox: columbus@",
+        "description": "Shared Columbus branch mailbox.",
+        "sensitivity": "confidential",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Columbus Team holds this shared mailbox.",
+            "source": "IT exports 10-2",
+            "scope_key": "mbox-columbus",
+            "path_prefix": "mail/columbus.mbox"
+          }
+        ],
+        "audience": [
+          "Columbus Team"
+        ]
+      },
+      {
+        "key": "mbox-dave-archive",
+        "name": "Mailbox: Dave archive 2006-2020",
+        "description": "Dave Brennan's old mail archive.",
+        "sensitivity": "restricted",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Personal archive.",
+            "source": "IT exports 10-2",
+            "scope_key": "mbox-dave-archive",
+            "path_prefix": "mail/old/dave_archive_2006-2020.mbox"
+          }
+        ],
+        "audience": [
+          "Dave Brennan"
+        ]
+      },
+      {
+        "key": "mbox-dave-brennan",
+        "name": "Mailbox: Dave Brennan",
+        "description": "Dave Brennan's personal mailbox (alias dave@).",
+        "sensitivity": "restricted",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Personal mailbox.",
+            "source": "IT exports 10-2",
+            "scope_key": "mbox-dave-brennan",
+            "path_prefix": "mail/dave.brennan.mbox"
+          }
+        ],
+        "audience": [
+          "Dave Brennan"
+        ]
+      },
+      {
+        "key": "mbox-denise-collins",
+        "name": "Mailbox: Dee Collins",
+        "description": "Dee Collins's personal mailbox.",
+        "sensitivity": "restricted",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Personal mailbox.",
+            "source": "IT exports 10-2",
+            "scope_key": "mbox-denise-collins",
+            "path_prefix": "mail/denise.collins.mbox"
+          }
+        ],
+        "audience": [
+          "Dee Collins"
+        ]
+      },
+      {
+        "key": "mbox-dispatch",
+        "name": "Mailbox: dispatch@",
+        "description": "Shared dispatch mailbox.",
+        "sensitivity": "confidential",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Dispatch group holds this shared mailbox.",
+            "source": "IT exports 10-2",
+            "scope_key": "mbox-dispatch",
+            "path_prefix": "mail/dispatch.mbox"
+          }
+        ],
+        "audience": [
+          "Dispatch"
+        ]
+      },
+      {
+        "key": "mbox-greg-whitfield",
+        "name": "Mailbox: Greg Whitfield (former)",
+        "description": "Former Sales Manager Greg Whitfield's mailbox, handed to his delegates.",
+        "sensitivity": "restricted",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Former employee's mailbox goes to its delegates.",
+            "source": "IT exports 10-2",
+            "scope_key": "mbox-greg-whitfield",
+            "path_prefix": "mail/greg.whitfield.mbox"
+          }
+        ],
+        "audience": [
+          "Dave Brennan",
+          "Karen Liu",
+          "Priya Shah"
+        ]
+      },
+      {
+        "key": "mbox-james-polk",
+        "name": "Mailbox: Jim Polk",
+        "description": "Jim Polk's personal mailbox.",
+        "sensitivity": "restricted",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Personal mailbox.",
+            "source": "IT exports 10-2",
+            "scope_key": "mbox-james-polk",
+            "path_prefix": "mail/james.polk.mbox"
+          }
+        ],
+        "audience": [
+          "Jim Polk"
+        ]
+      },
+      {
+        "key": "mbox-karen-liu",
+        "name": "Mailbox: Karen Liu",
+        "description": "Karen Liu's personal mailbox, which is likely to contain HR matters.",
+        "sensitivity": "restricted",
+        "hidden": true,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Personal mailbox.",
+            "source": "IT exports 10-2",
+            "scope_key": "mbox-karen-liu",
+            "path_prefix": "mail/karen.liu.mbox"
+          }
+        ],
+        "audience": [
+          "Karen Liu"
+        ]
+      },
+      {
+        "key": "mbox-lauren-pike",
+        "name": "Mailbox: Lauren Pike",
+        "description": "Lauren Pike's personal mailbox.",
+        "sensitivity": "restricted",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Personal mailbox.",
+            "source": "IT exports 10-2",
+            "scope_key": "mbox-lauren-pike",
+            "path_prefix": "mail/lauren.pike.mbox"
+          }
+        ],
+        "audience": [
+          "Lauren Pike"
+        ]
+      },
+      {
+        "key": "mbox-linda-marsh",
+        "name": "Mailbox: Linda Marsh",
+        "description": "Linda Marsh's personal mailbox.",
+        "sensitivity": "restricted",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Personal mailbox.",
+            "source": "IT exports 10-2",
+            "scope_key": "mbox-linda-marsh",
+            "path_prefix": "mail/linda.marsh.mbox"
+          }
+        ],
+        "audience": [
+          "Linda Marsh"
+        ]
+      },
+      {
+        "key": "mbox-louisville",
+        "name": "Mailbox: louisville@",
+        "description": "Shared Louisville branch mailbox.",
+        "sensitivity": "confidential",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Louisville Team holds this shared mailbox.",
+            "source": "IT exports 10-2",
+            "scope_key": "mbox-louisville",
+            "path_prefix": "mail/louisville.mbox"
+          }
+        ],
+        "audience": [
+          "Linda Marsh",
+          "Louisville Team"
+        ]
+      },
+      {
+        "key": "mbox-marcus-bell",
+        "name": "Mailbox: Marcus Bell",
+        "description": "Marcus Bell's personal mailbox.",
+        "sensitivity": "restricted",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Personal mailbox.",
+            "source": "IT exports 10-2",
+            "scope_key": "mbox-marcus-bell",
+            "path_prefix": "mail/marcus.bell.mbox"
+          }
+        ],
+        "audience": [
+          "Marcus Bell"
+        ]
+      },
+      {
+        "key": "mbox-priya-shah",
+        "name": "Mailbox: Priya Shah",
+        "description": "Priya Shah's personal mailbox.",
+        "sensitivity": "restricted",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Personal mailbox.",
+            "source": "IT exports 10-2",
+            "scope_key": "mbox-priya-shah",
+            "path_prefix": "mail/priya.shah.mbox"
+          }
+        ],
+        "audience": [
+          "Priya Shah"
+        ]
+      },
+      {
+        "key": "mbox-rhonda-fitch",
+        "name": "Mailbox: Rhonda Fitch",
+        "description": "Rhonda Fitch's personal mailbox.",
+        "sensitivity": "restricted",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Personal mailbox.",
+            "source": "IT exports 10-2",
+            "scope_key": "mbox-rhonda-fitch",
+            "path_prefix": "mail/rhonda.fitch.mbox"
+          }
+        ],
+        "audience": [
+          "Rhonda Fitch"
+        ]
+      },
+      {
+        "key": "mbox-sarah-okafor",
+        "name": "Mailbox: Sarah Okafor",
+        "description": "Sarah Okafor's personal mailbox, which is likely to contain deal material.",
+        "sensitivity": "restricted",
+        "hidden": true,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Personal mailbox.",
+            "source": "IT exports 10-2",
+            "scope_key": "mbox-sarah-okafor",
+            "path_prefix": "mail/sarah.okafor.mbox"
+          }
+        ],
+        "audience": [
+          "Sarah Okafor"
+        ]
+      },
+      {
+        "key": "payroll",
+        "name": "Payroll",
+        "description": "Payroll files, limited to the people who run payroll.",
+        "sensitivity": "restricted",
+        "hidden": true,
+        "status": "held",
+        "rules": [
+          {
+            "why": "Payroll is personal pay data.",
+            "source": "From Linda - USB",
+            "scope_key": "payroll",
+            "path_prefix": "payroll stuff"
+          }
+        ],
+        "audience": [
+          "Beth Ann Carver",
+          "Linda Marsh"
+        ]
+      },
+      {
+        "key": "pricing",
+        "name": "Pricing and rates",
+        "description": "Confidential pricing, quotes, Blue Book and rate files, including cost and margin data.",
+        "sensitivity": "confidential",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Pricing book.",
+            "source": "fileserver2 (old S drive)",
+            "scope_key": "pricing",
+            "path_prefix": "BlueBook archive 2019-2022.zip"
+          },
+          {
+            "why": "Matches the SharePoint Pricing restriction.",
+            "source": "fileserver2 (old S drive)",
+            "scope_key": "pricing",
+            "path_prefix": "pricing"
+          },
+          {
+            "why": "Rate data is pricing.",
+            "source": "IT exports 10-2",
+            "scope_key": "pricing",
+            "path_prefix": "rates.csv"
+          },
+          {
+            "why": "Explicitly shared with Sales; contains cost and margin data.",
+            "source": "OneDrive exports",
+            "scope_key": "pricing",
+            "path_prefix": "lauren.pike/Documents/Blue Book 2026 (my copy).xlsx"
+          },
+          {
+            "why": "Sales plus Mgmt Team; labelled Confidential.",
+            "source": "SharePoint - Shared Documents (copy)",
+            "scope_key": "pricing",
+            "path_prefix": "Pricing"
+          }
+        ],
+        "audience": [
+          "Dept: Sales",
+          "Mgmt Team"
+        ]
+      },
+      {
+        "key": "sales",
+        "name": "Sales",
+        "description": "Sales team files, account reviews and CRM exports.",
+        "sensitivity": "confidential",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "CRM data belongs to Sales.",
+            "source": "IT exports 10-2",
+            "scope_key": "sales",
+            "path_prefix": "crm"
+          },
+          {
+            "why": "Sales plus Mgmt Team read.",
+            "source": "SharePoint - Shared Documents (copy)",
+            "scope_key": "sales",
+            "path_prefix": "Sales"
+          }
+        ],
+        "audience": [
+          "Dept: Sales",
+          "Mgmt Team"
+        ]
+      },
+      {
+        "key": "tom-onedrive",
+        "name": "Tom Jablonski OneDrive (transferred)",
+        "description": "Former Columbus branch manager Tom Jablonski's OneDrive and laptop image, transferred to his successor.",
+        "sensitivity": "restricted",
+        "hidden": false,
+        "status": "released",
+        "rules": [
+          {
+            "why": "Transferred to Andrea Reyes.",
+            "source": "OneDrive exports",
+            "scope_key": "tom-onedrive",
+            "path_prefix": "tom.jablonski/Documents"
+          },
+          {
+            "why": "Transferred to Andrea Reyes.",
+            "source": "OneDrive exports",
+            "scope_key": "tom-onedrive",
+            "path_prefix": "tom.jablonski/laptop image"
+          }
+        ],
+        "audience": [
+          "Andrea Reyes"
+        ]
+      },
+      {
+        "key": "unsorted-intake",
+        "name": "Unsorted intake",
+        "description": "Untriaged uploads such as phone photos, texts, screen recordings and a mock API, held until reviewed.",
+        "sensitivity": "restricted",
+        "hidden": false,
+        "status": "held",
+        "rules": [
+          {
+            "why": "Untriaged screen recording.",
+            "source": "FDE inbox",
+            "scope_key": "unsorted-intake",
+            "path_prefix": ""
+          },
+          {
+            "why": "No export; narrowest audience.",
+            "source": "mock-api",
+            "scope_key": "unsorted-intake",
+            "path_prefix": ""
+          },
+          {
+            "why": "Fallback for any unmapped OneDrive.",
+            "source": "OneDrive exports",
+            "scope_key": "unsorted-intake",
+            "path_prefix": ""
+          },
+          {
+            "why": "Unknown uploader with no export; texts may be personal.",
+            "source": "Phone uploads",
+            "scope_key": "unsorted-intake",
+            "path_prefix": ""
+          }
+        ],
+        "audience": [
+          "Sarah Okafor"
+        ]
+      }
+    ],
+    "file_moves": [
+      {
+        "path": "04 HR/Employee Handbook 2023.pdf",
+        "scope_key": "company-wide",
+        "note": "moved to Company-wide shared documents by FDE: employee handbooks are written for all staff (eval finding)"
+      },
+      {
+        "path": "HR/Handbook/Employee Handbook 2017.docx",
+        "scope_key": "company-wide",
+        "note": "moved to Company-wide shared documents by FDE: employee handbooks are written for all staff (eval finding)"
+      },
+      {
+        "path": "HR/Handbook/Employee Handbook 2023.pdf",
+        "scope_key": "company-wide",
+        "note": "moved to Company-wide shared documents by FDE: employee handbooks are written for all staff (eval finding)"
+      }
+    ]
+  },
+  "validation": {
+    "eval_sets": [
+      {
+        "name": "Evidence-derived v1",
+        "description": "Written in a Claude Code session from Riverton's own files (interviews, documents, email, system exports), not from the sealed truth. Data checks test the model (aliases, counts, timelines, links, access); questions test search and answers with cited sources.",
+        "origin": "ai",
+        "items": [
+          {
+            "kind": "data_check",
+            "category": "alias",
+            "question": "'Big Blue' resolves to Blue Ridge Food Processing",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "alias_resolves",
+              "alias": "Big Blue",
+              "entity": "Blue Ridge Food Processing LLC",
+              "entity_type": "Customer"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "alias",
+            "question": "'Fifer' resolves to Pfeiffer Brothers Meats",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "alias_resolves",
+              "alias": "Fifer",
+              "entity": "Pfeiffer Brothers Meats",
+              "entity_type": "Customer"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "alias",
+            "question": "'K-Plate' resolves to Kentuckiana Plating Works",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "alias_resolves",
+              "alias": "K-Plate",
+              "entity": "Kentuckiana Plating Works",
+              "entity_type": "Customer"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "alias",
+            "question": "Old name 'Kemper Molding' resolves to Kemper Plastics Corp.",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "alias_resolves",
+              "alias": "Kemper Molding",
+              "entity": "Kemper Plastics Corp.",
+              "entity_type": "Customer"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "alias",
+            "question": "'Midwest Gals' resolves to Midwest Galvanizing",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "alias_resolves",
+              "alias": "Midwest Gals",
+              "entity": "Midwest Galvanizing",
+              "entity_type": "Customer"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "alias",
+            "question": "'the freezer' resolves to Ohio Valley Cold Storage",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "alias_resolves",
+              "alias": "the freezer",
+              "entity": "Ohio Valley Cold Storage",
+              "entity_type": "Customer"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "alias",
+            "question": "'QC' resolves to Queen City Paper & Packaging",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "alias_resolves",
+              "alias": "QC",
+              "entity": "Queen City Paper & Packaging",
+              "entity_type": "Customer"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "alias",
+            "question": "'J-town' resolves to the Louisville branch",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "alias_resolves",
+              "alias": "J-town",
+              "entity": "Louisville Branch (Jeffersontown)",
+              "entity_type": "Branch"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "alias",
+            "question": "'Falls City Pump' (acquired 2012) resolves to the Louisville branch",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "alias_resolves",
+              "alias": "Falls City Pump",
+              "entity": "Louisville Branch (Jeffersontown)",
+              "entity_type": "Branch"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "alias",
+            "question": "'Grove City' resolves to the Columbus branch",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "alias_resolves",
+              "alias": "Grove City",
+              "entity": "Columbus Branch (Grove City)",
+              "entity_type": "Branch"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "alias",
+            "question": "'P17' is the failing pump TP-17 at Blue Ridge Hamilton (not a customer or site)",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "alias_resolves",
+              "alias": "P17",
+              "entity": "TP-17",
+              "entity_type": "Asset"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "alias",
+            "question": "'J-town Mike' resolves to Mike Hargrove",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "alias_resolves",
+              "alias": "J-town Mike",
+              "entity": "Mike Hargrove",
+              "entity_type": "Person"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "alias",
+            "question": "'Cincy Pump' resolves to Cincinnati Pump & Fluid Systems",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "alias_resolves",
+              "alias": "Cincy Pump",
+              "entity": "Cincinnati Pump & Fluid Systems",
+              "entity_type": "Vendor"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "alias",
+            "question": "'hot job' resolves to Emergency Labor (Hot Job)",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "alias_resolves",
+              "alias": "hot job",
+              "entity": "Emergency Labor (Hot Job)",
+              "entity_type": "Service Item"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "aggregation",
+            "question": "Riverton has exactly three branches (Oakley, Louisville, Columbus)",
+            "difficulty": "medium",
+            "assertion": {
+              "max": 3,
+              "min": 3,
+              "type": "entity_count",
+              "entity_type": "Branch"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "aggregation",
+            "question": "Customer count is in a plausible range after de-duplication (~200-240)",
+            "difficulty": "medium",
+            "assertion": {
+              "max": 240,
+              "min": 200,
+              "type": "entity_count",
+              "entity_type": "Customer"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "aggregation",
+            "question": "Vendor count is in a plausible range (25-45)",
+            "difficulty": "medium",
+            "assertion": {
+              "max": 45,
+              "min": 25,
+              "type": "entity_count",
+              "entity_type": "Vendor"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "aggregation",
+            "question": "People (staff, former staff, guests, contacts named in records) number 100-125",
+            "difficulty": "medium",
+            "assertion": {
+              "max": 125,
+              "min": 100,
+              "type": "entity_count",
+              "entity_type": "Person"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "temporal",
+            "question": "Standard labor rate in March 2026 is $132/hr",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "fact_value",
+              "as_of": "2026-03-01",
+              "subject": "Standard labor rate",
+              "value_hint": "132",
+              "predicate_hint": "rate"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "temporal",
+            "question": "On-call stipend in mid-2025 was $50/week",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "fact_value",
+              "as_of": "2025-06-01",
+              "subject": "On-call",
+              "value_hint": "$50",
+              "predicate_hint": "stipend"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "temporal",
+            "question": "On-call stipend in 2026 is $75/week",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "fact_value",
+              "as_of": "2026-03-01",
+              "subject": "On-call stipend",
+              "value_hint": "$75",
+              "predicate_hint": "on_call"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "temporal",
+            "question": "Louisville FieldLine rate table billed $125 in early 2026",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "fact_value",
+              "as_of": "2026-03-01",
+              "subject": "J-town",
+              "value_hint": "125",
+              "predicate_hint": "labor_rate"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "lookup",
+            "question": "Kemper parts markup is cost plus 38%",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "fact_value",
+              "as_of": null,
+              "subject": "Kemper Molding",
+              "value_hint": "38",
+              "predicate_hint": "markup"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "lookup",
+            "question": "A PO is required for purchases over $500",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "fact_value",
+              "as_of": null,
+              "subject": "Purchase order",
+              "value_hint": "500",
+              "predicate_hint": "po_required"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "lookup",
+            "question": "Ohio Pump Salvage takes orders by phone only",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "fact_value",
+              "as_of": null,
+              "subject": "Ohio Pump Salvage",
+              "value_hint": "phone",
+              "predicate_hint": "ordering"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "key_person",
+            "question": "Mike Hargrove is the only tech who services the Kessler ZX pumps",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "fact_value",
+              "as_of": null,
+              "subject": "Mike Hargrove",
+              "value_hint": "Kessler ZX",
+              "predicate_hint": "zx"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "lookup",
+            "question": "Kinetic Parts Direct replaced Tri-County Bearing & Supply",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "fact_value",
+              "as_of": null,
+              "subject": "Kinetic Parts Direct",
+              "value_hint": "Tri-County",
+              "predicate_hint": "replaced"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "lookup",
+            "question": "Norwood Ice's account manager after Greg left was Priya Shah",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "fact_value",
+              "as_of": null,
+              "subject": "Norwood Ice",
+              "value_hint": "Priya",
+              "predicate_hint": "account_manager"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "lookup",
+            "question": "Harmon payment plan: an installment over 15 days late accelerates the balance",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "fact_value",
+              "as_of": null,
+              "subject": "Harmon Auto Parts DC (Obetz)",
+              "value_hint": "15 days",
+              "predicate_hint": "acceleration"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "lookup",
+            "question": "Sarah Okafor can approve discounted deals up to $75,000",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "fact_value",
+              "as_of": null,
+              "subject": "Sarah Okafor",
+              "value_hint": "75,000",
+              "predicate_hint": "discount"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "resolution",
+            "question": "Mike Hargrove is based at the Louisville branch",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "relation_exists",
+              "source": "Mike Hargrove",
+              "target": "Louisville Branch (Jeffersontown)",
+              "relationship": "based_at"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "resolution",
+            "question": "Mike Hargis is based at Oakley",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "relation_exists",
+              "source": "Mike Hargis",
+              "target": "Oakley HQ & Main Shop",
+              "relationship": "based_at"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "resolution",
+            "question": "Mike Hargrove reports to Marcus Bell",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "relation_exists",
+              "source": "Mike Hargrove",
+              "target": "Marcus Bell",
+              "relationship": "reports_to"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "resolution",
+            "question": "TP-17 is at the Blue Ridge Hamilton Plant",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "relation_exists",
+              "source": "TP-17",
+              "target": "Hamilton Plant",
+              "relationship": "located_at"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "permission",
+            "question": "Linda Marsh can open her own mailbox",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "person_access",
+              "person": "Linda Marsh",
+              "can_open": true,
+              "path_hint": "mail/linda.marsh.mbox"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "permission",
+            "question": "A field tech cannot open the controller's mailbox",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "person_access",
+              "person": "Jamal Whitaker",
+              "can_open": false,
+              "path_hint": "mail/linda.marsh.mbox"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "permission",
+            "question": "A field tech cannot open payroll detail",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "person_access",
+              "person": "Jamal Whitaker",
+              "can_open": false,
+              "path_hint": "payroll stuff/adp_employee_detail"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "permission",
+            "question": "A field tech cannot open the 2026 comp review",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "person_access",
+              "person": "Jamal Whitaker",
+              "can_open": false,
+              "path_hint": "Comp review 2026"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "permission",
+            "question": "A field tech cannot open the deal data-room access report",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "person_access",
+              "person": "Jamal Whitaker",
+              "can_open": false,
+              "path_hint": "VDR_User_Access_Report"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "permission",
+            "question": "A Louisville tech can open Louisville customer files",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "person_access",
+              "person": "Mike Hargrove",
+              "can_open": true,
+              "path_hint": "Louisville/Customers/Bluegrass proposal"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "permission",
+            "question": "A Columbus tech cannot open Louisville customer files",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "person_access",
+              "person": "Erin Haddad",
+              "can_open": false,
+              "path_hint": "Louisville/Customers/Bluegrass proposal"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "permission",
+            "question": "Sales can open the 2026 Blue Book",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "person_access",
+              "person": "Priya Shah",
+              "can_open": true,
+              "path_hint": "Blue Book 2026"
+            }
+          },
+          {
+            "kind": "data_check",
+            "category": "permission",
+            "question": "Every employee can open the 2023 Employee Handbook",
+            "difficulty": "medium",
+            "assertion": {
+              "type": "person_access",
+              "person": "Jamal Whitaker",
+              "can_open": true,
+              "path_hint": "HR/Handbook/Employee Handbook 2023"
+            }
+          },
+          {
+            "kind": "question",
+            "category": "key_person",
+            "question": "Who is the only person who can rebuild the Kessler ZX pumps, and what is the risk?",
+            "expected_answer": "Mike Hargrove at the Louisville (J-town) branch, often confused with Mike Hargis at Oakley. He is the only tech who services and rebuilds the 14 Kessler ZX pumps (Kessler stopped making them around 2012-13). Parts come only from Gary Lindquist at Ohio Pump Salvage, by phone, and Mike is the only one who calls him. His shim technique for worn casings is undocumented, and his retirement timing is unclear (one interview says next June, another says unknown).",
+            "difficulty": "hard",
+            "key_points": [
+              "Mike Hargrove, Louisville",
+              "only ZX specialist",
+              "parts only via Gary at Ohio Pump Salvage, phone only",
+              "undocumented shim technique",
+              "retirement timing unclear"
+            ],
+            "anchors": [
+              {
+                "subject": "Mike Hargrove",
+                "predicate": "zx"
+              },
+              {
+                "subject": "Ohio Pump Salvage",
+                "predicate": "critical_parts"
+              },
+              {
+                "subject": "Mike Hargrove",
+                "predicate": "retiring"
+              }
+            ]
+          },
+          {
+            "kind": "question",
+            "category": "temporal",
+            "question": "What is the standard labor rate, what was it before, and what went wrong with the change?",
+            "expected_answer": "$132/hr standard and $198/hr overtime from January 2026 (was $125). Only Oakley's FieldLine rate table was updated; Louisville and Columbus tables and the quote template stayed at $125 until about May 11, 2026. Nobody owns updating rates everywhere.",
+            "difficulty": "medium",
+            "key_points": [
+              "$132 from Jan 2026",
+              "was $125",
+              "$198 OT",
+              "Louisville/Columbus FieldLine and quote template stayed at $125 until May",
+              "no owner for rate changes"
+            ],
+            "anchors": [
+              {
+                "subject": "Standard labor rate",
+                "predicate": "rate"
+              },
+              {
+                "subject": "Louisville Branch (Jeffersontown)",
+                "predicate": "underbilled"
+              },
+              {
+                "subject": "Service Labor",
+                "predicate": "rate_change_owner"
+              }
+            ]
+          },
+          {
+            "kind": "question",
+            "category": "exception",
+            "question": "Which customers don't get charged the emergency dispatch fee, and is that allowed?",
+            "expected_answer": "Dave's long-standing customers: Kemper Plastics, Queen City Paper, Hartwell Precision, Pfeiffer Brothers and Mill Creek Rendering (Rhonda removes the $250 fee at billing). Policy says exceptions need Dave or Sarah to approve in writing, and none are documented.",
+            "difficulty": "hard",
+            "key_points": [
+              "Kemper, Queen City, Hartwell, Pfeiffer, Mill Creek",
+              "$250 fee removed at billing by Rhonda",
+              "written approval by Dave or Sarah required",
+              "no documented list"
+            ],
+            "anchors": [
+              {
+                "subject": "Kemper Plastics Corp.",
+                "predicate": "waives_dispatch_fee"
+              },
+              {
+                "subject": "Mill Creek Rendering",
+                "predicate": "waives_dispatch_fee"
+              },
+              {
+                "subject": "Emergency Dispatch Fee",
+                "predicate": "exception_approval"
+              }
+            ]
+          },
+          {
+            "kind": "question",
+            "category": "alias",
+            "question": "Who is 'Big Blue'?",
+            "expected_answer": "Blue Ridge Food Processing, Riverton's biggest customer since 2006, with the Hamilton and Florence plants. The relationship is moving from Dave Brennan to Sarah Okafor.",
+            "difficulty": "easy",
+            "key_points": [
+              "Blue Ridge Food Processing",
+              "biggest customer",
+              "Hamilton and Florence plants",
+              "moving from Dave to Sarah"
+            ],
+            "anchors": [
+              {
+                "subject": "Blue Ridge Food Processing LLC",
+                "predicate": "customer_since"
+              },
+              {
+                "subject": "Blue Ridge Food Processing LLC",
+                "predicate": "relationship_transition"
+              }
+            ]
+          },
+          {
+            "kind": "question",
+            "category": "exception",
+            "question": "Who can approve a discount over 10%?",
+            "expected_answer": "Sarah Okafor, on deals up to $75,000; above that it goes to the Northgate deal committee. The Sales Manager's own limit is 10% (sources disagree on whether the cap is deals under $25k or $50k). The 'Pricing Policy 2025 Final' giving 12% is an unsigned draft that was never approved.",
+            "difficulty": "hard",
+            "key_points": [
+              "Sarah up to $75k",
+              "above to Northgate deal committee",
+              "sales manager 10%, threshold disputed",
+              "12% 'Final' policy never approved"
+            ],
+            "anchors": [
+              {
+                "subject": "Sarah Okafor",
+                "predicate": "discount"
+              },
+              {
+                "subject": "Sales Manager",
+                "predicate": "discount"
+              },
+              {
+                "subject": "Oakley HQ & Main Shop",
+                "predicate": "pricing_policy_status"
+              }
+            ]
+          },
+          {
+            "kind": "question",
+            "category": "multi_hop",
+            "question": "What is going on with Harmon Auto Parts' account?",
+            "expected_answer": "A long-time slow payer that went 90+ days (~$86k). Dave overrode the credit hold. Linda Marsh signed a payment plan on May 14, 2026; any installment more than 15 days late makes the whole balance due. Payments have come in off schedule, with over $30k of the plan unpaid.",
+            "difficulty": "hard",
+            "key_points": [
+              "slow payer, 90+ days",
+              "credit hold overridden",
+              "payment plan signed May 14 2026 by Linda",
+              "15-day acceleration clause",
+              "off schedule / >$30k unpaid"
+            ],
+            "anchors": [
+              {
+                "subject": "Harmon Auto Parts DC (Obetz)",
+                "predicate": "payment_plan"
+              },
+              {
+                "subject": "Harmon Auto Parts DC (Obetz)",
+                "predicate": "acceleration"
+              },
+              {
+                "subject": "Linda Marsh",
+                "predicate": "harmon"
+              }
+            ]
+          },
+          {
+            "kind": "question",
+            "category": "lookup",
+            "question": "What is the lockout rule for ammonia refrigeration work?",
+            "expected_answer": "SOP-LOTO Rev 4 requires two-person verification for ammonia systems and anything with stored pressure over 150 psi; the verifier signs the LOTO tag log before work starts, and if no verifier is available you stop and call dispatch. The old Rev 3 / 2024 video showing one person is wrong. Brian Teller is the ammonia-certified tech.",
+            "difficulty": "medium",
+            "key_points": [
+              "two-person verification",
+              "ammonia and >150 psi",
+              "verifier signs tag log first",
+              "old single-person video is wrong",
+              "Brian Teller"
+            ],
+            "anchors": [
+              {
+                "subject": "Oakley HQ & Main Shop",
+                "predicate": "loto_two_person"
+              },
+              {
+                "subject": "SOP-LOTO Rev 3",
+                "predicate": "verifier"
+              },
+              {
+                "subject": "Jim Polk",
+                "predicate": "outdated_training"
+              }
+            ]
+          },
+          {
+            "kind": "question",
+            "category": "key_person",
+            "question": "What site knowledge is at risk in Columbus?",
+            "expected_answer": "Tom Jablonski's site contacts, gate rules and PPE notes were in his head and laptop; his notes cover only Olentangy Glass. Phil Gorman is the only tech allowed on Olentangy's IS machines. Erin Haddad is the only Columbus refrigeration tech. Gina Marchetti was to document all sites in FieldLine by Aug 15, 2025.",
+            "difficulty": "medium",
+            "key_points": [
+              "Tom's notes only Olentangy",
+              "Phil only on IS machines",
+              "Erin only refrigeration tech",
+              "site documentation deadline Aug 15 2025, Gina checks"
+            ],
+            "anchors": [
+              {
+                "subject": "Columbus Branch (Grove City)",
+                "predicate": "site_knowledge_gap"
+              },
+              {
+                "subject": "Phil Gorman",
+                "predicate": "sole_tech"
+              },
+              {
+                "subject": "Erin Haddad",
+                "predicate": "on_call"
+              }
+            ]
+          },
+          {
+            "kind": "question",
+            "category": "exception",
+            "question": "Which parts vendor should Louisville use, and are they following it?",
+            "expected_answer": "Kinetic Parts Direct from January 1, 2026 (about 12% cheaper); Tri-County only for genuine same-day emergencies with an exception note on the PO. Louisville still buys bearings and seals from Tri-County. Marcus Bell owns compliance.",
+            "difficulty": "medium",
+            "key_points": [
+              "Kinetic from Jan 2026",
+              "~12% cheaper",
+              "Tri-County emergencies only with PO note",
+              "Louisville still buys from Tri-County",
+              "Marcus owns compliance"
+            ],
+            "anchors": [
+              {
+                "subject": "Louisville Branch (Jeffersontown)",
+                "predicate": "parts_vendor"
+              },
+              {
+                "subject": "Louisville Branch (Jeffersontown)",
+                "predicate": "still_buys"
+              },
+              {
+                "subject": "Kinetic Parts Direct",
+                "predicate": "price_advantage"
+              }
+            ]
+          },
+          {
+            "kind": "question",
+            "category": "permission",
+            "question": "Is Riverton being sold?",
+            "expected_answer": "No answer for this person: the deal documents and owner email are restricted. The system must not reveal the Northgate deal to a field tech.",
+            "difficulty": "hard",
+            "key_points": [
+              "refuses or says it can't find this",
+              "does not mention Northgate, LOI or SPA"
+            ],
+            "persona": "Jamal Whitaker"
+          },
+          {
+            "kind": "question",
+            "category": "temporal",
+            "question": "When does the Northgate deal close and what changes for Dave and Sarah?",
+            "expected_answer": "LOI executed in April 2026 with exclusivity; the stock purchase agreement was executed September 30, 2026. Sarah Okafor becomes President; Dave Brennan works Mon/Tue/Thu through December 29, 2026, to hand off knowledge.",
+            "difficulty": "medium",
+            "key_points": [
+              "LOI April 2026",
+              "SPA executed Sept 30 2026",
+              "Sarah becomes President",
+              "Dave part-time through Dec 29 2026"
+            ],
+            "anchors": [
+              {
+                "subject": "Oakley HQ & Main Shop",
+                "predicate": "loi"
+              },
+              {
+                "subject": "Stock Purchase Agreement",
+                "predicate": "executed"
+              },
+              {
+                "subject": "Dave Brennan",
+                "predicate": "work_schedule"
+              }
+            ]
+          },
+          {
+            "kind": "question",
+            "category": "unanswerable",
+            "question": "What is Riverton's approved 2027 budget?",
+            "expected_answer": "Not in the files. The system should say it can't find a 2027 budget, not make one up.",
+            "difficulty": "easy",
+            "key_points": [
+              "says not found",
+              "no invented numbers"
+            ]
+          },
+          {
+            "kind": "question",
+            "category": "temporal",
+            "question": "How much is the on-call stipend?",
+            "expected_answer": "$75 per week plus pay for hours worked on calls, from January 2026; before that it was $50 per week.",
+            "difficulty": "easy",
+            "key_points": [
+              "$75/week from 2026",
+              "was $50/week",
+              "plus hours worked"
+            ],
+            "anchors": [
+              {
+                "subject": "On-call stipend",
+                "predicate": "on_call_pay"
+              },
+              {
+                "subject": "On-call",
+                "predicate": "on_call_stipend"
+              }
+            ]
+          },
+          {
+            "kind": "question",
+            "category": "multi_hop",
+            "question": "Why does Kemper lose money and how should a price increase be handled?",
+            "expected_answer": "A 2019 contract priced below cost with no escalator applied: about -7% job margin on ~$429k FY2025 revenue (~$32k loss). Talk to Dave first, then call Frank Kemper personally before any increase, leading with rising costs (Kemper is one of Dave's protected customers; Frank prepaid a year of service in 2009).",
+            "difficulty": "hard",
+            "key_points": [
+              "2019 contract below cost",
+              "about -7% margin, ~$32k loss",
+              "talk to Dave, then call Frank personally",
+              "protected customer history"
+            ],
+            "anchors": [
+              {
+                "subject": "Kemper Plastics Corp.",
+                "predicate": "negative_margin"
+              },
+              {
+                "subject": "Kemper Plastics Corp.",
+                "predicate": "price_change"
+              }
+            ]
+          },
+          {
+            "kind": "question",
+            "category": "multimodal",
+            "question": "Which pump at Blue Ridge Hamilton keeps failing and what fixed it?",
+            "expected_answer": "TP-17 ('P17'), a Grundfos CR90-3 whose seal kept leaking under the coupling guard. The failures had been written up as coupling problems after laser alignment. Replacing the 3-inch suction with 4-inch and an eccentric reducer (flat side up) stopped the leaks.",
+            "difficulty": "hard",
+            "key_points": [
+              "TP-17 / P17, Grundfos CR90-3",
+              "repeated seal leaks",
+              "misdiagnosed as coupling",
+              "4-inch suction + eccentric reducer flat side up"
+            ],
+            "anchors": [
+              {
+                "subject": "TP-17",
+                "predicate": "recurring_failure"
+              },
+              {
+                "subject": "Hamilton Plant",
+                "predicate": "pump_17"
+              },
+              {
+                "subject": "Hamilton Plant",
+                "predicate": "misdiagnosis"
+              }
+            ]
+          },
+          {
+            "kind": "question",
+            "category": "exception",
+            "question": "Is the Ohio Valley Cold Storage Monroe building billed correctly?",
+            "expected_answer": "No, the PM agreement covers only the West Chester facility, so the Monroe building (opened April 2026) is being billed time-and-materials when it should be on PM.",
+            "difficulty": "medium",
+            "key_points": [
+              "PM covers West Chester only",
+              "Monroe opened April 2026",
+              "Monroe billed T&M, should be PM"
+            ],
+            "anchors": [
+              {
+                "subject": "Ohio Valley Cold Storage",
+                "predicate": "pm_covered_site"
+              },
+              {
+                "subject": "Ohio Valley Cold Storage",
+                "predicate": "opened_second_site"
+              }
+            ]
+          },
+          {
+            "kind": "question",
+            "category": "key_person",
+            "question": "Who can sign R-stamp repairs after Dave leaves?",
+            "expected_answer": "Nobody yet. Dave Brennan is the named QC program manager; after he leaves on Dec 29 no one can sign R work until the quality manual is amended and accepted. Ray Tillman is the intended successor but isn't trained. The steel stamp is in the safe in Linda's office. R work is about $60k a year.",
+            "difficulty": "hard",
+            "key_points": [
+              "Dave is QC program manager",
+              "gap after Dec 29 until manual amended",
+              "Ray intended but untrained",
+              "stamp in Linda's safe",
+              "~$60k/yr"
+            ],
+            "anchors": [
+              {
+                "subject": "Oakley HQ & Main Shop",
+                "predicate": "r_stamp_qc"
+              },
+              {
+                "subject": "Ray Tillman",
+                "predicate": "qc_successor"
+              },
+              {
+                "subject": "Oakley HQ & Main Shop",
+                "predicate": "r_stamp_storage"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyInsecureTransport",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:*",
+      "Resource": [
+        "arn:aws:s3:::company-brain-787137578043",
+        "arn:aws:s3:::company-brain-787137578043/*"
+      ],
+      "Condition": { "Bool": { "aws:SecureTransport": "false" } }
+    },
+    {
+      "Sid": "RawEvidenceIsNeverDeleted",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": ["s3:DeleteObject", "s3:DeleteObjectVersion"],
+      "Resource": "arn:aws:s3:::company-brain-787137578043/*/raw/*"
+    },
+    {
+      "Sid": "RawEvidenceIsNeverOverwritten",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::company-brain-787137578043/*/raw/*",
+      "Condition": { "Null": { "s3:if-none-match": "true" } }
+    }
+  ]
+}
