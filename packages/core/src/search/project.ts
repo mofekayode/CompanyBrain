@@ -72,6 +72,20 @@ export interface EvRow {
 // ---------------------------------------------------------------------------- passages
 
 const TABLE_ROWS = 12
+const CHAT_ROWS = 6
+
+/** For a table whose columns are a message log, a row → "2026-08-10 08:10 Josh Hensley: so we got sold". */
+export function messageLog(header: string): ((row: string) => string) | null {
+  const cols = header.split(' | ').map((c) => c.trim().toLowerCase())
+  const text = cols.findIndex((c) => /^(text|message|body|content|message text)$/.test(c))
+  const who = cols.findIndex((c) => /^(sender_name|sender|from|author|sender name|name)$/.test(c))
+  const when = cols.findIndex((c) => /(date|time|timestamp|sent)/.test(c))
+  if (text < 0 || who < 0 || when < 0) return null
+  return (row) => {
+    const v = row.split(' | ')
+    return `${(v[when] ?? '').trim().slice(0, 16)} ${(v[who] ?? '').trim()}: ${(v[text] ?? '').trim()}`.trim()
+  }
+}
 const TRANSCRIPT_MS = 90_000
 const TEXT_TARGET = 1000
 const TEXT_MAX = 1600
@@ -111,16 +125,21 @@ export function cutPassages(rows: EvRow[]): Omit<SearchDoc, 'entity_ids'>[] {
       const prefix: string[] = []
       while (start < lines.length && /^(#|Sheet:)/.test(lines[start])) prefix.push(lines[start++])
       const header = lines[start] ?? ''
-      const body = lines.slice(start + 1).filter((l) => l.trim())
+      const rawBody = lines.slice(start + 1).filter((l) => l.trim())
+      // A message log (a text column plus sender and date): one readable line per message, in
+      // small windows, so a single message isn't drowned in IDs and unrelated chatter.
+      const chat = messageLog(header)
+      const body = chat ? rawBody.map(chat) : rawBody
+      const per = chat ? CHAT_ROWS : TABLE_ROWS
       const rowStart = Number(r.locator.row_start ?? 1)
       const sheet = (r.locator.sheet as string | undefined) ?? null
-      for (let k = 0; k < Math.max(body.length, 1); k += TABLE_ROWS) {
-        const win = body.slice(k, k + TABLE_ROWS)
+      for (let k = 0; k < Math.max(body.length, 1); k += per) {
+        const win = body.slice(k, k + per)
         const a = rowStart + k
         const b = a + Math.max(win.length, 1) - 1
         common([r], {
           title: `${base(path)}${sheet && sheet !== 'CSV' ? ` · ${sheet}` : ''} · rows ${a}–${b}`,
-          content: [...prefix, header, ...win].join('\n'),
+          content: [...prefix, ...(chat ? [] : [header]), ...win].join('\n'),
           citation: { sheet, row_start: a, row_end: b },
         })
       }
