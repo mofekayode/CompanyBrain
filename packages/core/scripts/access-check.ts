@@ -1,5 +1,6 @@
 // Dev tool: checks who may open what against expectations written from the permission exports
-// (evals/<slug>/access-dev-v1.json). A file counts as openable if the role can read any passage of it.
+// (evals/<slug>/access-dev-v1.json). Per item: a file is openable if its own access list (or one of its
+// members', for a mailbox or archive) admits the role.
 //
 // Usage: npx tsx scripts/access-check.ts <slug> [set.json]
 
@@ -22,12 +23,13 @@ for (const c of set.checks) {
   if (!who) throw new Error(`no principal for ${c.role}`)
   const principals = await principalsOf(db, t, who.id)
   // The file and everything inside it (mailbox messages, archive members).
+  // Per item, as the company's systems decide it: the file's (or its members') own access list.
+  // Identical copies elsewhere don't change whether *this* copy may be opened.
   const r = (
     await db.query<{ files: number; readable: number }>(
-      `with f as (select id from public.source_objects where tenant_id = $1 and (original_path = $2 or original_path like $2 || '/%'))
-       select (select count(*) from f)::int files,
-              (select count(*) from public.search_documents d where d.tenant_id = $1 and d.doc_type = 'passage' and d.source_object_id in (select id from f)
-                 and exists (select 1 from public.acl_entries ae where ae.acl_id = any(d.acl_ids) and ae.principal_id = any($3::uuid[])))::int readable`,
+      `with g as (select id, acl_id from public.source_objects where tenant_id = $1 and (original_path = $2 or original_path like $2 || '/%'))
+       select (select count(*) from g)::int files,
+              (select count(*) from g where exists (select 1 from public.acl_entries ae where ae.acl_id = g.acl_id and ae.principal_id = any($3::uuid[])))::int readable`,
       [t, c.path, principals],
     )
   ).rows[0]
@@ -37,7 +39,7 @@ for (const c of set.checks) {
   }
   const ok = r.readable > 0 === c.allow
   if (ok) pass++
-  else fails.push(`  FAIL ${c.role} ${c.allow ? 'should open' : 'must NOT open'} ${c.path} (${c.why}); readable passages: ${r.readable}`)
+  else fails.push(`  FAIL ${c.role} ${c.allow ? 'should open' : 'must NOT open'} ${c.path} (${c.why}); readable items: ${r.readable}/${r.files}`)
 }
 console.log(`=== ${set.name}: ${pass}/${set.checks.length - missing.length} pass${missing.length ? ` · ${missing.length} paths not found: ${missing.join(', ')}` : ''}`)
 for (const f of fails) console.log(f)
