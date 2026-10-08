@@ -30,8 +30,31 @@ For cutoff 2026-10-10 this hides 20 files (14 interview recordings, the inbox sc
 
 ## Roles
 
-`config/tenants/riverton/eval-roles.json` maps each role to the person whose access best matches it. ROLE-OPS-MGR →
-Hank Ostrander is a judgment call (no one holds that title). `{"person": ...}` resolves by display name, then email.
+`config/tenants/riverton/eval-roles.json`. A role is either a real person whose access matches it, or a **profile**: a
+stand-in that belongs to exactly a set of the company's groups, so it gets that access and nobody's personal files.
+
+| Role | Answers as |
+|---|---|
+| ROLE-CEO-BUYER | profile: All Staff, Mgmt Team, Owners & Execs (owner-level access incl. the data room; no personal mailboxes or HR) |
+| ROLE-OPS-MGR | profile: All Staff, Mgmt Team, Dispatch, Oakley/Louisville/Columbus Techs |
+| ROLE-FINANCE | profile: All Staff, Accounting |
+| ROLE-BRANCH-MGR | Marcus Bell |
+| ROLE-FIELD-TECH | Jamal Whitaker |
+| ROLE-SALES-MGR | Priya Shah |
+| ROLE-SALES | Tyler Branham |
+| ROLE-HR | Karen Liu |
+| ROLE-DISPATCH | Dee Collins |
+
+`{"person": ...}` resolves by display name, then email.
+
+## Access basis
+
+Access follows the source systems' permission exports (`IT exports 10-2`: SharePoint permissions, sharing links, mailbox
+permissions, group memberships; the field-service user list; the data-room access report), applied with
+`packages/core/scripts/access-sync.ts` from `config/tenants/riverton/tenant.json` → `access`. A copy in someone's private
+mailbox keeps that mailbox's access. A reader sees a fact only through evidence they can open, and then only its
+statement if some of its evidence is restricted for them. Guests and former staff never inherit group access, except
+where the config records an evidence-backed membership (Rachel Stein → Mgmt Team).
 
 ## Run conditions and known limits
 

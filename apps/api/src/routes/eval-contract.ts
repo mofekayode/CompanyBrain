@@ -9,6 +9,7 @@ import { answersAllowed } from '@companybrain/core/claude'
 import { refsFor, type Ref } from '@companybrain/core/evals/contract'
 import { exportOntology } from '@companybrain/core/evals/ontology-export'
 import { exportComponents } from '@companybrain/core/evals/components'
+import { principalFor } from '@companybrain/core/evals/roles'
 import { search } from '@companybrain/core/search/search'
 import { pool, tenantBySlug } from '@companybrain/core/workbench/server'
 import { Hono } from 'hono'
@@ -28,31 +29,15 @@ const LOG_DIR = join(import.meta.dirname, '../../../../logs/eval')
 interface EvalConfig {
   /** Knowledge cutoffs to prepare at startup. */
   warm_cutoffs?: string[]
-  roles: Record<string, { person: string; why: string }>
+  /** A role is a real person, or a profile: a set of groups (that access, nobody's personal files). */
+  roles: Record<string, { person?: string; profile?: string[]; why: string }>
 }
 const evalConfig = (): EvalConfig => JSON.parse(readFileSync(join(import.meta.dirname, '../../../../config/tenants', SLUG, 'eval-roles.json'), 'utf8')) as EvalConfig
-const roles = () => evalConfig().roles
 
 const tenant = async () => {
   const t = await tenantBySlug(SLUG)
   if (!t) throw new Error(`unknown eval tenant ${SLUG}`)
   return t
-}
-
-/** A role or a named person → the principal the Brain answers as. */
-async function principalFor(tenantId: string, as: { role?: string; person?: { name?: string; email?: string } }): Promise<{ id: string; name: string } | null> {
-  const name = as.role ? roles()[as.role]?.person : as.person?.name
-  const email = as.person?.email?.toLowerCase()
-  const rows = (
-    await pool().query<{ id: string; name: string }>(
-      `select p.id, p.display_name name from public.principals p
-       where p.tenant_id = $1 and p.kind = 'user'
-         and (lower(p.display_name) = lower($2) or ($3::text is not null and (lower(p.metadata ->> 'email') = $3 or lower(p.external_ref) = $3)))
-       order by (coalesce(p.metadata ->> 'status', 'active') = 'active') desc limit 1`,
-      [tenantId, name ?? '', email ?? null],
-    )
-  ).rows
-  return rows[0] ?? null
 }
 
 const day = (s: unknown) => (typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s) ? s : null)
@@ -65,7 +50,7 @@ evalContract.post('/eval/answer', async (c) => {
   const cutoff = day(body.knowledge_cutoff) ?? askedOn
   if (!question || !askedOn || !cutoff) return c.json({ error: 'question, asked_on and knowledge_cutoff (YYYY-MM-DD) are required' }, 400)
   const t = await tenant()
-  const who = body.as ? await principalFor(t.id, body.as) : null
+  const who = body.as ? await principalFor(pool(), t.id, SLUG, body.as) : null
   if (body.as && !who) return c.json({ error: `no person for ${JSON.stringify(body.as)}` }, 422)
 
   const sql = pool()
