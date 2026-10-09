@@ -28,6 +28,8 @@ export interface ToolCtx {
   view?: KnowledgeView
   /** The question's "today" (YYYY-MM-DD); default: the real date. */
   today?: string
+  /** Rewrite questions into the documents' words before searching (search/rewrite.ts). */
+  rewrite?: boolean
 }
 
 /** Event dates arrive as 2025-03-10, 03/10/2025 or 3/9/25 depending on the system. */
@@ -107,6 +109,7 @@ export async function searchCompany(ctx: ToolCtx, a: { query: string; kinds?: st
   const r = await search(ctx.sql, ctx.tenantId, a.query, {
     view: ctx.view,
     today: ctx.today,
+    rewrite: ctx.rewrite,
     as: ctx.as,
     kinds: a.kinds,
     docTypes: a.doc_types,

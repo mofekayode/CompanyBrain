@@ -11,6 +11,7 @@ import type { estypes } from '@elastic/elasticsearch'
 import type { Sql } from '../storage/raw'
 import { type KnowledgeView, viewAliases, viewContent } from '../access/knowledge-view'
 import { embedQuery, rerankScores } from './embed'
+import { rewriteQuestion } from './rewrite'
 import { activeVersion, es, indexAlias } from './es'
 import { type Dictionary, type LinkedEntity, linkText, loadDictionary, normalize } from './linker'
 import { parseTime, type TimeIntent } from './time'
@@ -35,6 +36,8 @@ export interface SearchOptions {
   view?: KnowledgeView
   /** The question's "today" (YYYY-MM-DD); default: the client's latest dated evidence. */
   today?: string
+  /** Rewrite the question into the documents' words first (search/rewrite.ts; uses the answer API). */
+  rewrite?: boolean
 }
 
 export interface SearchHit {
@@ -61,7 +64,7 @@ export interface SearchHit {
 
 export interface SearchResult {
   query: string
-  understood: { entities: LinkedEntity[]; asOf: string | null; preferCurrent: boolean; history: boolean; time: TimeIntent & { anchor_date?: string | null } }
+  understood: { entities: LinkedEntity[]; asOf: string | null; preferCurrent: boolean; history: boolean; time: TimeIntent & { anchor_date?: string | null }; rewrite?: string | null }
   hits: SearchHit[]
   timings: { understand_ms: number; embed_ms: number; es_ms: number; rerank_ms: number; total_ms: number }
   counts: { bm25: number; knn: number; fused: number }
@@ -130,6 +133,18 @@ export const statementOnly = (content: string) =>
     .filter((l, i) => i === 0 || /^(Valid |Status: |Timeline: )/.test(l))
     .join('\n')
 
+/** One rewrite per question for a minute: an answer runs a few searches for the same question. */
+const rewrites = new Map<string, { at: number; text: Promise<string | null> }>()
+function cachedRewrite(sql: Sql, tenantId: string, dict: Dictionary, q: string) {
+  const key = `${tenantId}:${q}`
+  const hit = rewrites.get(key)
+  if (hit && Date.now() - hit.at < 60_000) return hit.text
+  const text = rewriteQuestion(sql, tenantId, dict, q)
+  rewrites.set(key, { at: Date.now(), text })
+  if (rewrites.size > 500) for (const [k, v] of rewrites) if (Date.now() - v.at > 60_000) rewrites.delete(k)
+  return text
+}
+
 /** The client's "today": the date of their latest records (interviews can postdate the machine clock). */
 const nowCache = new Map<string, { at: number; now: Date }>()
 async function clientNow(sql: Sql, tenantId: string): Promise<Date> {
@@ -166,6 +181,10 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
   const limit = Math.min(opts.limit ?? 10, 50)
   const dict = await dictionary(sql, tenantId)
   const u = understand(dict, query, opts.asOf, opts.today ? new Date(`${opts.today}T12:00:00Z`) : await clientNow(sql, tenantId))
+  // Rewritten into the documents' words (opt-in): time and names were read from the original above;
+  // keyword search, meaning search and the reranker use the original plus the rewrite.
+  const rewritten = opts.rewrite ? await cachedRewrite(sql, tenantId, dict, query) : null
+  if (rewritten) query = `${query}\n${rewritten}`
   // A view only resolves names it could have known (not a nickname first heard in a later interview).
   if (opts.view) {
     const view = opts.view
@@ -422,7 +441,7 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
   const t2 = performance.now()
   return {
     query,
-    understood: { entities: u.entities, asOf: u.asOf, preferCurrent: u.preferCurrent, history: u.history, time: { ...u.time, anchor_date: anchorDate } },
+    understood: { entities: u.entities, asOf: u.asOf, preferCurrent: u.preferCurrent, history: u.history, time: { ...u.time, anchor_date: anchorDate }, rewrite: rewritten },
     hits,
     timings: { understand_ms: Math.round(t1 - t0), embed_ms: Math.round(te1 - te0), es_ms: Math.round(te2 - te1), rerank_ms: Math.round(rerankMs), total_ms: Math.round(t2 - t0) },
     counts: { bm25: lex?.hits.hits.length ?? 0, knn: sem?.hits.hits.length ?? 0, fused: fused.size },

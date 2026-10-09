@@ -9,7 +9,8 @@
 //                     chunking or embedding problem)
 // A hit counts a passage from a gold file, or a fact/record whose evidence is in a gold file.
 //
-// Usage: npx tsx scripts/robustness-eval.ts <slug> [set.json] [--verbose] [--style casual]
+// Usage: npx tsx scripts/robustness-eval.ts <slug> [set.json] [--verbose] [--style casual] [--rewrite] [--no-rerank]
+//   --rewrite uses the product path (needs COMPANY_BRAIN_ALLOW_ANSWER_API=1); --rewrite-claude/--rewrite-local are experiments
 
 import { readFileSync } from 'node:fs'
 import { search, type SearchHit } from '../src/search/search'
@@ -107,7 +108,8 @@ for (const target of set.targets)
     if (only && style !== only) continue
     const asked = await rewrite(q)
     const t0 = performance.now()
-    const r = await search(db, t, asked, { limit: 50, rerank: !args.includes('--no-rerank') })
+    // --rewrite runs the product's own rewriting inside search (search/rewrite.ts).
+    const r = await search(db, t, asked, { limit: 50, rerank: !args.includes('--no-rerank'), rewrite: args.includes('--rewrite') })
     ms += performance.now() - t0
     n++
     const final = await firstGold(r.hits, target.gold)

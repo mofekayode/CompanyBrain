@@ -55,12 +55,12 @@ Rules:
 - Lead with the direct answer in one sentence, then the supporting detail. Keep it short.
 - Never use em dashes. Use commas, colons, periods or parentheses instead.`
 
-export async function buildContext(sql: Sql, tenantId: string, question: string, opts: { as?: string | null; asOf?: string; limit?: number; prefetched?: SearchResult; view?: KnowledgeView; today?: string } = {}): Promise<ContextPack> {
+export async function buildContext(sql: Sql, tenantId: string, question: string, opts: { as?: string | null; asOf?: string; limit?: number; prefetched?: SearchResult; view?: KnowledgeView; today?: string; rewrite?: boolean } = {}): Promise<ContextPack> {
   const t0 = performance.now()
   const ctx: ToolCtx = { sql, tenantId, as: opts.as ?? null, view: opts.view, today: opts.today }
   const today = opts.today ?? new Date().toISOString().slice(0, 10)
   // Answers get the reranked list: 40/41 retrieval checks vs 37/41 without, for ~1 s more.
-  const r = opts.prefetched ?? (await search(sql, tenantId, question, { as: opts.as, asOf: opts.asOf, limit: opts.limit ?? 12, rerank: true, view: opts.view, today: opts.today }))
+  const r = opts.prefetched ?? (await search(sql, tenantId, question, { as: opts.as, asOf: opts.asOf, limit: opts.limit ?? 12, rerank: true, view: opts.view, today: opts.today, rewrite: opts.rewrite }))
 
   // Facts about the entities the question names (visible to this reader only).
   const facts: ContextPack['facts'] = []

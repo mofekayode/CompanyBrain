@@ -101,7 +101,7 @@ export async function briefAnswer(ctx: ToolCtx, question: string, progress: Brie
   const step = (id: BriefStep['id'], label: string, status: BriefStep['status'], detail?: string) => progress.onStep?.({ id, label, status, detail })
   step('search', 'Looking across documents, email, interviews and records', 'active')
   // With a reader, the full-access search (for "N more matches are locked") runs alongside theirs.
-  const known = { view: ctx.view, today: ctx.today }
+  const known = { view: ctx.view, today: ctx.today, rewrite: ctx.rewrite }
   const fullAccess = ctx.as ? search(ctx.sql, ctx.tenantId, question, { limit: 12, rerank: true, ...known }) : null
   const r = await search(ctx.sql, ctx.tenantId, question, { as: ctx.as, limit: 12, rerank: true, ...known })
   progress.onSearch?.(r)

@@ -20,7 +20,8 @@ import type { Env } from '../tenant'
  */
 export const app = new Hono<Env>()
 
-const ctx = (c: { get: (k: 'tenant') => { id: string } }, as?: string | null) => ({ sql: pool(), tenantId: c.get('tenant').id, as: as || null })
+// The client app rewrites questions into the documents' words before searching (search/rewrite.ts).
+const ctx = (c: { get: (k: 'tenant') => { id: string } }, as?: string | null) => ({ sql: pool(), tenantId: c.get('tenant').id, as: as || null, rewrite: true })
 
 /** People who can sign in (mock until Clerk), with whether they manage access. */
 app.get('/app/people', async (c) =>
@@ -97,7 +98,7 @@ app.post('/app/ask/stream', async (c) => {
       if (!answersAllowed() || locked || ac.signal.aborted) return void (await send('done', { ...brief, written: null }))
 
       await send('step', { id: 'write', label: 'Writing the answer from these sources', status: 'active' })
-      const pack = await (packed ?? buildContext(pool(), c.get('tenant').id, q.trim(), { as: as || null }))
+      const pack = await (packed ?? buildContext(pool(), c.get('tenant').id, q.trim(), { as: as || null, rewrite: true }))
       await send('sources', pack.sources.map((s) => ({
         n: s.n,
         id: s.id,
@@ -139,7 +140,7 @@ app.get('/app/search', async (c) => {
   // Fast hybrid ranking for the list (~0.6 s); the cross-encoder only checks the top few to tell
   // whether anything matches at all (vector search always returns neighbours, even for gibberish):
   // real queries score ≥ ~1 at the top, nonsense ≤ ~-5.
-  const r = await search(pool(), c.get('tenant').id, q, { as: c.req.query('as') || null, limit: 40, asOf: c.req.query('as_of') || undefined })
+  const r = await search(pool(), c.get('tenant').id, q, { as: c.req.query('as') || null, limit: 40, asOf: c.req.query('as_of') || undefined, rewrite: true })
   const scores = r.hits.length ? await rerankScores(q, r.hits.slice(0, 3).map((h) => `${h.title}\n${h.content}`)) : []
   const weak = !scores.length || Math.max(...scores) < -3
   return c.json({ ...r, weak, hits: weak ? [] : r.hits })

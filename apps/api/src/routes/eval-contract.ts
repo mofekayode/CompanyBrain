@@ -55,11 +55,11 @@ evalContract.post('/eval/answer', async (c) => {
 
   const sql = pool()
   const view = await knowledgeView(sql, t.id, SLUG, cutoff, askedOn)
-  const ctx: ToolCtx = { sql, tenantId: t.id, as: who?.id ?? null, view, today: askedOn }
+  const ctx: ToolCtx = { sql, tenantId: t.id, as: who?.id ?? null, view, today: askedOn, rewrite: true }
   const files = await tenantFiles(sql, t.id, SLUG)
 
   // Ranked candidates after access and cutoff filtering, before generation.
-  const [ranked, brief] = await Promise.all([search(sql, t.id, question, { as: ctx.as, limit: 50, rerank: true, view, today: askedOn }), briefAnswer(ctx, question)])
+  const [ranked, brief] = await Promise.all([search(sql, t.id, question, { as: ctx.as, limit: 50, rerank: true, view, today: askedOn, rewrite: true }), briefAnswer(ctx, question)])
 
   const tRetrieved = performance.now()
   let text = ''
