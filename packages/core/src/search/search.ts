@@ -11,7 +11,7 @@ import type { estypes } from '@elastic/elasticsearch'
 import type { Sql } from '../storage/raw'
 import { type KnowledgeView, viewAliases, viewContent } from '../access/knowledge-view'
 import { embedQuery, rerankScores } from './embed'
-import { es, indexAlias } from './es'
+import { activeVersion, es, indexAlias } from './es'
 import { type Dictionary, type LinkedEntity, linkText, loadDictionary, normalize } from './linker'
 import { parseTime, type TimeIntent } from './time'
 
@@ -82,8 +82,11 @@ async function slugOf(sql: Sql, tenantId: string) {
   return slugCache.get(tenantId)!
 }
 
+/** Meaning-search depth: how many neighbours Elasticsearch returns, from how many it examines. */
+const KNN_K = Number(process.env.CB_KNN_K ?? 100)
+const KNN_CANDIDATES = Number(process.env.CB_KNN_CANDIDATES ?? 1000)
 /** How deep into each leg (keyword, meaning) the reranker looks, beyond the fused head. */
-const LEG_POOL = 30
+const LEG_POOL = Number(process.env.CB_LEG_POOL ?? 30)
 
 /** The reader's principals: themselves plus every group they belong to (transitively). */
 export async function principalsOf(sql: Sql, tenantId: string, principalId: string): Promise<string[]> {
@@ -273,7 +276,8 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
 
   const slug = await slugOf(sql, tenantId)
   const te0 = performance.now()
-  const vector = opts.only === 'bm25' ? null : await embedQuery(expansion ? `${query} (${expansion})` : query)
+  // Embedded with the model of the index version the alias points to.
+  const vector = opts.only === 'bm25' ? null : await embedQuery(expansion ? `${query} (${expansion})` : query, await activeVersion(slug))
   const te1 = performance.now()
   const [lex, sem] = await Promise.all([
     // Same shard copies for every query of a tenant: approximate kNN differs between replicas.
@@ -284,7 +288,7 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
           preference: `cb-${slug}`,
           size: 60,
           _source: { excludes: ['embedding'] },
-          knn: { field: 'embedding', query_vector: vector, k: 60, num_candidates: 400, filter },
+          knn: { field: 'embedding', query_vector: vector, k: KNN_K, num_candidates: KNN_CANDIDATES, filter },
         })
       : null,
   ])

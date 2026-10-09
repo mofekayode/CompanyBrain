@@ -4,7 +4,7 @@
 
 import { Client, type estypes } from '@elastic/elasticsearch'
 import { readEnv } from '../env'
-import { EMBEDDING_DIMS } from './embed'
+import { DEFAULT_EMBEDDING_VERSION, EMBEDDINGS } from './embed'
 
 let client: Client | undefined
 export function es(): Client {
@@ -16,7 +16,8 @@ export function es(): Client {
 }
 
 export const indexAlias = (slug: string) => `cb-${slug}`
-export const MAPPING_VERSION = 1
+/** The version a fresh index gets (see EMBEDDINGS for each version's model). */
+export const MAPPING_VERSION = DEFAULT_EMBEDDING_VERSION
 export const indexName = (slug: string, version = MAPPING_VERSION) => `cb-${slug}-v${version}`
 
 /**
@@ -26,9 +27,9 @@ export const indexName = (slug: string, version = MAPPING_VERSION) => `cb-${slug
  * - entity_terms: names + aliases of the entities a passage mentions, so "Big Blue"
  *   finds passages that only say "Blue Ridge" (and vice versa).
  * - acl_principals: who may read the document (users and groups). Every query filters on it.
- * - embedding: 384-d vector from a local model (bge-small), cosine, HNSW.
+ * - embedding: a vector from the index version's local model (EMBEDDINGS), cosine, HNSW.
  */
-export const MAPPING: Pick<estypes.IndicesCreateRequest, 'settings' | 'mappings'> = {
+export const mappingFor = (version: number): Pick<estypes.IndicesCreateRequest, 'settings' | 'mappings'> => ({
   settings: {
     number_of_shards: 1,
     analysis: {
@@ -59,17 +60,58 @@ export const MAPPING: Pick<estypes.IndicesCreateRequest, 'settings' | 'mappings'
       authority: { type: 'keyword' },
       dedupe_key: { type: 'keyword' },
       citation: { type: 'object', enabled: false },
-      embedding: { type: 'dense_vector', dims: EMBEDDING_DIMS, similarity: 'cosine', index: true },
+      embedding: { type: 'dense_vector', dims: EMBEDDINGS[version].dims, similarity: 'cosine', index: true },
     },
   },
-}
+})
+export const MAPPING = mappingFor(MAPPING_VERSION)
 
 /** Creates the versioned index and points the alias at it (no-op when it exists). */
 export async function ensureIndex(slug: string, opts: { recreate?: boolean } = {}) {
-  const name = indexName(slug)
+  // Keep whatever version the alias already points to (an index may have been rebuilt on a newer model).
+  const name = indexName(slug, (await aliasedVersion(slug)) ?? MAPPING_VERSION)
   const exists = await es().indices.exists({ index: name })
   if (exists && opts.recreate) await es().indices.delete({ index: name })
-  if (!exists || opts.recreate) await es().indices.create({ index: name, ...MAPPING })
+  if (!exists || opts.recreate) await es().indices.create({ index: name, ...mappingFor(Number(name.split('-v').pop())) })
   await es().indices.updateAliases({ actions: [{ add: { index: name, alias: indexAlias(slug) } }] })
   return name
+}
+
+/** The index version the client's alias points to (null if there is no alias yet). */
+export async function aliasedVersion(slug: string): Promise<number | null> {
+  try {
+    const r = await es().indices.getAlias({ name: indexAlias(slug) })
+    const names = Object.keys(r)
+    return names.length ? Math.max(...names.map((n) => Number(n.split('-v').pop()))) : null
+  } catch {
+    return null
+  }
+}
+const activeCache = new Map<string, { at: number; v: number }>()
+/** Version to embed questions with for this client (cached briefly; follows an alias swap within a minute). */
+export async function activeVersion(slug: string): Promise<number> {
+  const hit = activeCache.get(slug)
+  if (hit && Date.now() - hit.at < 60_000) return hit.v
+  const v = (await aliasedVersion(slug)) ?? MAPPING_VERSION
+  activeCache.set(slug, { at: Date.now(), v })
+  return v
+}
+
+/** Creates a new index version (not yet live). */
+export async function createVersion(slug: string, version: number) {
+  const name = indexName(slug, version)
+  if (await es().indices.exists({ index: name })) await es().indices.delete({ index: name })
+  await es().indices.create({ index: name, ...mappingFor(version) })
+  return name
+}
+
+/** Points the alias at one version, atomically (searches switch model with it). */
+export async function swapAlias(slug: string, version: number) {
+  const alias = indexAlias(slug)
+  const current = await es()
+    .indices.getAlias({ name: alias })
+    .then((r) => Object.keys(r))
+    .catch(() => [] as string[])
+  await es().indices.updateAliases({ actions: [...current.map((index) => ({ remove: { index, alias } })), { add: { index: indexName(slug, version), alias } }] })
+  activeCache.delete(slug)
 }

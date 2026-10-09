@@ -1,20 +1,33 @@
-// Local text embeddings (no API spend): BAAI bge-small-en-v1.5, 384 dimensions,
-// int8-quantised ONNX run by Transformers.js on the CPU. ~10 ms per passage.
-// Queries get bge's retrieval instruction prefix; passages are embedded as-is.
+// Local text embeddings (no API spend), int8-quantised ONNX run by Transformers.js on the CPU.
+// Each search index version is built with one embedding model; questions must be embedded with the
+// same model as the index they search (search asks which version the alias points to).
+// BGE models: queries get the retrieval instruction prefix; passages are embedded as-is.
 
 import { type FeatureExtractionPipeline, pipeline } from '@huggingface/transformers'
 
-export const EMBEDDING_MODEL = 'Xenova/bge-small-en-v1.5'
-export const EMBEDDING_DIMS = 384
-const QUERY_PREFIX = 'Represent this sentence for searching relevant passages: '
+/** Index version → the embedding model its vectors come from. */
+export const EMBEDDINGS: Record<number, { model: string; dims: number; queryPrefix: string }> = {
+  1: { model: 'Xenova/bge-small-en-v1.5', dims: 384, queryPrefix: 'Represent this sentence for searching relevant passages: ' },
+  // bge-base: on the phrasing-robustness set, meaning search finds the right file in the top 10 for 104/120
+  // phrasings (bge-small: 96) and 18/24 situation-style questions (bge-small: 13), at ~7 ms per question.
+  2: { model: 'Xenova/bge-base-en-v1.5', dims: 768, queryPrefix: 'Represent this sentence for searching relevant passages: ' },
+}
+/** The version new indexes are built with, and the default for callers outside search. */
+export const DEFAULT_EMBEDDING_VERSION = 1
+export const EMBEDDING_MODEL = EMBEDDINGS[DEFAULT_EMBEDDING_VERSION].model
+export const EMBEDDING_DIMS = EMBEDDINGS[DEFAULT_EMBEDDING_VERSION].dims
 /** The model reads ~512 tokens; longer text is cut (≈ 2,000 characters). */
 const MAX_CHARS = 2000
 
-let extractor: Promise<FeatureExtractionPipeline> | undefined
-const model = () => (extractor ??= pipeline('feature-extraction', EMBEDDING_MODEL, { dtype: 'q8' }) as Promise<FeatureExtractionPipeline>)
+const extractors = new Map<string, Promise<FeatureExtractionPipeline>>()
+const model = (version = DEFAULT_EMBEDDING_VERSION) => {
+  const name = EMBEDDINGS[version].model
+  if (!extractors.has(name)) extractors.set(name, pipeline('feature-extraction', name, { dtype: 'q8' }) as Promise<FeatureExtractionPipeline>)
+  return extractors.get(name)!
+}
 
-export async function embedPassages(texts: string[], batch = 32): Promise<number[][]> {
-  const m = await model()
+export async function embedPassages(texts: string[], batch = 32, version = DEFAULT_EMBEDDING_VERSION): Promise<number[][]> {
+  const m = await model(version)
   const out: number[][] = []
   for (let i = 0; i < texts.length; i += batch) {
     const t = await m(
@@ -26,9 +39,9 @@ export async function embedPassages(texts: string[], batch = 32): Promise<number
   return out
 }
 
-export async function embedQuery(q: string): Promise<number[]> {
-  const m = await model()
-  const t = await m([QUERY_PREFIX + q.slice(0, MAX_CHARS)], { pooling: 'cls', normalize: true })
+export async function embedQuery(q: string, version = DEFAULT_EMBEDDING_VERSION): Promise<number[]> {
+  const m = await model(version)
+  const t = await m([EMBEDDINGS[version].queryPrefix + q.slice(0, MAX_CHARS)], { pooling: 'cls', normalize: true })
   return (t.tolist() as number[][])[0]
 }
 

@@ -17,7 +17,7 @@
 import { createHash } from 'node:crypto'
 import type { Sql } from '../storage/raw'
 import { embedPassages } from './embed'
-import { es, indexAlias } from './es'
+import { activeVersion, createVersion, es, indexAlias } from './es'
 import { type Dictionary, linkText, loadDictionary } from './linker'
 import { timelines, timelineText } from '../ontology/timeline'
 
@@ -147,12 +147,7 @@ export function cutPassages(rows: EvRow[]): Omit<SearchDoc, 'entity_ids'>[] {
     } else if (r.kind === 'transcript_segment') {
       const group = [r]
       let j = i + 1
-      while (
-        j < rows.length &&
-        rows[j].kind === 'transcript_segment' &&
-        (rows[j].end_ms ?? 0) - (r.start_ms ?? 0) <= TRANSCRIPT_MS &&
-        group.reduce((n, g) => n + g.content.length, 0) < TEXT_MAX
-      )
+      while (j < rows.length && rows[j].kind === 'transcript_segment' && (rows[j].end_ms ?? 0) - (r.start_ms ?? 0) <= TRANSCRIPT_MS && group.reduce((n, g) => n + g.content.length, 0) < TEXT_MAX)
         group.push(rows[j++])
       const s = group[0].start_ms ?? 0
       const e = group.at(-1)!.end_ms ?? s
@@ -312,7 +307,11 @@ async function entityCards(sql: Sql, tenantId: string, ids: string[] | null): Pr
   ).rows
   const relBy = new Map<string, typeof rels>()
   for (const r of rels) relBy.set(r.id, [...(relBy.get(r.id) ?? []), r])
-  const acls = await entityAcls(sql, tenantId, ents.map((e) => e.id))
+  const acls = await entityAcls(
+    sql,
+    tenantId,
+    ents.map((e) => e.id),
+  )
   return ents.map((e) => {
     const props = Object.entries(e.properties ?? {})
       .filter(([k, v]) => k !== 'source_system' && v !== null && v !== '' && typeof v !== 'object')
@@ -437,7 +436,16 @@ async function factCards(sql: Sql, tenantId: string, ids: string[] | null, dict?
       evidence_ids: f.evidence ?? [],
       // The subject, plus everything the fact mentions: "Blue Ridge · p17 suction fix completed" is
       // also about TP-17, so a search for TP-17 (or its page) finds it.
-      entity_ids: [...new Set([f.subject_id, ...(dict ? linkText(dict, `${f.predicate.replaceAll('_', ' ')}\n${f.value}\n${f.summary ?? ''}\n${(f.quotes ?? []).map((q) => q.q).join('\n')}`).filter((e) => e.type !== 'Term').map((e) => e.id) : [])])],
+      entity_ids: [
+        ...new Set([
+          f.subject_id,
+          ...(dict
+            ? linkText(dict, `${f.predicate.replaceAll('_', ' ')}\n${f.value}\n${f.summary ?? ''}\n${(f.quotes ?? []).map((q) => q.q).join('\n')}`)
+                .filter((e) => e.type !== 'Term')
+                .map((e) => e.id)
+            : []),
+        ]),
+      ],
       acl_ids: f.acls?.length ? f.acls : (subjAcl.get(f.subject_id) ?? []),
       observed_at: null,
       valid_from: f.valid_from,
@@ -455,7 +463,12 @@ async function factCards(sql: Sql, tenantId: string, ids: string[] | null, dict?
 /** One card per shared rule that changed over time across subjects (e.g. who may approve discounts). */
 async function timelineCards(sql: Sql, tenantId: string): Promise<SearchDoc[]> {
   const rules = new Set(
-    (await sql.query<{ topic: string }>(`select distinct metadata ->> 'topic' topic from public.facts where tenant_id = $1 and metadata ->> 'topic_kind' = 'rule' or (tenant_id = $1 and metadata ? 'topic' and not metadata ? 'topic_auto')`, [tenantId])).rows.map((r) => r.topic),
+    (
+      await sql.query<{ topic: string }>(
+        `select distinct metadata ->> 'topic' topic from public.facts where tenant_id = $1 and metadata ->> 'topic_kind' = 'rule' or (tenant_id = $1 and metadata ? 'topic' and not metadata ? 'topic_auto')`,
+        [tenantId],
+      )
+    ).rows.map((r) => r.topic),
   )
   const out: SearchDoc[] = []
   for (const tl of await timelines(sql, tenantId)) {
@@ -494,7 +507,8 @@ async function timelineCards(sql: Sql, tenantId: string): Promise<SearchDoc[]> {
 
 // ------------------------------------------------------------------------------ store
 
-const COLS = 'id, doc_type, kind, title, content, source_object_id, document_version_id, evidence_ids, entity_ids, acl_ids, observed_at, valid_from, valid_to, is_current, authority, dedupe_key, citation'
+const COLS =
+  'id, doc_type, kind, title, content, source_object_id, document_version_id, evidence_ids, entity_ids, acl_ids, observed_at, valid_from, valid_to, is_current, authority, dedupe_key, citation'
 
 /** Upserts documents; any change clears indexed_at so the indexer picks it up. */
 export async function saveDocs(sql: Sql, tenantId: string, docs: SearchDoc[]): Promise<number> {
@@ -539,9 +553,36 @@ async function aclPrincipals(sql: Sql, tenantId: string): Promise<Map<string, st
  * same (new readers, renamed entity) get a partial update without touching the vector.
  * Vectors live only in Elasticsearch: re-embedding everything takes ~5 minutes locally.
  */
+/** A search document as Elasticsearch stores it (everything but the vector). */
+function esFields(tenantId: string, dict: Dictionary, acl: Map<string, string[]>, paths: Map<string, { path: string; source: string | null }>) {
+  return (r: SearchDoc) => ({
+    tenant_id: tenantId,
+    doc_type: r.doc_type,
+    kind: r.kind,
+    title: r.title,
+    content: r.content,
+    entity_ids: r.entity_ids,
+    entity_terms: r.entity_ids.flatMap((id) => dict.entities.get(id)?.terms ?? []).join(' · '),
+    acl_principals: [...new Set(r.acl_ids.flatMap((a) => acl.get(a) ?? []))],
+    source_object_id: r.source_object_id,
+    document_version_id: r.document_version_id,
+    path: r.source_object_id ? (paths.get(r.source_object_id)?.path ?? null) : null,
+    source_name: r.source_object_id ? (paths.get(r.source_object_id)?.source ?? null) : null,
+    observed_at: r.observed_at,
+    valid_from: r.valid_from,
+    valid_to: r.valid_to,
+    is_current: r.is_current,
+    authority: r.authority,
+    dedupe_key: r.dedupe_key,
+    citation: r.citation,
+  })
+}
+
 export async function indexPending(sql: Sql, tenantId: string, opts: { dict?: Dictionary; onProgress?: (n: number) => void } = {}): Promise<{ indexed: number; embedded: number }> {
   const slug = (await sql.query<{ slug: string }>(`select slug from public.tenants where id = $1`, [tenantId])).rows[0].slug
   const dict = opts.dict ?? (await loadDictionary(sql, tenantId))
+  // Vectors must come from the model of the index version the alias points to.
+  const version = await activeVersion(slug)
   // Re-read who may read each list per batch: access can change while a long run is going.
   let acl = await aclPrincipals(sql, tenantId)
   const paths = new Map<string, { path: string; source: string | null }>()
@@ -566,34 +607,18 @@ export async function indexPending(sql: Sql, tenantId: string, opts: { dict?: Di
       ).rows)
         paths.set(p.id, { path: p.path, source: p.source })
     const fresh = rows.filter((r) => r.embedded_hash !== r.content_hash)
-    const vectors = fresh.length ? await embedPassages(fresh.map((r) => `${r.title}\n${r.content}`)) : []
+    const vectors = fresh.length
+      ? await embedPassages(
+          fresh.map((r) => `${r.title}\n${r.content}`),
+          32,
+          version,
+        )
+      : []
     const vec = new Map(fresh.map((r, i) => [r.id, vectors[i]]))
     embedded += fresh.length
-    const fields = (r: SearchDoc) => ({
-      tenant_id: tenantId,
-      doc_type: r.doc_type,
-      kind: r.kind,
-      title: r.title,
-      content: r.content,
-      entity_ids: r.entity_ids,
-      entity_terms: r.entity_ids.flatMap((id) => dict.entities.get(id)?.terms ?? []).join(' · '),
-      acl_principals: [...new Set(r.acl_ids.flatMap((a) => acl.get(a) ?? []))],
-      source_object_id: r.source_object_id,
-      document_version_id: r.document_version_id,
-      path: r.source_object_id ? (paths.get(r.source_object_id)?.path ?? null) : null,
-      source_name: r.source_object_id ? (paths.get(r.source_object_id)?.source ?? null) : null,
-      observed_at: r.observed_at,
-      valid_from: r.valid_from,
-      valid_to: r.valid_to,
-      is_current: r.is_current,
-      authority: r.authority,
-      dedupe_key: r.dedupe_key,
-      citation: r.citation,
-    })
+    const fields = esFields(tenantId, dict, acl, paths)
     const body: Record<string, unknown>[] = rows.flatMap((r): Record<string, unknown>[] =>
-      vec.has(r.id)
-        ? [{ index: { _index: indexAlias(slug), _id: r.id } }, { ...fields(r), embedding: vec.get(r.id) }]
-        : [{ update: { _index: indexAlias(slug), _id: r.id } }, { doc: fields(r) }],
+      vec.has(r.id) ? [{ index: { _index: indexAlias(slug), _id: r.id } }, { ...fields(r), embedding: vec.get(r.id) }] : [{ update: { _index: indexAlias(slug), _id: r.id } }, { doc: fields(r) }],
     )
     const res = await es().bulk({ body, refresh: false })
     if (res.errors) {
@@ -620,8 +645,7 @@ export async function indexPending(sql: Sql, tenantId: string, opts: { dict?: Di
 async function deleteFromIndex(sql: Sql, tenantId: string, ids: string[]) {
   if (!ids.length) return
   const slug = (await sql.query<{ slug: string }>(`select slug from public.tenants where id = $1`, [tenantId])).rows[0].slug
-  for (let i = 0; i < ids.length; i += 1000)
-    await es().bulk({ body: ids.slice(i, i + 1000).map((id) => ({ delete: { _index: indexAlias(slug), _id: id } })), refresh: false })
+  for (let i = 0; i < ids.length; i += 1000) await es().bulk({ body: ids.slice(i, i + 1000).map((id) => ({ delete: { _index: indexAlias(slug), _id: id } })), refresh: false })
 }
 
 // ----------------------------------------------------------------------- entry points
@@ -642,14 +666,24 @@ export async function project(sql: Sql, tenantId: string, scope: ProjectScope | 
 
   const dvIds =
     scope === 'all'
-      ? (await sql.query<{ id: string }>(`select d.current_version_id id from public.documents d where d.tenant_id = $1 and d.deleted_at is null and d.current_version_id is not null`, [tenantId])).rows.map((r) => r.id)
+      ? (
+          await sql.query<{ id: string }>(`select d.current_version_id id from public.documents d where d.tenant_id = $1 and d.deleted_at is null and d.current_version_id is not null`, [tenantId])
+        ).rows.map((r) => r.id)
       : (scope.documentVersionIds ?? [])
   for (let i = 0; i < dvIds.length; i += 150) {
     const chunk = dvIds.slice(i, i + 150)
     const docs = await passagesFor(sql, tenantId, dict, chunk)
     stats.passages += docs.length
     stats.changed += await saveDocs(sql, tenantId, docs)
-    removed.push(...(await dropStale(sql, tenantId, `doc_type = 'passage' and document_version_id = any($2::uuid[])`, [chunk], docs.map((d) => d.id))))
+    removed.push(
+      ...(await dropStale(
+        sql,
+        tenantId,
+        `doc_type = 'passage' and document_version_id = any($2::uuid[])`,
+        [chunk],
+        docs.map((d) => d.id),
+      )),
+    )
     if (i % 1500 === 0) log(`passages: ${Math.min(i + 150, dvIds.length)}/${dvIds.length} documents`)
   }
   if (scope === 'all') {
@@ -662,8 +696,26 @@ export async function project(sql: Sql, tenantId: string, scope: ProjectScope | 
     const cards = await entityCards(sql, tenantId, entityIds)
     stats.entities = cards.length
     stats.changed += await saveDocs(sql, tenantId, cards)
-    if (entityIds === null) removed.push(...(await dropStale(sql, tenantId, `doc_type = 'entity'`, [], cards.map((c) => c.id))))
-    else removed.push(...(await dropStale(sql, tenantId, `doc_type = 'entity' and id = any($2::text[])`, [entityIds.map((e) => `e:${e}`)], cards.map((c) => c.id))))
+    if (entityIds === null)
+      removed.push(
+        ...(await dropStale(
+          sql,
+          tenantId,
+          `doc_type = 'entity'`,
+          [],
+          cards.map((c) => c.id),
+        )),
+      )
+    else
+      removed.push(
+        ...(await dropStale(
+          sql,
+          tenantId,
+          `doc_type = 'entity' and id = any($2::text[])`,
+          [entityIds.map((e) => `e:${e}`)],
+          cards.map((c) => c.id),
+        )),
+      )
     log(`entity cards: ${cards.length}`)
   }
   const factIds = scope === 'all' ? null : (scope.factIds ?? [])
@@ -671,16 +723,41 @@ export async function project(sql: Sql, tenantId: string, scope: ProjectScope | 
     const cards = await factCards(sql, tenantId, factIds, dict)
     stats.facts = cards.length
     stats.changed += await saveDocs(sql, tenantId, cards)
-    if (factIds === null) removed.push(...(await dropStale(sql, tenantId, `doc_type = 'fact' and kind <> 'timeline'`, [], cards.map((c) => c.id))))
-    else removed.push(...(await dropStale(sql, tenantId, `doc_type = 'fact' and id = any($2::text[])`, [factIds.map((f) => `f:${f}`)], cards.map((c) => c.id))))
+    if (factIds === null)
+      removed.push(
+        ...(await dropStale(
+          sql,
+          tenantId,
+          `doc_type = 'fact' and kind <> 'timeline'`,
+          [],
+          cards.map((c) => c.id),
+        )),
+      )
+    else
+      removed.push(
+        ...(await dropStale(
+          sql,
+          tenantId,
+          `doc_type = 'fact' and id = any($2::text[])`,
+          [factIds.map((f) => `f:${f}`)],
+          cards.map((c) => c.id),
+        )),
+      )
     log(`fact cards: ${cards.length}`)
     const tcards = await timelineCards(sql, tenantId)
     stats.changed += await saveDocs(sql, tenantId, tcards)
-    removed.push(...(await dropStale(sql, tenantId, `doc_type = 'fact' and kind = 'timeline'`, [], tcards.map((c) => c.id))))
+    removed.push(
+      ...(await dropStale(
+        sql,
+        tenantId,
+        `doc_type = 'fact' and kind = 'timeline'`,
+        [],
+        tcards.map((c) => c.id),
+      )),
+    )
     log(`timeline cards: ${tcards.length}`)
   }
-  if (scope !== 'all' && scope.touchDocIds?.length)
-    await sql.query(`update public.search_documents set indexed_at = null where tenant_id = $1 and id = any($2::text[])`, [tenantId, scope.touchDocIds])
+  if (scope !== 'all' && scope.touchDocIds?.length) await sql.query(`update public.search_documents set indexed_at = null where tenant_id = $1 and id = any($2::text[])`, [tenantId, scope.touchDocIds])
 
   stats.deleted = removed.length
   await deleteFromIndex(sql, tenantId, removed)
@@ -688,4 +765,45 @@ export async function project(sql: Sql, tenantId: string, scope: ProjectScope | 
   stats.indexed = idx.indexed
   stats.embedded = idx.embedded
   return stats
+}
+
+/**
+ * Builds a new index version alongside the live one: every document, embedded with that version's
+ * model, written straight to the new index. Nothing changes for searches until swapAlias().
+ */
+export async function buildVersion(sql: Sql, tenantId: string, version: number, onProgress?: (n: number, total: number) => void): Promise<{ indexed: number; index: string }> {
+  const slug = (await sql.query<{ slug: string }>(`select slug from public.tenants where id = $1`, [tenantId])).rows[0].slug
+  const index = await createVersion(slug, version)
+  const dict = await loadDictionary(sql, tenantId)
+  const total = (await sql.query<{ n: number }>(`select count(*)::int n from public.search_documents where tenant_id = $1`, [tenantId])).rows[0].n
+  const paths = new Map<string, { path: string; source: string | null }>()
+  let n = 0
+  let after = ''
+  for (;;) {
+    const acl = await aclPrincipals(sql, tenantId)
+    const rows = (await sql.query<SearchDoc>(`select ${COLS} from public.search_documents where tenant_id = $1 and id > $2 order by id limit 256`, [tenantId, after])).rows
+    if (!rows.length) break
+    after = rows.at(-1)!.id
+    const missing = [...new Set(rows.map((r) => r.source_object_id).filter((x): x is string => !!x && !paths.has(x)))]
+    if (missing.length)
+      for (const p of (
+        await sql.query<{ id: string; path: string; source: string | null }>(
+          `select so.id, so.original_path path, s.name source from public.source_objects so left join public.sources s on s.id = so.source_id where so.id = any($1::uuid[])`,
+          [missing],
+        )
+      ).rows)
+        paths.set(p.id, { path: p.path, source: p.source })
+    const vectors = await embedPassages(
+      rows.map((r) => `${r.title}\n${r.content}`),
+      32,
+      version,
+    )
+    const fields = esFields(tenantId, dict, acl, paths)
+    const res = await es().bulk({ body: rows.flatMap((r, i) => [{ index: { _index: index, _id: r.id } }, { ...fields(r), embedding: vectors[i] }]), refresh: false })
+    if (res.errors) throw new Error(`bulk index failed: ${JSON.stringify(res.items.find((it) => it.index?.error)?.index?.error).slice(0, 400)}`)
+    n += rows.length
+    onProgress?.(n, total)
+  }
+  await es().indices.refresh({ index })
+  return { indexed: n, index }
 }
