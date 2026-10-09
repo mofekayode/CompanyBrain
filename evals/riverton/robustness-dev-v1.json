@@ -1,0 +1,150 @@
+{
+  "name": "Riverton phrasing robustness (dev) v1",
+  "purpose": "Does search find the right file however a person phrases the question? Each target is a fact whose source files are known from the evidence; each is asked five ways: as the documents say it (doc), as a person would ask it (casual), with typos (typo), with nicknames or company jargon (nickname), and indirectly, by what the person is trying to do (indirect). A phrasing passes if any gold file is in the top 10. Written by the Brain side from evidence, as a measuring tool, not a target to tune on question by question.",
+  "targets": [
+    { "gold": ["dispatch.mbox"], "fact": "Lunken site rules", "q": {
+      "doc": "Lunken Aerospace site rules escort Bay 3",
+      "casual": "anything I should know before going to Lunken?",
+      "typo": "lunkin aerospace site ruels",
+      "nickname": "rules at the aerospace place, can I bring my phone?",
+      "indirect": "can I take pictures of the equipment at Lunken" } },
+    { "gold": ["Kemper Plastics - PM Agreement 2019.pdf"], "fact": "Kemper site rules and lockout", "q": {
+      "doc": "Kemper Plastics site rules sign-in lockout program",
+      "casual": "do we follow Kemper's lockout or ours?",
+      "typo": "kemper plastic lock out rules",
+      "nickname": "KEPER safety rules for techs",
+      "indirect": "what do I need to do when I show up at Kemper" } },
+    { "gold": ["Oakley Lease (Madison Road Properties).pdf"], "fact": "Oakley lease term", "q": {
+      "doc": "Oakley lease term renewal notice",
+      "casual": "when does our building lease run out?",
+      "typo": "oakly leese end date",
+      "nickname": "HQ lease Madison Road when is it up",
+      "indirect": "how much notice do we need to give to stay in the main shop" } },
+    { "gold": ["Bluegrass Distilling - Project and PM Agreement.pdf"], "fact": "Bluegrass signatory", "q": {
+      "doc": "Bluegrass Distilling agreement signatory",
+      "casual": "who signed for Bluegrass?",
+      "typo": "blue grass distiling contract signed by",
+      "nickname": "who's our guy at the distillery",
+      "indirect": "who do I send the Bluegrass renewal to for signature" } },
+    { "gold": ["Tri-State Bottling - PM Agreement 2026.pdf"], "fact": "Tri-State parts markup", "q": {
+      "doc": "Tri-State Bottling parts markup",
+      "casual": "what do we mark up parts for Tri-State?",
+      "typo": "tristate botling parts mark up",
+      "nickname": "TSB parts pricing",
+      "indirect": "how much do I add on top of cost when I invoice Tri-State parts" } },
+    { "gold": ["Blue Ridge Food Processing - PM Agreement Renewal + Amendment No 1 (executed).pdf", "BRM PM Agreement 2022 signed.pdf", "Doc - Jul 11 2025 - 2.37 PM.pdf"], "fact": "Blue Ridge agreement signer", "q": {
+      "doc": "Blue Ridge Food Processing agreement signed by Walt Pruitt",
+      "casual": "who signs contracts at Blue Ridge?",
+      "typo": "blue rdge contract signer",
+      "nickname": "who signed the Big Blue deal",
+      "indirect": "who needs to approve the Blue Ridge renewal on their side" } },
+    { "gold": ["H&P Summary of Insurance 4.1.26.pdf"], "fact": "Inland marine coverage", "q": {
+      "doc": "inland marine coverage tools and equipment in transit",
+      "casual": "are our tools insured when they're in the truck?",
+      "typo": "insurence for tools in transit",
+      "nickname": "H&P coverage for tools",
+      "indirect": "a tech's tools got stolen from the van, are we covered" } },
+    { "gold": ["Tri-State Bottling - PM Agreement 2026.pdf"], "fact": "Tri-State site address", "q": {
+      "doc": "Tri-State Bottling site address",
+      "casual": "where is Tri-State?",
+      "typo": "tri state bottleing address",
+      "nickname": "TSB address Sharonville",
+      "indirect": "where do I drive for the Tri-State job" } },
+    { "gold": ["OVCB letter 9-30-26.pdf"], "fact": "Bank UCC-3 terminations", "q": {
+      "doc": "Ohio Valley Community Bank UCC-3 termination",
+      "casual": "is the bank releasing its lien on our stuff?",
+      "typo": "ucc3 terminaton bank letter",
+      "nickname": "OVCB letter at close",
+      "indirect": "what happened with the bank's security interest after the sale" } },
+    { "gold": ["Operations/Procedures/PM Visit Procedure.docx"], "fact": "Vibration readings on PM", "q": {
+      "doc": "PM visit vibration readings pumps over 25 hp",
+      "casual": "do I need to take vibration readings on every PM?",
+      "typo": "vibraton readings pm visit",
+      "nickname": "green sheet vibration numbers",
+      "indirect": "what do I record on a pump PM" } },
+    { "gold": ["Hot Job Policy 2025"], "fact": "Hot job exceptions", "q": {
+      "doc": "Hot Job policy exception approval",
+      "casual": "can I skip the hot job fee for a good customer?",
+      "typo": "hot jop fee exeption",
+      "nickname": "waive the emergency dispatch fee",
+      "indirect": "customer is upset about the after-hours charge, can we drop it" } },
+    { "gold": ["Operations/Purchasing Policy 2026.docx"], "fact": "Preferred vendor for ammonia parts", "q": {
+      "doc": "preferred vendor ammonia refrigeration parts",
+      "casual": "where do we buy ammonia parts?",
+      "typo": "amonia refrigeration parts vendor",
+      "nickname": "who's the ColdLine guy for NH3",
+      "indirect": "I need a relief valve for an ammonia system, who do I order from" } },
+    { "gold": ["Pricing Policy v3"], "fact": "Where discount approvals are recorded", "q": {
+      "doc": "discount approvals recorded in HubSpot deal notes",
+      "casual": "where do I write down that a discount was approved?",
+      "typo": "discount aproval recorded where",
+      "nickname": "do discount OKs go in the CRM",
+      "indirect": "Sarah approved my discount, what do I do now" } },
+    { "gold": ["Kinetic Parts Direct - Supply Agreement.pdf", "linda.marsh.mbox"], "fact": "Kinetic delivery terms", "q": {
+      "doc": "Kinetic Parts Direct next-day delivery cutoff",
+      "casual": "if I order parts today when do they show up?",
+      "typo": "kinetic parts delivary cut off time",
+      "nickname": "KPD next day by 3",
+      "indirect": "I need a bearing for tomorrow morning, when do I have to order it" } },
+    { "gold": ["Safety/SOP-LOTO Rev 3.pdf"], "fact": "Group lockout at shift change", "q": {
+      "doc": "group lockout shift change personal lock",
+      "casual": "how does lockout work when the shift changes?",
+      "typo": "group lock out shift chnage",
+      "nickname": "LOTO handoff between shifts",
+      "indirect": "I'm taking over a locked-out job from the day guy, what do I do" } },
+    { "gold": ["Q26-1045 Hartwell - Conveyor section rebuild 1.5.26.pdf"], "fact": "Hartwell quote validity", "q": {
+      "doc": "Hartwell conveyor rebuild quote valid 30 days",
+      "casual": "is the Hartwell quote still good?",
+      "typo": "hartwel quote expiry",
+      "nickname": "Hartwell castings conveyor quote",
+      "indirect": "Hartwell wants to accept our January quote, can we still honor it" } },
+    { "gold": ["Templates/Quote letter template.docx", "Q26-"], "fact": "HQ address", "q": {
+      "doc": "Riverton Industrial Services address Wesley Ave",
+      "casual": "what's our mailing address?",
+      "typo": "riverton adress wesley",
+      "nickname": "Oakley shop address",
+      "indirect": "where should customers mail checks" } },
+    { "gold": ["Northgate 100-Day Plan - Riverton (FINAL 9.25.26).pptx"], "fact": "Monthly reporting to Northgate", "q": {
+      "doc": "monthly reporting package Northgate business day 10",
+      "casual": "when is the monthly report due to the new owners?",
+      "typo": "northgait monthly reporting deadline",
+      "nickname": "100-day plan reporting",
+      "indirect": "what do the new owners expect from us every month" } },
+    { "gold": ["Northgate 100-Day Plan - Riverton (FINAL 9.25.26).pptx"], "fact": "Who owns which KPI", "q": {
+      "doc": "100-day plan KPI owners",
+      "casual": "who's responsible for tracking safety numbers now?",
+      "typo": "kpi ownres hundred day plan",
+      "nickname": "Jim Polk KPI",
+      "indirect": "who do I report a near-miss count to for the new owners" } },
+    { "gold": ["Safety/Training/LOTO training March 2024.mp4", "Safety/SOP-LOTO Rev 3.pdf"], "fact": "LOTO steps", "q": {
+      "doc": "lockout tagout steps identify energy sources verify zero energy",
+      "casual": "what are the steps to lock out a machine?",
+      "typo": "lock out tag out stpes",
+      "nickname": "LOTO procedure",
+      "indirect": "new guy needs to work on a pump, how do we make it safe first" } },
+    { "gold": ["Dave/PM pricing notes.docx", "Blue Book"], "fact": "PM labor discount", "q": {
+      "doc": "PM agreement labor discount 10%",
+      "casual": "what discount do PM customers get on labor?",
+      "typo": "pm agrement labour discount",
+      "nickname": "contract customer labor break",
+      "indirect": "customer signed a PM deal, how much less do we charge them per hour" } },
+    { "gold": ["Hot Job Policy 2025", "QoE Summary", "Hot Job Policy 2018.pdf"], "fact": "Hot job billing rate", "q": {
+      "doc": "Hot Job emergency labor billed 1.5x standard rate",
+      "casual": "how much do we charge for emergency calls?",
+      "typo": "emergancy labor rate hot job",
+      "nickname": "after hours time and a half",
+      "indirect": "a customer called us at 2am, how do I bill the hours" } },
+    { "gold": ["Employee Handbook 2023.pdf", "Employee Handbook 2017.docx"], "fact": "Same-day safety reporting", "q": {
+      "doc": "report injuries near misses same day",
+      "casual": "how fast do I have to report an injury?",
+      "typo": "injurey reporting deadline",
+      "nickname": "near miss reporting rule",
+      "indirect": "I cut my hand on the job yesterday and didn't tell anyone, is that a problem" } },
+    { "gold": ["Riverton P&L", "Revenue by Customer", "QoE Summary"], "fact": "Company financials", "q": {
+      "doc": "revenue by customer FY2025",
+      "casual": "who are our biggest customers?",
+      "typo": "revenu by custmer",
+      "nickname": "top accounts by sales",
+      "indirect": "which customers would hurt the most to lose" } }
+  ]
+}

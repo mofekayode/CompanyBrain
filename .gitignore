@@ -34,3 +34,6 @@ coverage/
 
 # Heavy, regenerated artifacts (re-capture with the audit scripts)
 docs/ui-audit/
+
+# Local model benchmarks
+.cache/
