@@ -73,9 +73,13 @@ where the config records an evidence-backed membership (Rachel Stein → Mgmt Te
   terms, titles and branch managers from the system records. Seven typo'd customer variants merged (letters-in-order
   match plus a shared site/asset or whole-name match).
 
+- Search: meaning search on bge-base (index v2), looking deeper (100 neighbours from 1,000 candidates); questions are
+  rewritten into the documents' words by Claude Haiku, grounded in the Brain's own name matches, and searched as the
+  original plus the rewrite (time and names come from the original). Retrieval candidates and citations reflect that.
+
 ## Run conditions and known limits
 
-- **Model:** `claude-sonnet-5-5` for written answers, reported per response. It does not accept `temperature`
+- **Models:** `claude-sonnet-5-5` for written answers (reported per response); `claude-haiku-4-5-20251001` for question rewriting. It does not accept `temperature`
   (the API rejects it as deprecated), so runs are fixed by model id and prompt instead. Each response says so in
   `generation`.
 - **No learning:** questions are never stored, indexed or embedded. Each call appends one line (who, dates, latency,

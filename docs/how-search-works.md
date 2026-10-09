@@ -80,31 +80,54 @@ Other lessons:
 
 ## 4. What each fix bought
 
-| Fix | Cost | Right file in top 10 (all 120) | Situation questions (24) |
+| Setup | Cost | Right file in top 10 (of 120) | Situation questions (of 24) |
 |---|---|---|---|
-| Before | | 100 | 13 |
-| Look deeper in meaning search (100 results from 1,000 candidates instead of 60 from 400) | free, no slowdown | 103 | 15 |
-| Rewrite the question with a free local model (Qwen 1.5B) | free, ~3 s per question on a laptop | | 17 |
-| Rewrite with Claude Haiku, grounded in our own name list | ~0.02 cents and ~0.6 s per question | 108 | 19 |
-| Bigger embedding model (bge-base) for meaning search, measured on meaning search alone | free, ~7 ms per question, one index rebuild | 104 vs 96 (meaning search alone) | 18 vs 13 (meaning search alone) |
+| Where we started | | 100 | 13 |
+| Look deeper in meaning search (100 results from 1,000 candidates, was 60 from 400) | free, no slowdown | 103 | 15 |
+| Rewrite with a free local model (Qwen 1.5B), old embedding model | free, ~3 s per question on a laptop | | 17 |
+| Rewrite with Claude Haiku, grounded in our own name list, old embedding model | ~0.02 cents, ~0.6 s per question | 108 | 19 |
+| **Bigger embedding model (bge-base) for meaning search** | free, ~7 ms per question, one index rebuild (~50 min) | **108** | **17** |
+| **Bigger model + grounded rewriting (what's live now)** | ~0.02 cents, ~0.6 s per question | **115** | **22** |
+
+Every other phrasing style is at 23 or 24 of 24 with both on. The regular checks didn't move: retrieval eval 143/146,
+per-step checks all pass, access 33/33, and 0 leaks across all roles.
 
 How to read the rewriting rows: the question is rewritten into the words a company document would use ("tools stolen
 from the van, are we covered?" → "insurance coverage tools equipment theft vehicle inland marine") and we search with
-the original *plus* the rewrite, so a bad rewrite can't lose what the original found.
+the original *plus* the rewrite, so a bad rewrite can't lose what the original found. The time ("now", "in March
+2025") and the names are read from the original question only, so a rewrite can't invent them.
 
 **Grounding matters.** Ungrounded, Haiku didn't know "Lunken" was a customer: it guessed "Lunken Airport" or replied
 "I need more context". Given our own name matches ("Lunken" = Lunken Aerospace Components, a customer), it wrote
-useful queries. The company's own vocabulary is the knowledge a general model lacks, and we already have it.
+useful queries. The company's own vocabulary is the knowledge a general model lacks, and we already have it. Only the
+matched names go to the model (about 140 words in, 13 out), never the company's facts.
 
-**Don't let the rewriter add the company's own name.** Every document says "Riverton"; adding it pulls contracts to
+**Don't let the rewriter add the company's own name.** Every document says "Riverton"; adding it pulled contracts to
 the top of unrelated searches.
 
-## 5. What we'd ship (draft, final numbers pending)
+**The reranker earns its cost.** It occasionally pushes a right answer down, but switching it off loses more (97 vs 103
+right), so we keep it; a stronger reranker is a later upgrade (a larger open one was 6x slower and only somewhat better).
 
-1. Deeper meaning search (done).
-2. The bigger embedding model (being rebuilt next to the live index; the alias swap switches search over with no
-   downtime and can be reversed).
-3. Grounded question rewriting with a small, cheap model, only on the meaning-search side and alongside the original
-   question.
+## 5. What's live, and how to bring the cost down
 
-We'll confirm the combination with the same test before turning it on.
+Live now:
+
+1. Deeper meaning search.
+2. bge-base embeddings (index version 2; switching back is one command:
+   `npx tsx scripts/search-rebuild.ts <slug> 1 --swap-only`).
+3. Grounded question rewriting with Claude Haiku (`packages/core/src/search/rewrite.ts`), on in the client app and the
+   eval endpoint, off in dev scripts. It falls back to the plain question if the API is off, slow or failing.
+
+Cost: rewriting is about 0.02 cents per question (10,000 questions ≈ $2). The written answer (about 2 cents) is where
+the money goes. To bring rewriting to zero later, train a small open model on Haiku's own question → query pairs and
+run it on our own server; that requires keeping customers' questions, which their agreement has to allow (and the eval
+endpoint must never do).
+
+## 6. Tools to keep doing this
+
+| Tool | What it answers |
+|---|---|
+| `scripts/robustness-eval.ts` | Does search find the right file however people phrase it, and where is each miss lost? |
+| `scripts/embed-bench.ts` | Which embedding model finds more, offline, without touching the live index? |
+| `scripts/search-rebuild.ts` | Rebuild the index on another model next to the live one; swap when it's proven. |
+| `scripts/search-eval.ts`, `steps-eval.ts`, `access-check.ts`, `eval-leak-check.ts` | Did anything else get worse? |
