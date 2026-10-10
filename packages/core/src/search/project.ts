@@ -242,10 +242,20 @@ async function passagesFor(sql: Sql, tenantId: string, dict: Dictionary, dvIds: 
   for (const r of rows) byDv.set(r.dv, [...(byDv.get(r.dv) ?? []), r])
   // An identical copy of a file is read once; its content is readable by anyone who may open any copy.
   const twins = await twinAcls(sql, tenantId, [...new Set(rows.map((r) => r.so_id))])
+  // ...except a sheet marked with a sensitivity label: it keeps only its own (narrower) readers.
+  const labelled = new Map(
+    (
+      await sql.query<{ id: string; sheets: string[] }>(
+        `select id, array(select u ->> 'sheet' from jsonb_array_elements(metadata -> 'label_units') u) sheets from public.source_objects where id = any($1::uuid[]) and metadata ? 'label_units'`,
+        [[...new Set(rows.map((r) => r.so_id))]],
+      )
+    ).rows.map((r) => [r.id, new Set(r.sheets)]),
+  )
   const out: SearchDoc[] = []
   for (const group of byDv.values())
     for (const p of cutPassages(group)) {
-      if (p.source_object_id && twins.has(p.source_object_id)) p.acl_ids = [...new Set([...p.acl_ids, ...twins.get(p.source_object_id)!])]
+      const sheetLabelled = !!p.source_object_id && !!labelled.get(p.source_object_id)?.has(String(p.citation.sheet ?? ''))
+      if (p.source_object_id && twins.has(p.source_object_id) && !sheetLabelled) p.acl_ids = [...new Set([...p.acl_ids, ...twins.get(p.source_object_id)!])]
       // A copy in someone's private mailbox keeps that mailbox's access, even when the message
       // went to a distribution list: the stricter of the source's permission and the sensitivity
       // label wins. (Recipients see it through their own copies.)

@@ -25,6 +25,8 @@ interface AccessConfig {
   scopes: ScopeConfig[]
   file_moves: { path: string; scope_key: string; note: string }[]
   memberships?: { group: string; member: string; why: string }[]
+  /** Sensitivity labels found inside files: the stricter of the folder's access and the label's wins. */
+  labels?: { label: string; audience: string[]; why: string }[]
 }
 
 const [slug, flag] = process.argv.slice(2)
@@ -129,12 +131,77 @@ for (const m of cfg.file_moves) {
   if (!dry && ids.length) await moveFiles(db, t, ids, scopeIds.get(m.scope_key)!, `FDE: ${m.note}`)
 }
 
+// 5. Sensitivity labels inside files: readers = people allowed by both the file's area and the label.
+//    A label counts as a marking (a title or heading line), not as a value inside a table row (a
+//    permissions export lists label names as data). In a spreadsheet it restricts the sheet it sits
+//    on; elsewhere the whole file.
+const labelled: string[] = []
+const people = async (ids: string[]) =>
+  new Set(
+    (
+      await db.query<{ id: string }>(
+        `with recursive m (id) as (select unnest($2::uuid[]) union select pm.member_id from public.principal_members pm join m on pm.group_id = m.id where pm.tenant_id = $1)
+         select m.id::text id from m join public.principals p on p.id = m.id where p.kind = 'user'`,
+        [t, ids],
+      )
+    ).rows.map((r) => r.id),
+  )
+const units = new Map<string, { sheet: string; scope_key: string; acl_id: string }[]>()
+for (const l of cfg.labels ?? []) {
+  const rows = (
+    await db.query<{ id: string; path: string; scope_id: string; scope: string; kind: string; sheet: string | null; content: string }>(
+      `select so.id, so.original_path path, fa.scope_id, sc.key scope, e.kind, e.locator ->> 'sheet' sheet, e.content
+       from public.evidence e join public.document_versions dv on dv.id = e.document_version_id join public.source_objects so on so.id = dv.source_object_id
+       join public.file_access fa on fa.source_object_id = so.id join public.access_scopes sc on sc.id = fa.scope_id
+       where e.tenant_id = $1 and e.content ilike '%' || $2 || '%'`,
+      [t, l.label],
+    )
+  ).rows
+  const marked = rows.filter((r) => r.content.split('\n').some((line) => line.toLowerCase().includes(l.label.toLowerCase()) && line.split(' | ').length <= 2))
+  const labelPeople = await people(l.audience.map(pid))
+  const seen = new Set<string>()
+  for (const f of marked) {
+    const sheet = f.kind === 'table' && f.sheet && f.sheet !== 'CSV' ? f.sheet : null
+    if (seen.has(f.id + (sheet ?? ''))) continue
+    seen.add(f.id + (sheet ?? ''))
+    const area = f.scope.startsWith('label:') ? f.scope.split(':')[1] : f.scope
+    const areaId = (await db.query<{ id: string }>(`select id from public.access_scopes where tenant_id = $1 and key = $2`, [t, area])).rows[0]?.id ?? f.scope_id
+    const areaPeople = await people((await db.query<{ p: string }>(`select principal_id::text p from public.access_scope_audience where scope_id = $1`, [areaId])).rows.map((r) => r.p))
+    const both = [...areaPeople].filter((p) => labelPeople.has(p))
+    const key = `label:${area}:${l.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
+    console.log(`label   ${f.path}${sheet ? ` [sheet ${sheet}]` : ''} → ${key} (${both.length} people in both the area and the label)`)
+    labelled.push(f.id)
+    if (dry) continue
+    let scope = (await db.query<{ id: string; acl_id: string }>(`select id, acl_id from public.access_scopes where tenant_id = $1 and key = $2`, [t, key])).rows[0]
+    if (!scope) {
+      const acl = (await db.query<{ id: string }>(`insert into public.acls (tenant_id, name, origin) values ($1, $2, $3) returning id`, [t, `scope:${key}`, JSON.stringify({ scope: key })])).rows[0].id
+      scope = (
+        await db.query<{ id: string; acl_id: string }>(
+          `insert into public.access_scopes (tenant_id, key, name, description, sensitivity, hidden, status, acl_id, origin, rules, evidence)
+           values ($1, $2, $3, $4, 'restricted', true, 'released', $5, 'human', '[]', '[]') returning id, acl_id`,
+          [t, key, `${l.label} within ${area}`, `Marked "${l.label}": only people allowed by both the area and the label. ${l.why}`, acl],
+        )
+      ).rows[0]
+    }
+    await db.query(`delete from public.access_scope_audience where scope_id = $1 and not (principal_id = any($2::uuid[]))`, [scope.id, both])
+    for (const p of both) await db.query(`insert into public.access_scope_audience (tenant_id, scope_id, principal_id, why) values ($1, $2, $3, 'area and label') on conflict (scope_id, principal_id) do nothing`, [t, scope.id, p])
+    changedScopes.push(scope.id)
+    if (sheet) units.set(f.id, [...(units.get(f.id) ?? []), { sheet, scope_key: key, acl_id: scope.acl_id }])
+    else await db.query(`update public.file_access set scope_id = $2, acl_id = $3, sensitivity = 'restricted', origin = 'rule' where source_object_id = $1`, [f.id, scope.id, scope.acl_id])
+  }
+}
+// Sheet-level labels are kept on the file and applied by applyAccess to that sheet's evidence.
+if (!dry) {
+  await db.query(`update public.source_objects set metadata = metadata - 'label_units' where tenant_id = $1 and metadata ? 'label_units'`, [t])
+  for (const [id, u] of units) await db.query(`update public.source_objects set metadata = metadata || jsonb_build_object('label_units', $2::jsonb) where id = $1`, [id, JSON.stringify(u)])
+}
+
 if (!dry) {
   console.log('applied', await applyAccess(db, t))
   // Search documents carry their readers in the index: re-index those whose readers changed
   // (scopes with a new audience or status, and every file that moved).
   const acls = (await db.query<{ acl_id: string }>(`select acl_id from public.access_scopes where id = any($1::uuid[])`, [changedScopes])).rows.map((r) => r.acl_id)
-  const movedIds = [...moved.values()].flat()
+  const movedIds = [...moved.values()].flat().concat(labelled)
   const r = await db.query(
     `update public.search_documents set indexed_at = null
      where tenant_id = $1 and (acl_ids && $2::uuid[] or source_object_id = any($3::uuid[]))`,

@@ -4489,11 +4489,6 @@
     ],
     "file_moves": [
       {
-        "path": "greg.whitfield/Documents/Pricing Policy 2025 FINAL.docx",
-        "scope_key": "company-wide",
-        "note": "anonymous view link, active, no label (sharing_links.csv): anyone can open it"
-      },
-      {
         "path": "rates.csv",
         "scope_key": "pricing",
         "note": "branch labor rates, not personal pay: detector false positive"
@@ -4504,6 +4499,32 @@
         "group": "Mgmt Team",
         "member": "Rachel Stein",
         "why": "Guest member of Mgmt Team (group_members.csv); Teams: Mgmt Team (guest_users.csv)."
+      }
+    ],
+    "labels": [
+      {
+        "label": "Confidential - Finance",
+        "audience": [
+          "Accounting",
+          "Owners & Execs"
+        ],
+        "why": "Label on the Accounting library (sharepoint_permissions.csv): Accounting + Owners & Execs."
+      },
+      {
+        "label": "Highly Confidential - HR",
+        "audience": [
+          "Karen Liu",
+          "Dave Brennan",
+          "Sarah Okafor"
+        ],
+        "why": "Label on the HR library (sharepoint_permissions.csv)."
+      },
+      {
+        "label": "Highly Confidential - Deal",
+        "audience": [
+          "Owners & Execs"
+        ],
+        "why": "Label on the Owners & Execs library (sharepoint_permissions.csv)."
       }
     ]
   },

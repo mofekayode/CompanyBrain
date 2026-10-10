@@ -500,6 +500,15 @@ export async function applyAccess(sql: Sql, tenantId: string): Promise<{ scopes:
      where e.document_version_id = dv.id and e.tenant_id = $1 and e.acl_id is distinct from dv.acl_id`,
     [tenantId],
   )
+  // Part of a file can be stricter than the file: a sheet marked with a sensitivity label keeps the
+  // label's (narrower) readers on its own evidence (set by the access sync as metadata.label_units).
+  await sql.query(
+    `update public.evidence e set acl_id = (u ->> 'acl_id')::uuid
+     from public.document_versions dv, public.source_objects so, jsonb_array_elements(so.metadata -> 'label_units') u
+     where e.document_version_id = dv.id and dv.source_object_id = so.id and so.tenant_id = $1 and so.metadata ? 'label_units'
+       and e.locator ->> 'sheet' = u ->> 'sheet' and e.acl_id is distinct from (u ->> 'acl_id')::uuid`,
+    [tenantId],
+  )
   await sql.query(
     `update public.email_threads t set acl_id = x.acl_id, mixed_acl = x.mixed
      from (select m.thread_id, case when count(distinct d.acl_id) = 1 then min(d.acl_id::text)::uuid end acl_id, count(distinct d.acl_id) > 1 mixed
