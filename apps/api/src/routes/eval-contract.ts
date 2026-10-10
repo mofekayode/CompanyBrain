@@ -59,18 +59,22 @@ evalContract.post('/eval/answer', async (c) => {
   const files = await tenantFiles(sql, t.id, SLUG)
 
   // Ranked candidates after access and cutoff filtering, before generation.
-  const [ranked, brief] = await Promise.all([search(sql, t.id, question, { as: ctx.as, limit: 50, rerank: true, view, today: askedOn, rewrite: true }), briefAnswer(ctx, question)])
+  // The reader's ranked search and the full-access one (to count what's locked) run side by side.
+  const full = ctx.as ? search(sql, t.id, question, { limit: 12, rerank: true, view, today: askedOn, rewrite: true }) : undefined
+  const ranked = await search(sql, t.id, question, { as: ctx.as, limit: 50, rerank: true, view, today: askedOn, rewrite: true })
+  const brief = await briefAnswer(ctx, question, { reuse: ranked, reuseFull: full })
 
   const tRetrieved = performance.now()
   let text = ''
   let cited: string[] = []
   let model = 'none (instant answer)'
+  // Locked: what this role can open is weak and the best match overall is one it can't open.
   const locked = !!brief.restricted?.best_is_locked && brief.evidence === 'weak'
   // The writer gets a chance whenever search found anything: weak matches can still answer from
   // ordinary documents, and it says plainly when they don't (or refuses when only locked sources would).
   if (answersAllowed() && ranked.hits.length) {
     const pack = await buildContext(sql, t.id, question, { as: ctx.as, prefetched: { ...ranked, hits: ranked.hits.slice(0, 12) }, view, today: askedOn })
-    const w = await writeAnswer(pack, () => {}, { restricted: !!brief.restricted?.best_is_locked })
+    const w = await writeAnswer(pack, () => {}, { restricted: !!brief.restricted?.count })
     if (w) {
       model = w.model
       const nums = [...new Set([...w.text.matchAll(/\[(\d+)\]/g)].map((m) => Number(m[1])))]
@@ -83,7 +87,8 @@ evalContract.post('/eval/answer', async (c) => {
     // A refusal or "nothing found" cites nothing; an instant answer cites what it rests on.
     cited = brief.headline ? brief.sources.map((s) => s.id) : []
   }
-  if (/^I can[’']t answer that from the information you have access to/.test(text.trim())) cited = []
+  // A refusal cites nothing of what was withheld; what the open material says may still be cited.
+  if (/^I can[’']t answer that from the information you have access to\.?\s*$/.test(text.trim())) cited = []
 
   const refs = await refsFor(ctx, files, [...new Set([...cited, ...ranked.hits.map((h) => h.id)])])
   const citations: Ref[] = []
@@ -105,8 +110,10 @@ evalContract.post('/eval/answer', async (c) => {
     }
 
   // Refused = the direct answer is the refusal (not an answer that mentions some sources are locked).
+  // Refused: the key information was withheld for permissions (the strongest source is one this role
+  // can't open), or the answer itself is the refusal.
   const opening = text.split(/\n\s*\n/)[0].trim()
-  const refused = /^I can[’']t answer that from the information you have access to/.test(opening)
+  const refused = locked || /^I can[’']t answer that from the information you have access to/.test(opening)
   // Generation settings: the answer model doesn't accept a temperature (deprecated for it), so runs
   // are fixed by model id and prompt instead; reported so the runner can record it.
   const out = { answer: text, refused, citations, retrieved, latency_ms: Math.round(performance.now() - t0), model, timings: { retrieval_ms: Math.round(tRetrieved - t0) }, generation: { temperature: 'not supported by model; default' } }

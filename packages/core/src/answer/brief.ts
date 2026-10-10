@@ -56,7 +56,14 @@ export interface BriefProgress {
   onSearch?: (r: SearchResult) => void
   /** The answer so far (headline, history), sent before sources and access checks finish. */
   onPartial?: (p: Pick<BriefAnswer, 'question' | 'headline' | 'detail' | 'timeline' | 'changed' | 'time' | 'entities'>) => void
+  /** This reader's search for the question, if the caller already ran it (saves a reranked search). */
+  reuse?: SearchResult
+  /** The same search with full access (to count what's locked), if the caller started it. */
+  reuseFull?: Promise<SearchResult>
 }
+
+/** Cross-encoder score above which a fact clearly answers the question. 3, not 2: at 2 a fact about the right customer but the wrong topic headlines ("warranty" for "payment terms"); no headline is better than a wrong one. */
+const CONFIDENT = 3
 
 const KIND: Record<string, string> = {
   email_body: 'email',
@@ -102,8 +109,9 @@ export async function briefAnswer(ctx: ToolCtx, question: string, progress: Brie
   step('search', 'Looking across documents, email, interviews and records', 'active')
   // With a reader, the full-access search (for "N more matches are locked") runs alongside theirs.
   const known = { view: ctx.view, today: ctx.today, rewrite: ctx.rewrite }
-  const fullAccess = ctx.as ? search(ctx.sql, ctx.tenantId, question, { limit: 12, rerank: true, ...known }) : null
-  const r = await search(ctx.sql, ctx.tenantId, question, { as: ctx.as, limit: 12, rerank: true, ...known })
+  const fullAccess = ctx.as ? (progress.reuseFull ?? search(ctx.sql, ctx.tenantId, question, { limit: 12, rerank: true, ...known })) : null
+  // A caller that already ran this reader's search (the same question, access and date) can hand it over.
+  const r = progress.reuse ? { ...progress.reuse, hits: progress.reuse.hits.slice(0, 12) } : await search(ctx.sql, ctx.tenantId, question, { as: ctx.as, limit: 12, rerank: true, ...known })
   progress.onSearch?.(r)
   {
     const ents = r.understood.entities.filter((e) => e.type !== 'Term')
@@ -132,6 +140,14 @@ export async function briefAnswer(ctx: ToolCtx, question: string, progress: Brie
   const overlap = (f: SearchHit) => new Set((f.title.split(': ').slice(1).join(' ') || f.title).split(/[\s:_·]+/).filter((w) => w.length >= 4).map(stem).filter((w) => asked.has(w) && !nameStems.has(w))).size
   const relevant = allFacts.filter(answers)
   const best = Math.max(0, ...relevant.slice(0, 6).map(overlap))
+  // The question asks about something beyond the names it mentions ("payment terms" of Big Blue):
+  // a fact about the right thing but sharing none of it ("workmanship warranty") only answers if the
+  // reranker is confident it does ("pump 17 cavitation fix" for "what was wrong with pump 17").
+  const askedBeyondNames = [...asked].some((w) => !nameStems.has(w))
+  if (askedBeyondNames && best === 0) {
+    const sure = relevant.filter((f) => (f.ranks.rerank ?? 0) >= CONFIDENT)
+    relevant.splice(0, relevant.length, ...sure)
+  }
   const facts = [...relevant.filter((f, i) => i < 6 && overlap(f) === best), ...relevant.filter((f, i) => !(i < 6 && overlap(f) === best))]
   const passages = r.hits.filter((h) => h.doc_type === 'passage')
 

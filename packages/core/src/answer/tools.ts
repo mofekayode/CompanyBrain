@@ -15,7 +15,7 @@
 
 import type { KnowledgeView } from '../access/knowledge-view'
 import { humanPeriod } from '../text'
-import { search } from '../search/search'
+import { factsForReader, search } from '../search/search'
 import { principalsOf } from '../search/search'
 import type { Sql } from '../storage/raw'
 
@@ -217,7 +217,9 @@ async function facts(ctx: ToolCtx, entityId: string, where: string, params: unkn
     )
   ).rows
   const ok = await visible(ctx, rows.map((r) => `f:${r.id}`))
-  return rows.filter((r) => ok.has(`f:${r.id}`))
+  // A fact a reader sees only through part of its evidence must be said by what they can open.
+  const hidden = ctx.as ? (await factsForReader(ctx.sql, ctx.tenantId, ctx.as, [...ok], ctx.view)).hidden : new Set<string>()
+  return rows.filter((r) => ok.has(`f:${r.id}`) && !hidden.has(`f:${r.id}`))
 }
 
 export async function getCurrentFacts(ctx: ToolCtx, a: { entity: string }) {

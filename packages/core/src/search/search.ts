@@ -89,7 +89,9 @@ async function slugOf(sql: Sql, tenantId: string) {
 const KNN_K = Number(process.env.CB_KNN_K ?? 100)
 const KNN_CANDIDATES = Number(process.env.CB_KNN_CANDIDATES ?? 1000)
 /** How deep into each leg (keyword, meaning) the reranker looks, beyond the fused head. */
-const LEG_POOL = Number(process.env.CB_LEG_POOL ?? 30)
+const LEG_POOL = Number(process.env.CB_LEG_POOL ?? 20)
+/** How much of the fused list the reranker judges (plus each leg's top LEG_POOL). */
+const RERANK_HEAD = 40
 
 /** The reader's principals: themselves plus every group they belong to (transitively). */
 export async function principalsOf(sql: Sql, tenantId: string, principalId: string): Promise<string[]> {
@@ -124,6 +126,33 @@ export async function readableEvidence(sql: Sql, tenantId: string, principalId: 
     for (const e of r.evidence_ids) if (want.has(e)) out.add(e)
   }
   return out
+}
+
+/**
+ * For facts a reader can see only partly (some evidence restricted for them): which to show as a
+ * bare statement (partial) and which to hide (hidden) because nothing they can open actually says the
+ * value: it may come from the restricted part alone ("bonus: $30k" from a restricted email).
+ */
+export async function factsForReader(sql: Sql, tenantId: string, principalId: string, factDocIds: string[], view?: KnowledgeView): Promise<{ partial: Set<string>; hidden: Set<string> }> {
+  const partial = new Set<string>()
+  const hidden = new Set<string>()
+  if (!factDocIds.length) return { partial, hidden }
+  const ev = (
+    await sql.query<{ id: string; content: string; evidence_ids: string[] }>(`select id, content, evidence_ids from public.search_documents where tenant_id = $1 and id = any($2::text[])`, [tenantId, factDocIds])
+  ).rows
+  const readable = await readableEvidence(sql, tenantId, principalId, [...new Set(ev.flatMap((r) => r.evidence_ids))], view)
+  const part = ev.filter((r) => r.evidence_ids.some((e) => !readable.has(e)))
+  const openIds = part.flatMap((r) => r.evidence_ids.filter((e) => readable.has(e)))
+  const text = new Map<string, string>()
+  if (openIds.length) for (const e of (await sql.query<{ id: string; content: string }>(`select id, content from public.evidence where id = any($1::uuid[])`, [openIds])).rows) text.set(e.id, e.content.toLowerCase())
+  for (const r of part) {
+    const value = r.content.split('\n')[0].split(': ').slice(1).join(': ').toLowerCase()
+    const words = [...new Set(value.match(/[a-z0-9$%.,]{3,}/g)?.map((w) => w.replace(/[.,]+$/, '')) ?? [])]
+    const open = r.evidence_ids.map((e) => text.get(e) ?? '').join('\n')
+    const said = !words.length || (words.filter((w) => /\d/.test(w)).every((n) => open.includes(n)) && words.filter((w) => open.includes(w)).length / words.length >= 0.6)
+    ;(said ? partial : hidden).add(r.id)
+  }
+  return { partial, hidden }
 }
 
 /** A fact's statement, dates, status and history, without quotes, summary or notes (which may come from evidence the reader can't open). */
@@ -350,20 +379,16 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
   // The reranker sees the fused head plus each leg's own top LEG_POOL (30): a document one leg ranks first
   // but the other missed (approximate kNN, a keyword-only match) still gets judged.
   const pool = opts.rerank
-    ? ranked.filter(([, v], i) => i < Math.max(40, limit * 3) || (v.bm25 !== null && v.bm25 <= LEG_POOL) || (v.knn !== null && v.knn <= LEG_POOL))
+    ? // A fixed shortlist however many results are asked for: the reranker is the slow step (CPU).
+      ranked.filter(([, v], i) => i < RERANK_HEAD || (v.bm25 !== null && v.bm25 <= LEG_POOL) || (v.knn !== null && v.knn <= LEG_POOL))
     : ranked.slice(0, Math.max(40, limit * 3))
   let hits: SearchHit[] = pool.map(([id, v]) => toHit(id, v.src, v.highlight, query, { bm25: v.bm25, knn: v.knn, fused: ranked.findIndex(([x]) => x === id) + 1 }, v.score))
   // A reader sees a fact if they can open some of the evidence behind it; when some of it is
   // restricted for them, they get the statement only (quotes and notes may come from the rest).
   if (opts.as) {
     const facts = hits.filter((h) => h.doc_type === 'fact' && h.kind !== 'timeline')
-    const ev = (
-      await sql.query<{ id: string; evidence_ids: string[] }>(`select id, evidence_ids from public.search_documents where tenant_id = $1 and id = any($2::text[])`, [tenantId, facts.map((h) => h.id)])
-    ).rows
-    const all = [...new Set(ev.flatMap((r) => r.evidence_ids))]
-    const readable = await readableEvidence(sql, tenantId, opts.as, all, opts.view)
-    const partial = new Set(ev.filter((r) => r.evidence_ids.some((e) => !readable.has(e))).map((r) => r.id))
-    hits = hits.map((h) => (partial.has(h.id) ? { ...h, content: statementOnly(h.content) } : h))
+    const { hidden, partial } = await factsForReader(sql, tenantId, opts.as, facts.map((h) => h.id), opts.view)
+    hits = hits.filter((h) => !hidden.has(h.id)).map((h) => (partial.has(h.id) ? { ...h, content: statementOnly(h.content) } : h))
   }
   // As known by the view's cutoff: whether a fact was current then, and its history as far as it went.
   if (opts.view) {
