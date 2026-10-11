@@ -428,25 +428,33 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
   if (!u.asOf && !u.history) {
     const supported = [...new Set(hits.flatMap((h) => (h.doc_type === 'passage' ? ((h.citation.facts as string[] | undefined) ?? []) : [])))]
     const current = new Map<string, boolean>()
-    if (opts.view) {
+    const titles = new Map<string, string>()
+    if (supported.length)
+      for (const r of (
+        await sql.query<{ id: string; cur: boolean; title: string }>(`select citation ->> 'fact_id' id, is_current cur, title from public.search_documents where tenant_id = $1 and id = any($2::text[])`, [
+          tenantId,
+          supported.map((f) => `f:${f}`),
+        ])
+      ).rows) {
+        titles.set(r.id, r.title)
+        if (!opts.view) current.set(r.id, r.cur)
+      }
+    if (opts.view)
       for (const f of supported) {
         const v = opts.view.facts.get(`f:${f}`)
         if (v) current.set(f, v.is_current)
       }
-    } else if (supported.length)
-      for (const r of (
-        await sql.query<{ id: string; cur: boolean }>(`select citation ->> 'fact_id' id, is_current cur from public.search_documents where tenant_id = $1 and id = any($2::text[])`, [
-          tenantId,
-          supported.map((f) => `f:${f}`),
-        ])
-      ).rows)
-        current.set(r.id, r.cur)
+    // Outdated only next to its replacement: an old version that is the only source for something
+    // (a procedure the new revision dropped) stays where it ranks.
+    const files = new Set(hits.map((h) => h.source_object_id).filter(Boolean))
+    const currentFactTitles = new Set(hits.filter((h) => h.doc_type === 'fact' && h.is_current).map((h) => h.title))
     for (const h of hits) {
+      if (h.doc_type !== 'passage') continue
       const fs = ((h.citation.facts as string[] | undefined) ?? []).filter((f) => current.has(f))
-      if (h.doc_type === 'passage' && fs.length && fs.every((f) => !current.get(f))) outdated.add(h.id)
-      // An older version of a document, when a newer one existed by the view's cutoff.
+      if (fs.length && fs.every((f) => !current.get(f)) && fs.some((f) => currentFactTitles.has(titles.get(f) ?? ''))) outdated.add(h.id)
+      // An older version of a document, when a newer one (known by the view's cutoff) is in the results.
       const newer = ((h.citation.replaced_by as string[] | undefined) ?? []).filter((so) => !opts.view?.hiddenObjects.has(so))
-      if (h.doc_type === 'passage' && newer.length) outdated.add(h.id)
+      if (newer.some((so) => files.has(so))) outdated.add(h.id)
     }
     // A replaced fact whose current version is in the results adds nothing but confusion.
     const currentTitles = new Set(hits.filter((h) => h.doc_type === 'fact' && h.is_current).map((h) => h.title))
