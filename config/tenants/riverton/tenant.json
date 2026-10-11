@@ -2237,17 +2237,18 @@
       "entity_type": "Customer",
       "kept": "Blue Ridge Food Processing LLC",
       "merged": [
+        "BR Florence",
+        "BRM",
         "Blue Ridge (Hamilton)",
         "Blue Ridge Foods",
-        "Blue Ridge Mills",
-        "BR Florence",
-        "BRM"
+        "Blue Ridge Mills"
       ]
     },
     {
       "entity_type": "Customer",
       "kept": "Brownsboro Rubber Products",
       "merged": [
+        "BROWNSBRO RUBBER",
         "Bronsboro Rubber",
         "Brownboro Rubber",
         "Brownsboo Rubber",
@@ -2258,7 +2259,6 @@
         "Brownsboro Ruber",
         "Brownsboro ubber",
         "BrownsboroRubber",
-        "BROWNSBRO RUBBER",
         "Brownsoro Rubber",
         "Browsboro Rubber"
       ]
@@ -2268,13 +2268,13 @@
       "kept": "Buckeye Polymer Compounding",
       "merged": [
         "BUCKEE POLYMER",
-        "Buckey Polymer",
-        "Buckeye olymer",
         "BUCKEYE PLYMER",
         "BUCKEYE POLYER",
+        "Buckey Polymer",
         "Buckeye Polymer",
         "Buckeye Polymr",
         "Buckeye Poymer",
+        "Buckeye olymer",
         "BuckeyePolymer",
         "Buckye Polymer"
       ]
@@ -2304,8 +2304,9 @@
       "entity_type": "Customer",
       "kept": "Clarksville Ice Cream Co.",
       "merged": [
-        "Clarksille Ice Cream Co.",
-        "CLARKSVILLE ICE CRAM CO."
+        "CLARKSVILLE ICE",
+        "CLARKSVILLE ICE CRAM CO.",
+        "Clarksille Ice Cream Co."
       ]
     },
     {
@@ -2326,10 +2327,10 @@
       "entity_type": "Customer",
       "kept": "Darby Creek Pet Foods",
       "merged": [
+        "DARBY CREK",
         "Darb Creek",
         "Darby Ceek",
         "Darby Creek",
-        "DARBY CREK",
         "DarbyCreek",
         "Dary Creek"
       ]
@@ -2390,16 +2391,16 @@
       "entity_type": "Customer",
       "kept": "Fairfield Fastener & Wire",
       "merged": [
+        "FAIRFIELD FASENER",
         "Faifield Fastener",
         "Fairfied Fastener",
         "Fairfiel Fastener",
-        "Fairfield astener",
-        "FAIRFIELD FASENER",
         "Fairfield Fasteer",
         "Fairfield Fastener",
         "Fairfield Fastenr",
         "Fairfield Fastner",
         "Fairfield Fstener",
+        "Fairfield astener",
         "FairfieldFastener",
         "Fairfild Fastener",
         "Fairield Fastener",
@@ -2412,8 +2413,8 @@
       "merged": [
         "Fall City Fab",
         "Falls Cit Fab",
-        "Falls City ab",
         "Falls City Fb",
+        "Falls City ab",
         "Falls CityFab",
         "Falls Ciy Fab",
         "Falls Cty Fab",
@@ -2434,12 +2435,12 @@
       "kept": "Great Miami Grain Cooperative",
       "merged": [
         "GM Grain",
+        "GREAT MIAMI GRAIN COOP",
         "Great Mami Grain",
         "Great Miai Grain",
         "Great Miam Grain",
         "Great Miami Gain",
         "Great Miami Grain",
-        "GREAT MIAMI GRAIN COOP",
         "Great Miami Grin",
         "Great Miami rain",
         "Great Mimi Grain"
@@ -2456,6 +2457,7 @@
       "entity_type": "Customer",
       "kept": "Harmon Auto Parts DC (Obetz)",
       "merged": [
+        "HARMON DC OBTZ",
         "Hamon DC Obetz",
         "Harmn DC Obetz",
         "Harmo DC Obetz",
@@ -2464,7 +2466,6 @@
         "Harmon C Obetz",
         "Harmon D Obetz",
         "Harmon DC Obetz",
-        "HARMON DC OBTZ",
         "Harmon DC Oetz",
         "Harmon DCObetz"
       ]
@@ -2482,14 +2483,14 @@
       "merged": [
         "Hartwel Castings",
         "Hartwell",
-        "Hartwell astings",
         "Hartwell Casings",
         "Hartwell Castigs",
         "Hartwell Castings",
         "Hartwell Castins",
         "Hartwell Castngs",
         "Hartwell Catings",
-        "Hartwell Cstings"
+        "Hartwell Cstings",
+        "Hartwell astings"
       ]
     },
     {
@@ -2503,9 +2504,9 @@
       "entity_type": "Customer",
       "kept": "Hilliard Hydraulics",
       "merged": [
-        "Hillard Hydraulics",
         "HILLIAD HYDRAULICS",
         "HILLIAR HYDRAULICS",
+        "Hillard Hydraulics",
         "Hilliard Hdraulics",
         "Hilliard Hydaulics",
         "Hilliard Hydraulcs",
@@ -2541,7 +2542,8 @@
       "kept": "Kemper Plastics Corp.",
       "merged": [
         "Kemper",
-        "Kemper Molding"
+        "Kemper Molding",
+        "Keper Molding"
       ]
     },
     {
@@ -2549,12 +2551,12 @@
       "kept": "Kentuckiana Plating Works",
       "merged": [
         "K-Plate",
+        "KENTUCKIANA LATING",
+        "KENTUCKIANA PLAING",
         "Kentuciana Plating",
         "Kentuckana Plating",
         "Kentuckiaa Plating",
-        "KENTUCKIANA LATING",
         "Kentuckiana Pating",
-        "KENTUCKIANA PLAING",
         "Kentuckiana Platig",
         "Kentuckiana Plating",
         "Kentuckiana Platng",
@@ -2568,8 +2570,8 @@
       "entity_type": "Customer",
       "kept": "Kroll Logistics - Tri-County DC",
       "merged": [
-        "Kroll Logistics",
         "KROLL TRI-COUNY",
+        "Kroll Logistics",
         "Tr-County DC",
         "Tri-County DC",
         "Tri-Couny DC",
@@ -2588,13 +2590,13 @@
       "entity_type": "Customer",
       "kept": "Lancaster Corrugated",
       "merged": [
+        "LANCASTERCORR",
         "Lacaster Corr",
         "Lanaster Corr",
         "Lancaste Corr",
         "Lancaster Cor",
         "Lancaster Corr",
         "Lancaster Crr",
-        "LANCASTERCORR",
         "Lancster Corr"
       ]
     },
@@ -2602,17 +2604,17 @@
       "entity_type": "Customer",
       "kept": "Little Miami Regional Water Authority",
       "merged": [
+        "LITTLE MIAMI ATER",
+        "LITTLE MIAMI REG WATER AUTH",
+        "LITTLE MIAMIWATER",
+        "LMRWA",
         "Litle Miami Water",
         "Little Mami Water",
         "Little Miam Water",
-        "LITTLE MIAMI ATER",
-        "LITTLE MIAMI REG WATER AUTH",
         "Little Miami Water",
         "Little Miami Wter",
-        "LITTLE MIAMIWATER",
         "Little Mimi Water",
-        "LittleMiami Water",
-        "LMRWA"
+        "LittleMiami Water"
       ]
     },
     {
@@ -2620,6 +2622,7 @@
       "kept": "Lunken Aerospace Components",
       "merged": [
         "Luken",
+        "Lunen",
         "Lunken"
       ]
     },
@@ -2629,13 +2632,13 @@
       "merged": [
         "Masn Medical",
         "Maso Medical",
-        "Mason edical",
         "Mason Mdical",
         "Mason Medcal",
         "Mason Medial",
         "Mason Medical",
         "Mason Medicl",
-        "Mason Meical"
+        "Mason Meical",
+        "Mason edical"
       ]
     },
     {
@@ -2653,20 +2656,20 @@
       "entity_type": "Customer",
       "kept": "Midwest Galvanizing",
       "merged": [
-        "Midest Galv",
-        "Midwes Galv",
-        "Midwest alv",
-        "Midwest Galv",
-        "Midwest Gav",
-        "Midwest Glv",
-        "MidwestGalv",
-        "Midwst Galv",
-        "Miwest Galv",
-        "MW alvanizing",
         "MW Galvaizing",
         "MW Galvaniing",
         "MW Galvanizig",
-        "MW Galvanizing"
+        "MW Galvanizing",
+        "MW alvanizing",
+        "Midest Galv",
+        "Midwes Galv",
+        "Midwest Galv",
+        "Midwest Gav",
+        "Midwest Glv",
+        "Midwest alv",
+        "MidwestGalv",
+        "Midwst Galv",
+        "Miwest Galv"
       ]
     },
     {
@@ -2701,8 +2704,8 @@
         "Norood Ice",
         "Norwod Ice",
         "Norwoo Ice",
-        "Norwood ce",
         "Norwood Ie",
+        "Norwood ce",
         "NorwoodIce",
         "Nowood Ice"
       ]
@@ -2728,39 +2731,40 @@
         "OF Paperboard",
         "OHI FALLS",
         "OHIO ALLS",
-        "Ohio Falls",
         "OHIO FALS",
+        "OHO FALLS",
+        "Ohio Falls",
         "Ohio Flls",
-        "OhioFalls",
-        "OHO FALLS"
+        "OhioFalls"
       ]
     },
     {
       "entity_type": "Customer",
       "kept": "Ohio River Dairy Cooperative",
       "merged": [
-        "Ohio iver Dairy",
+        "OHIO RIVER AIRY",
+        "OHIO RIVER DAIRY COOP",
+        "OHIO RIVR DAIRY",
+        "OR Dairy",
         "Ohio Rier Dairy",
         "Ohio Rive Dairy",
-        "OHIO RIVER AIRY",
         "Ohio River Dairy",
-        "OHIO RIVER DAIRY COOP",
         "Ohio River Daiy",
         "Ohio River Dary",
         "Ohio River Diry",
         "Ohio RiverDairy",
-        "OHIO RIVR DAIRY",
         "Ohio Rver Dairy",
-        "OhioRiver Dairy",
-        "OR Dairy"
+        "Ohio iver Dairy",
+        "OhioRiver Dairy"
       ]
     },
     {
       "entity_type": "Customer",
       "kept": "Ohio Valley Cold Storage",
       "merged": [
+        "OV Cold Storage",
+        "OVCS",
         "Ohi Valley Cold",
-        "Ohio alley Cold",
         "Ohio Valey Cold",
         "Ohio Valle Cold",
         "Ohio Valley Cld",
@@ -2769,21 +2773,20 @@
         "Ohio Valley old",
         "Ohio ValleyCold",
         "Ohio Vlley Cold",
-        "OV Cold Storage",
-        "OVCS"
+        "Ohio alley Cold"
       ]
     },
     {
       "entity_type": "Customer",
       "kept": "Olentangy Glass Container",
       "merged": [
+        "OLENTANGY GLSS",
         "Olenangy Glass",
         "Olentagy Glass",
         "Olentang Glass",
         "Olentangy Gass",
         "Olentangy Glas",
         "Olentangy Glass",
-        "OLENTANGY GLSS",
         "Olentngy Glass",
         "Oletangy Glass",
         "Olntangy Glass"
@@ -2800,6 +2803,7 @@
       "entity_type": "Customer",
       "kept": "Pfeiffer Brothers Meats",
       "merged": [
+        "PFEIFERBROS",
         "Pfefer Bros",
         "Pfeffer",
         "Pfeier Bros",
@@ -2807,7 +2811,6 @@
         "Pfeifer",
         "Pfeifer Bros",
         "Pfeifer ros",
-        "PFEIFERBROS",
         "Pfeiffer",
         "Pfeiffer Bros Meats",
         "Pfeiffr",
@@ -2817,13 +2820,14 @@
     },
     {
       "entity_type": "Customer",
-      "kept": "Pinnacle 3PL",
+      "kept": "Ardent Pinnacle Logistics",
       "merged": [
-        "Pinacle",
-        "Pinacle 3PL",
         "PINNACE",
         "PINNACE 3PL",
+        "Pinacle",
+        "Pinacle 3PL",
         "Pinnacle",
+        "Pinnacle 3PL",
         "Pinnacle 3PL - Grove City",
         "Pinnacle Third-Party Logistics",
         "Pinnacle3PL",
@@ -2872,16 +2876,16 @@
       "entity_type": "Customer",
       "kept": "Reliable Die Casting",
       "merged": [
+        "RELIABLE DIE CAT",
+        "RELIABLE IE CAST",
         "Reiable Die Cast",
         "Relable Die Cast",
         "Reliabe Die Cast",
         "Reliable De Cast",
         "Reliable Di Cast",
-        "Reliable Die ast",
-        "RELIABLE DIE CAT",
         "Reliable Die Cst",
+        "Reliable Die ast",
         "Reliable DieCast",
-        "RELIABLE IE CAST",
         "ReliableDie Cast",
         "Relible Die Cast"
       ]
@@ -2899,7 +2903,6 @@
       "merged": [
         "Rier Rd Asphalt",
         "Rive Rd Asphalt",
-        "River d Asphalt",
         "River R Asphalt",
         "River Rd Ashalt",
         "River Rd Aspalt",
@@ -2909,6 +2912,7 @@
         "River Rd sphalt",
         "River RdAsphalt",
         "River Road Asphalt",
+        "River d Asphalt",
         "RiverRd Asphalt"
       ]
     },
@@ -2940,13 +2944,13 @@
         "SCIOO VALLEY",
         "Sciot Foods",
         "Sciot Valley",
-        "Scioto alley",
         "Scioto Fods",
         "Scioto Foods",
         "Scioto Foos",
-        "Scioto oods",
         "Scioto Valey",
         "Scioto Valley",
+        "Scioto alley",
+        "Scioto oods",
         "SciotoFoods",
         "Scito Foods",
         "Scito Valley"
@@ -2978,13 +2982,13 @@
       "entity_type": "Customer",
       "kept": "Sycamore Specialty Foods",
       "merged": [
+        "SYCAMRE FOODS",
         "Syamore Foods",
         "Sycamoe Foods",
         "Sycamore Fods",
         "Sycamore Foods",
         "Sycamore Foos",
         "SycamoreFoods",
-        "SYCAMRE FOODS",
         "Sycaore Foods",
         "Sycmore Foods"
       ]
@@ -3000,17 +3004,17 @@
       "entity_type": "Customer",
       "kept": "Tri State Bottling",
       "merged": [
+        "TRI STATE BOTTLIG",
+        "TRI STATEBOTTLING",
+        "TSB",
         "Tri Sate Bottling",
         "Tri Stat Bottling",
         "Tri State Botling",
         "Tri State Botting",
-        "TRI STATE BOTTLIG",
         "Tri State Bottlng",
         "Tri State ottling",
-        "TRI STATEBOTTLING",
         "Tri tate Bottling",
-        "Tri-State",
-        "TSB"
+        "Tri-State"
       ]
     },
     {
@@ -3237,8 +3241,22 @@
       "entity_type": "Vendor",
       "kept": "Tri-County Bearing & Supply",
       "merged": [
-        "Tri County Bearing & Supply",
-        "TRI-COUNTY BRG"
+        "TRI-COUNTY BRG",
+        "Tri County Bearing & Supply"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Feldkamp & Sons Machine Works",
+      "merged": [
+        "FELDKAMP MACHINE"
+      ]
+    },
+    {
+      "entity_type": "Customer",
+      "kept": "Riverton Industrial (Loaner Pool)",
+      "merged": [
+        "RIVERTON LOANER"
       ]
     }
   ],

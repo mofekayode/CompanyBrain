@@ -5,7 +5,8 @@
 //   2. they share a site or asset, or the whole multi-word name matches that way
 //      ("Haron DC Obetz" in "Harmon Auto Parts DC (Obetz)").
 // Look-alikes with different addresses ("Stull & Sons" vs "Stull") are never touched: only records
-// created from links (no record of their own) are merged, into a real record.
+// created from links (no record of their own) are merged, into a real record. A second pass merges
+// duplicate accounts that give the same street address (see below).
 //
 // Usage: npx tsx scripts/merge-variants.ts <slug> [--apply]
 
@@ -66,6 +67,34 @@ for (const v of customers.filter((c) => c.origin === 'link')) {
     .filter((x): x is { c: (typeof customers)[number]; why: string } => !!x)
   if (matches.length === 1) plan.push({ variant: v, into: matches[0].c, why: matches[0].why })
   else if (matches.length > 1) console.log(`skip    ${v.name}: ambiguous (${matches.map((m) => m.c.name).join(' / ')})`)
+}
+// Duplicate accounts in one system: two customer rows giving the same street address, with names
+// starting the same way ("CLARKSVILLE ICE" and "CLARKSVILLE ICE CREAM CO LLC" at 4351 River Rd).
+// Look-alikes at different addresses ("FELDKAMP MACHINE WORKS INC" in Springdale) stay apart.
+const STREET = /^\d+ [A-Za-z0-9 .'-]+ (st|street|rd|road|ave|avenue|ct|court|dr|drive|pkwy|parkway|blvd|way|ln|lane|hwy|pike|pl)\.?$/i
+const addresses = new Map<string, Set<string>>() // customer → "street|city"
+for (const r of (
+  await db.query<{ eid: string; quote: string }>(
+    `select l.entity_id eid, l.quote from public.evidence_links l where l.tenant_id = $1 and l.origin = 'import' and l.entity_id = any($2::uuid[])`,
+    [t, real.map((c) => c.id)],
+  )
+).rows) {
+  const cells = r.quote.split(' | ').map((c) => c.trim())
+  const i = cells.findIndex((c) => STREET.test(c))
+  if (i >= 0 && cells[i + 1]) (addresses.get(r.eid) ?? addresses.set(r.eid, new Set()).get(r.eid)!).add(`${norm(cells[i])}|${norm(cells[i + 1])}`)
+}
+const linkCount = new Map((await db.query<{ id: string; n: number }>(`select target_entity_id id, count(*)::int n from public.relationships where target_entity_id = any($1::uuid[]) group by 1`, [real.map((c) => c.id)])).rows.map((r) => [r.id, r.n]))
+const atAddress = new Map<string, typeof real>()
+for (const c of real) for (const a of addresses.get(c.id) ?? []) atAddress.set(a, [...(atAddress.get(a) ?? []), c])
+const doneAddr = new Set<string>()
+for (const [addr, cs] of atAddress) {
+  const group = [...new Map(cs.map((c) => [c.id, c])).values()]
+  if (group.length < 2 || !group.every((c) => norm(c.name).split(' ')[0] === norm(group[0].name).split(' ')[0])) continue
+  const into = [...group].sort((a, b) => (linkCount.get(b.id) ?? 0) - (linkCount.get(a.id) ?? 0))[0]
+  for (const v of group.filter((c) => c.id !== into.id && !doneAddr.has(c.id))) {
+    doneAddr.add(v.id)
+    plan.push({ variant: v, into, why: `same address in the customer list (${addr.split('|')[0]})` })
+  }
 }
 for (const p of plan) {
   console.log(`merge   ${p.variant.name} → ${p.into.name}  (${p.why})`)
