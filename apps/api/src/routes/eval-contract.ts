@@ -44,7 +44,10 @@ const day = (s: unknown) => (typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test
 
 evalContract.post('/eval/answer', async (c) => {
   const t0 = performance.now()
-  const body = (await c.req.json()) as { question?: string; asked_on?: string; knowledge_cutoff?: string; as?: { role?: string; person?: { name?: string; email?: string } } }
+  const body = (await c.req.json()) as { question?: string; asked_on?: string; knowledge_cutoff?: string; as?: { role?: string; person?: { name?: string; email?: string } }; mode?: string }
+  // Retrieval only ("mode": "retrieval" or header X-Eval-Mode: retrieval): the ranked, access- and
+  // cutoff-filtered evidence, no answer written (no answer API spend). For retrieval metrics.
+  const retrievalOnly = body.mode === 'retrieval' || c.req.header('X-Eval-Mode') === 'retrieval'
   const question = body.question?.trim()
   const askedOn = day(body.asked_on)
   const cutoff = day(body.knowledge_cutoff) ?? askedOn
@@ -60,8 +63,18 @@ evalContract.post('/eval/answer', async (c) => {
 
   // Ranked candidates after access and cutoff filtering, before generation.
   // The reader's ranked search and the full-access one (to count what's locked) run side by side.
-  const full = ctx.as ? search(sql, t.id, question, { limit: 12, rerank: true, view, today: askedOn, rewrite: true }) : undefined
+  const full = ctx.as && !retrievalOnly ? search(sql, t.id, question, { limit: 12, rerank: true, view, today: askedOn, rewrite: true }) : undefined
   const ranked = await search(sql, t.id, question, { as: ctx.as, limit: 50, rerank: true, view, today: askedOn, rewrite: true })
+  if (retrievalOnly) {
+    const refs = await refsFor(ctx, files, ranked.hits.map((h) => h.id))
+    const scoreOf = new Map<string, number>()
+    for (const h of ranked.hits) for (const r of refs.get(h.id) ?? []) if (!scoreOf.has(r.source + r.locator)) scoreOf.set(r.source + r.locator, Number((h.ranks.rerank ?? h.score).toFixed(4)))
+    const retrieved = orderRetrieved(
+      ranked.hits.map((h) => h.id),
+      refs,
+    ).map((r, i) => ({ source: r.source, locator: r.locator, rank: i + 1, score: scoreOf.get(r.source + r.locator) ?? 0 }))
+    return c.json({ answer: '', refused: false, citations: [], retrieved, latency_ms: Math.round(performance.now() - t0), model: 'none (retrieval only)', mode: 'retrieval' })
+  }
   const brief = await briefAnswer(ctx, question, { reuse: ranked, reuseFull: full })
 
   const tRetrieved = performance.now()
