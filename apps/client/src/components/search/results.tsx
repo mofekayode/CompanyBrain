@@ -435,7 +435,7 @@ export function Records({ hits, slug }: { hits: Hit[]; slug: string }) {
         <ul className="flex flex-wrap gap-2">
           {things.map((h) => (
             <li key={h.id}>
-              <Link href={`/${slug}/e/${h.id.slice(2)}`} className="inline-flex items-center gap-1.5 rounded-full border border-border bg-white px-3 py-1 text-[13px] hover:border-cobalt">
+              <Link href={`/${slug}/e/${h.id.split('~')[0].slice(2)}`} className="inline-flex items-center gap-1.5 rounded-full border border-border bg-white px-3 py-1 text-[13px] hover:border-cobalt">
                 {name(h)}
                 <span className="text-[11.5px] text-muted-foreground">{h.kind === 'Asset' ? 'Equipment' : h.kind}</span>
               </Link>
@@ -447,7 +447,7 @@ export function Records({ hits, slug }: { hits: Hit[]; slug: string }) {
         <p className="flex flex-wrap items-center gap-1.5 text-[12.5px] text-muted-foreground">
           Company vocabulary
           {terms.map((h) => (
-            <Link key={h.id} href={`/${slug}/e/${h.id.slice(2)}`} className="rounded-md bg-secondary px-1.5 py-0.5 font-medium text-ink/80 hover:text-cobalt">
+            <Link key={h.id} href={`/${slug}/e/${h.id.split('~')[0].slice(2)}`} className="rounded-md bg-secondary px-1.5 py-0.5 font-medium text-ink/80 hover:text-cobalt">
               {name(h)}
             </Link>
           ))}

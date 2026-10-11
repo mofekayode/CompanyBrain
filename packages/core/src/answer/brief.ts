@@ -6,6 +6,7 @@
 // the model writes from when it is on. When the asker can't see what would answer the
 // question, it says so (and which kind of files matched) instead of guessing.
 
+import { baseId } from '../search/readers'
 import { search, type SearchHit, type SearchResult } from '../search/search'
 import { fieldLabel, humanDate, tidy } from '../text'
 import { citeLabel, factLabel, type ToolCtx, visible } from './tools'
@@ -283,7 +284,7 @@ export async function briefAnswer(ctx: ToolCtx, question: string, progress: Brie
   if (ctx.as) {
     step('access', 'Checking for matches in files you can’t open', 'active')
     const all = await fullAccess!
-    const hidden = all.hits.filter((h) => !r.hits.some((x) => x.id === h.id))
+    const hidden = all.hits.filter((h) => !r.hits.some((x) => baseId(x.id) === baseId(h.id)))
     const ok = await visible(ctx, hidden.map((h) => h.id))
     const blocked = hidden.filter((h) => !ok.has(h.id))
     if (blocked.length) {
@@ -298,7 +299,7 @@ export async function briefAnswer(ctx: ToolCtx, question: string, progress: Brie
           ).rows.map((x) => x.name)
         : []
       // "Locked" only when the single best source for the question (ranked with full access) is one they can't open.
-      restricted = { count: blocked.length, scopes, best_is_locked: !!all.hits[0] && blocked.some((b) => b.id === all.hits[0].id) }
+      restricted = { count: blocked.length, scopes, best_is_locked: !!all.hits[0] && blocked.some((b) => baseId(b.id) === baseId(all.hits[0].id)) }
     }
     step('access', 'Checking for matches in files you can’t open', 'done', restricted ? `${restricted.count} locked` : 'nothing locked')
   }

@@ -3,6 +3,7 @@
 // works without the Claude API and every line can be checked.
 
 import { resolveEntity, type ToolCtx } from '../answer/tools'
+import { baseId } from '../search/readers'
 import { canSeeRecords, events, evidenceItems, factItems, type FactRow, facts, human, type Item, isCurrent, money, moneyByYear, type Report, ReportBuilder, statusOf, whenOf } from './report'
 
 export interface SkillInput {
@@ -162,7 +163,7 @@ async function generateSop(ctx: ToolCtx, input: SkillInput): Promise<Report> {
   const b = new ReportBuilder(ctx, 'generate_sop', `Standard procedure: ${topic}`, topic)
   const { search } = await import('../search/search')
   const hits = await search(ctx.sql, ctx.tenantId, topic, { as: ctx.as, docTypes: ['fact'], limit: 30, rerank: true })
-  const ids = hits.hits.filter((h) => h.id.startsWith('f:')).map((h) => h.id.slice(2))
+  const ids = hits.hits.filter((h) => h.id.startsWith('f:')).map((h) => baseId(h.id).slice(2))
   const rows = ids.length ? await facts(ctx, `f.id = any($2::uuid[])`, [ids], 40) : []
   const order = new Map(ids.map((id, i) => [id, i]))
   rows.sort((a, c) => (order.get(a.id) ?? 0) - (order.get(c.id) ?? 0))
@@ -277,7 +278,7 @@ async function trainingPlan(ctx: ToolCtx, input: SkillInput): Promise<Report> {
   const { search } = await import('../search/search')
   const pick = async (q: string, kinds: string[]) => {
     const r = await search(ctx.sql, ctx.tenantId, q, { as: ctx.as, docTypes: ['fact'], limit: 25, rerank: true })
-    const ids = r.hits.filter((h) => h.id.startsWith('f:')).map((h) => h.id.slice(2))
+    const ids = r.hits.filter((h) => h.id.startsWith('f:')).map((h) => baseId(h.id).slice(2))
     return ids.length ? (await facts(ctx, `f.id = any($2::uuid[]) and f.metadata ->> 'kind' = any($3::text[])`, [ids, kinds], 25)).filter(isCurrent) : []
   }
   b.section({ heading: 'Week 1: safety and non-negotiables', items: await factItems(b, (await pick(`${role} safety lockout PPE site rules must`, ['policy'])).slice(0, 8), { withSubject: true }) })

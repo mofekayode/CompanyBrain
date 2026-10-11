@@ -4,6 +4,7 @@
 
 import type { FileInfo } from '../access/knowledge-view'
 import type { ToolCtx } from '../answer/tools'
+import { baseId } from '../search/readers'
 import { principalsOf, readableEvidence } from '../search/search'
 
 export interface Ref {
@@ -47,7 +48,7 @@ export async function refsFor(ctx: ToolCtx, files: Map<string, FileInfo>, ids: s
   const evById = new Map(ev.map((e) => [e.id, e]))
   // Only evidence this reader can open (and that existed by the view's cutoff) is ever cited.
   const readable = await readableEvidence(ctx.sql, ctx.tenantId, ctx.as, ev.map((e) => e.id), ctx.view)
-  const entIds = docs.filter((d) => d.doc_type === 'entity').map((d) => d.id.slice(2))
+  const entIds = docs.filter((d) => d.doc_type === 'entity').map((d) => baseId(d.id).slice(2))
   const ents = entIds.length
     ? (await ctx.sql.query<{ id: string; file_id: string | null; row: string | null }>(`select id, metadata #>> '{source,file_id}' file_id, metadata #>> '{source,row}' row from public.entities where id = any($1::uuid[])`, [entIds])).rows
     : []
@@ -121,11 +122,11 @@ export async function refsFor(ctx: ToolCtx, files: Map<string, FileInfo>, ids: s
         if (refs.length >= perFact) break
       }
     } else if (d.doc_type === 'entity') {
-      const e = entById.get(d.id.slice(2))
+      const e = entById.get(baseId(d.id).slice(2))
       if (e?.file_id && ok(e.file_id) && readableFiles.has(e.file_id)) refs.push({ source: files.get(e.file_id)!.path!, locator: e.row ? `row=${e.row}` : '' })
       // Records made from links between rows have no file of their own: cite the system rows
       // (and then other passages) that mention them, as far as the reader can open them.
-      for (const p of mentions.get(d.id.slice(2)) ?? []) if (refs.length < perFact && cite(p.so)) refs.push({ source: cite(p.so)!, locator: locatorOf(cite(p.so)!, p.citation), quote: p.content.slice(0, 240) })
+      for (const p of mentions.get(baseId(d.id).slice(2)) ?? []) if (refs.length < perFact && cite(p.so)) refs.push({ source: cite(p.so)!, locator: locatorOf(cite(p.so)!, p.citation), quote: p.content.slice(0, 240) })
     }
     out.set(d.id, refs)
   }

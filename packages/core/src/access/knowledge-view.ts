@@ -14,6 +14,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { timelineText } from '../ontology/timeline'
 import { normalize } from '../search/linker'
+import { baseId } from '../search/readers'
 import type { Sql } from '../storage/raw'
 
 export interface KnowledgeView {
@@ -165,7 +166,7 @@ async function base(sql: Sql, tenantId: string, slug: string, cutoff: string): P
   // file, and not mentioned by any passage or fact that survives.
   const ents = (
     await sql.query<{ id: string }>(
-      `select 'e:' || e.id id from public.entities e
+      `select d.id from public.entities e join public.search_documents d on d.tenant_id = e.tenant_id and d.doc_type = 'entity' and split_part(d.id, '~', 1) = 'e:' || e.id
        where e.tenant_id = $1 and e.status in ('candidate', 'active')
          and (e.metadata ->> 'origin' = 'prose' or (e.metadata #>> '{source,file_id}')::uuid = any($2::uuid[]))
          and not exists (select 1 from public.search_documents d where d.tenant_id = $1 and d.entity_ids @> array[e.id]
@@ -196,15 +197,17 @@ export async function knowledgeView(sql: Sql, tenantId: string, slug: string, cu
   // Which version was current on `today`, and its history as far as it was known.
   const out: KnowledgeView['facts'] = new Map()
   for (const g of b.groups) {
-    const dated = g.filter((f) => f.valid_from && f.valid_from <= today).sort((x, y) => x.valid_from!.localeCompare(y.valid_from!))
+    // Variants of one fact (split by reader group) are one version.
+    const one = [...new Map(g.map((f) => [baseId(f.id), f])).values()]
+    const dated = one.filter((f) => f.valid_from && f.valid_from <= today).sort((x, y) => x.valid_from!.localeCompare(y.valid_from!))
     const latest = dated.at(-1)
-    const steps = dated.map((f) => ({ fact_id: f.id, subject: '', predicate: '', authority: null, value: f.content.split('\n')[0].split(': ').slice(1).join(': '), valid_from: f.valid_from, valid_to: f.valid_to, status: f === latest ? 'accepted' : 'superseded' }))
+    const steps = dated.map((f) => ({ fact_id: baseId(f.id), subject: '', predicate: '', authority: null, value: f.content.split('\n')[0].split(': ').slice(1).join(': '), valid_from: f.valid_from, valid_to: f.valid_to, status: f === latest ? 'accepted' : 'superseded' }))
     const timeline = steps.length >= 2 ? timelineText(steps) : null
     for (const f of g) {
       const ended = !!f.valid_to && f.valid_to <= today
       const started = !f.valid_from || f.valid_from <= today
       // Current on `today`: started, not ended, and not replaced by a later version that was known.
-      const replaced = !!f.valid_from && dated.some((o) => o !== f && o.valid_from! > f.valid_from!)
+      const replaced = !!f.valid_from && dated.some((o) => baseId(o.id) !== baseId(f.id) && o.valid_from! > f.valid_from!)
       out.set(f.id, { is_current: started && !ended && !replaced && f.status !== 'rejected', timeline: f.valid_from ? timeline : null, mixed: b.mixed.has(f.id) })
     }
   }

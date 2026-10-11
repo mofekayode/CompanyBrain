@@ -17,6 +17,7 @@ import type { KnowledgeView } from '../access/knowledge-view'
 import { humanPeriod } from '../text'
 import { factsForReader, search } from '../search/search'
 import { principalsOf } from '../search/search'
+import { baseId } from '../search/readers'
 import type { Sql } from '../storage/raw'
 
 export interface ToolCtx {
@@ -50,14 +51,16 @@ export async function visible(ctx: ToolCtx, docIds: string[]): Promise<Set<strin
   }
   if (!ctx.as) return new Set(docIds)
   const principals = await principalsOf(ctx.sql, ctx.tenantId, ctx.as)
+  // A card counts as visible when the reader may see any of its variants (cards are split by reader group).
   const rows = (
     await ctx.sql.query<{ id: string }>(
-      `select d.id from public.search_documents d where d.tenant_id = $1 and d.id = any($2::text[])
+      `select distinct split_part(d.id, '~', 1) id from public.search_documents d where d.tenant_id = $1 and split_part(d.id, '~', 1) = any($2::text[])
          and exists (select 1 from public.acl_entries ae where ae.acl_id = any(d.acl_ids) and ae.principal_id = any($3::uuid[]))`,
-      [ctx.tenantId, docIds, principals],
+      [ctx.tenantId, [...new Set(docIds.map(baseId))], principals],
     )
   ).rows
-  return new Set(rows.map((r) => r.id))
+  const ok = new Set(rows.map((r) => r.id))
+  return new Set(docIds.filter((id) => ok.has(baseId(id))))
 }
 
 /** Resolves a name, alias or id to one live entity (best match), or null. */

@@ -145,22 +145,15 @@ export async function factsForReader(sql: Sql, tenantId: string, principalId: st
   const openIds = part.flatMap((r) => r.evidence_ids.filter((e) => readable.has(e)))
   const text = new Map<string, string>()
   if (openIds.length) for (const e of (await sql.query<{ id: string; content: string }>(`select id, content from public.evidence where id = any($1::uuid[])`, [openIds])).rows) text.set(e.id, e.content.toLowerCase())
-  for (const r of part) {
-    const value = r.content.split('\n')[0].split(': ').slice(1).join(': ').toLowerCase()
-    const words = [...new Set(value.match(/[a-z0-9$%.,]{3,}/g)?.map((w) => w.replace(/[.,]+$/, '')) ?? [])]
-    const open = r.evidence_ids.map((e) => text.get(e) ?? '').join('\n')
-    const said = !words.length || (words.filter((w) => /\d/.test(w)).every((n) => open.includes(n)) && words.filter((w) => open.includes(w)).length / words.length >= 0.6)
-    ;(said ? partial : hidden).add(r.id)
-  }
+  for (const r of part) (saysValue(r.content.split('\n')[0].split(': ').slice(1).join(': '), r.evidence_ids.map((e) => text.get(e) ?? '').join('\n')) ? partial : hidden).add(r.id)
   return { partial, hidden }
 }
 
-/** A fact's statement, dates, status and history, without quotes, summary or notes (which may come from evidence the reader can't open). */
-export const statementOnly = (content: string) =>
-  content
-    .split('\n')
-    .filter((l, i) => i === 0 || /^(Valid |Status: |Timeline: )/.test(l))
-    .join('\n')
+/** Does this text (lowercase) say the value: every number in it, and most of its words? */
+export function saysValue(value: string, open: string): boolean {
+  const words = [...new Set(value.toLowerCase().match(/[a-z0-9$%.,]{3,}/g)?.map((w) => w.replace(/[.,]+$/, '')) ?? [])]
+  return !words.length || (words.filter((w) => /\d/.test(w)).every((n) => open.includes(n)) && words.filter((w) => open.includes(w)).length / words.length >= 0.6)
+}
 
 /** One rewrite per question for a minute: an answer runs a few searches for the same question. */
 const rewrites = new Map<string, { at: number; text: Promise<string | null> }>()
@@ -298,8 +291,12 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
   // Codes (quote numbers, asset tags, invoice numbers) must match exactly: "Q26-1104" ≠ "Q26-1180".
   const codes = query.match(/\b[A-Za-z]{0,6}\d*[-#]?\d{2,}[A-Za-z]?\b/g)?.filter((c) => /\d/.test(c) && c.length >= 4 && !/^(19|20)\d{2}$/.test(c)) ?? []
   const expansion = u.entities.map((e) => e.name).join(' ')
+  // One hit per card or message: variants of a card (split by reader group) and copies of a message
+  // share a key, and would otherwise take several of each leg's places.
+  const collapse = { field: 'dedupe_key' }
   const bm25: estypes.SearchRequest = {
     size: 60,
+    collapse,
     _source: { excludes: ['embedding'] },
     query: {
       // Vocabulary cards are one line long, which BM25 over-rewards: keep them, but lower.
@@ -335,6 +332,7 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
           index: indexAlias(slug),
           preference: `cb-${slug}`,
           size: 60,
+          collapse,
           _source: { excludes: ['embedding'] },
           knn: { field: 'embedding', query_vector: vector, k: KNN_K, num_candidates: KNN_CANDIDATES, filter },
         })
@@ -342,31 +340,29 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
   ])
   const te2 = performance.now()
 
-  // ---- Reciprocal Rank Fusion: score = Σ 1 / (60 + rank) over the legs a doc appears in
+  // ---- Reciprocal Rank Fusion: score = Σ 1 / (60 + rank) over the legs a doc appears in. Fused per
+  // card or message (the two legs may return different variants or copies of it); the fuller variant
+  // is the one kept.
   type Src = Record<string, unknown>
-  const fused = new Map<string, { src: Src; bm25: number | null; knn: number | null; score: number; highlight?: string[] }>()
+  const fused = new Map<string, { id: string; src: Src; bm25: number | null; knn: number | null; score: number; highlight?: string[] }>()
+  const keyOf = (h: estypes.SearchHit<unknown>) => ((h._source as Src).dedupe_key as string | null) ?? h._id!
   lex?.hits.hits.forEach((h, i) => {
-    fused.set(h._id!, { src: h._source as Src, bm25: i + 1, knn: null, score: 1 / (RRF_K + i + 1), highlight: h.highlight?.content })
+    fused.set(keyOf(h), { id: h._id!, src: h._source as Src, bm25: i + 1, knn: null, score: 1 / (RRF_K + i + 1), highlight: h.highlight?.content })
   })
   sem?.hits.hits.forEach((h, i) => {
-    const cur = fused.get(h._id!)
+    const cur = fused.get(keyOf(h))
     if (cur) {
       cur.knn = i + 1
       cur.score += 1 / (RRF_K + i + 1)
-    } else fused.set(h._id!, { src: h._source as Src, bm25: null, knn: i + 1, score: 1 / (RRF_K + i + 1) })
+      if (String((h._source as Src).content ?? '').length > String(cur.src.content ?? '').length) Object.assign(cur, { id: h._id!, src: h._source as Src })
+    } else fused.set(keyOf(h), { id: h._id!, src: h._source as Src, bm25: null, knn: i + 1, score: 1 / (RRF_K + i + 1) })
   })
   let ranked = [...fused.entries()].sort((a, b) => b[1].score - a[1].score)
 
-  // ---- collapse copies of the same message, then cap results per file
-  const seen = new Set<string>()
+  // ---- cap results per file
   const perFile = new Map<string, number>()
   const cap = opts.perSource ?? 3
   ranked = ranked.filter(([, v]) => {
-    const key = v.src.dedupe_key as string | null
-    if (key) {
-      if (seen.has(key)) return false
-      seen.add(key)
-    }
     const so = v.src.source_object_id as string | null
     if (so) {
       const n = (perFile.get(so) ?? 0) + 1
@@ -382,13 +378,14 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
     ? // A fixed shortlist however many results are asked for: the reranker is the slow step (CPU).
       ranked.filter(([, v], i) => i < RERANK_HEAD || (v.bm25 !== null && v.bm25 <= LEG_POOL) || (v.knn !== null && v.knn <= LEG_POOL))
     : ranked.slice(0, Math.max(40, limit * 3))
-  let hits: SearchHit[] = pool.map(([id, v]) => toHit(id, v.src, v.highlight, query, { bm25: v.bm25, knn: v.knn, fused: ranked.findIndex(([x]) => x === id) + 1 }, v.score))
-  // A reader sees a fact if they can open some of the evidence behind it; when some of it is
-  // restricted for them, they get the statement only (quotes and notes may come from the rest).
+  let hits: SearchHit[] = pool.map(([key, v]) => toHit(v.id, v.src, v.highlight, query, { bm25: v.bm25, knn: v.knn, fused: ranked.findIndex(([x]) => x === key) + 1 }, v.score))
+  // A reader sees a fact through evidence they can open; if what they can open doesn't say the value,
+  // it is hidden (the value may come from the restricted part alone). Quotes, notes and history are
+  // already limited to what the reader may open (cards are split by reader group, project.ts).
   if (opts.as) {
     const facts = hits.filter((h) => h.doc_type === 'fact' && h.kind !== 'timeline')
-    const { hidden, partial } = await factsForReader(sql, tenantId, opts.as, facts.map((h) => h.id), opts.view)
-    hits = hits.filter((h) => !hidden.has(h.id)).map((h) => (partial.has(h.id) ? { ...h, content: statementOnly(h.content) } : h))
+    const { hidden } = await factsForReader(sql, tenantId, opts.as, facts.map((h) => h.id), opts.view)
+    hits = hits.filter((h) => !hidden.has(h.id))
   }
   // As known by the view's cutoff: whether a fact was current then, and its history as far as it went.
   if (opts.view) {

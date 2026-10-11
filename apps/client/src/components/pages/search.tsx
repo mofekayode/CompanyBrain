@@ -89,7 +89,7 @@ export function SearchPage({ initial }: { initial?: string }) {
       // Only when the query names it, or it's the very top result: a search for a topic ("lockout
       // two person") isn't about whichever record happens to rank first among the records.
       const top = r.hits[0]
-      const best = r.understood.entities.find((e) => e.type !== 'Term')?.id ?? (top?.doc_type === 'entity' && top.kind !== 'Term' && realName(top.title) ? top.id.slice(2) : undefined)
+      const best = r.understood.entities.find((e) => e.type !== 'Term')?.id ?? (top?.doc_type === 'entity' && top.kind !== 'Term' && realName(top.title) ? top.id.split('~')[0].slice(2) : undefined)
       setCard(null)
       if (best && !r.weak) {
         setCardLoading(true)
@@ -129,7 +129,7 @@ export function SearchPage({ initial }: { initial?: string }) {
 
   // The card covers the record itself and its nicknames: those don't repeat as results.
   const inCard = new Set(card ? [card.id, ...card.facts.map((f) => f.id), ...(card.changed ? [card.changed.id] : [])] : [])
-  const coveredByCard = (h: Hit) => !!card && (inCard.has(h.id.slice(2)) || (h.kind === 'Term' && h.content.includes(`: ${card.name}`)))
+  const coveredByCard = (h: Hit) => !!card && (inCard.has(h.id.split('~')[0].slice(2)) || (h.kind === 'Term' && h.content.includes(`: ${card.name}`)))
   const kept = useMemo(() => (res?.hits ?? []).filter((h) => !coveredByCard(h) && timeKeeps(time, h)), [res, time, card]) // eslint-disable-line react-hooks/exhaustive-deps
   const hidden = (res?.hits ?? []).filter((h) => !coveredByCard(h)).length - kept.length
   // The card's "best evidence": the top three files; the lists below don't repeat them.

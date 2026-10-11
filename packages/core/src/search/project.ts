@@ -18,8 +18,10 @@ import { createHash } from 'node:crypto'
 import type { Sql } from '../storage/raw'
 import { embedPassages } from './embed'
 import { activeVersion, createVersion, es, indexAlias } from './es'
-import { type Dictionary, linkText, loadDictionary } from './linker'
-import { timelines, timelineText } from '../ontology/timeline'
+import { type Dictionary, linkText, loadDictionary, normalize } from './linker'
+import { loadReaders, type Readers, splitByReaders } from './readers'
+import { saysValue } from './search'
+import { type TimelineStep, timelines, timelineText } from '../ontology/timeline'
 
 export interface SearchDoc {
   id: string
@@ -264,27 +266,59 @@ async function passagesFor(sql: Sql, tenantId: string, dict: Dictionary, dvIds: 
   return out
 }
 
-// ------------------------------------------------------------------------ entity cards
+// ------------------------------------------------------------------------ card access
+//
+// A card (record, fact, timeline) combines content from several files. It is split by reader group
+// (readers.ts): each variant carries only lines that every one of its readers may open. Who may open
+// a file or a piece of evidence is read from its passages, which already apply identical copies and
+// sensitivity labels; a file whose passages differ in access (a labelled sheet) counts as readable
+// only by those who may read all of it.
 
-async function entityAcls(sql: Sql, tenantId: string, ids: string[] | null): Promise<Map<string, string[]>> {
-  // An entity is visible to whoever can read a file it came from (its own or a merged
-  // duplicate's). Entities without a source file (company map, link-created) are company-wide.
-  const rows = (
-    await sql.query<{ id: string; acls: string[] | null }>(
-      `with ents as (select e.id from public.entities e where e.tenant_id = $1 and ($2::uuid[] is null or e.id = any($2::uuid[]))),
-       src as (
-         select coalesce(m.merged_into_id, m.id) id, (m.metadata -> 'source' ->> 'file_id')::uuid file_id
-         from public.entities m where m.tenant_id = $1 and m.metadata -> 'source' ? 'file_id'
-           and coalesce(m.merged_into_id, m.id) in (select id from ents))
-       select ents.id, array_remove(array_agg(distinct so.acl_id), null) acls
-       from ents left join src on src.id = ents.id left join public.source_objects so on so.id = src.file_id
-       group by ents.id`,
-      [tenantId, ids],
-    )
-  ).rows
-  const companyWide = (await sql.query<{ acl_id: string }>(`select acl_id from public.access_scopes where tenant_id = $1 and key = 'company-wide'`, [tenantId])).rows[0]?.acl_id
-  return new Map(rows.map((r) => [r.id, r.acls?.length ? r.acls : companyWide ? [companyWide] : []]))
+interface CardAccess {
+  readers: Readers
+  companyWide: string | null
+  /** May readers of `acl` open this file (all of it)? Unknown files: no. */
+  fileOK(acl: string, file: string): boolean
+  /** The access lists through which a file can be read. */
+  fileClasses(file: string): string[]
+  /** The access lists of the passages holding this evidence (empty: no one). */
+  evidence(id: string): string[]
 }
+
+async function cardAccess(sql: Sql, tenantId: string, files: string[], evidenceIds: string[]): Promise<CardAccess> {
+  const readers = await loadReaders(sql, tenantId)
+  const companyWide = (await sql.query<{ acl_id: string }>(`select acl_id from public.access_scopes where tenant_id = $1 and key = 'company-wide'`, [tenantId])).rows[0]?.acl_id ?? null
+  const groups = new Map<string, string[][]>()
+  const uniqFiles = [...new Set(files)]
+  for (let i = 0; i < uniqFiles.length; i += 2000)
+    for (const r of (
+      await sql.query<{ so: string; acl_ids: string[] }>(
+        `select distinct source_object_id::text so, acl_ids from public.search_documents where tenant_id = $1 and doc_type = 'passage' and source_object_id = any($2::uuid[])`,
+        [tenantId, uniqFiles.slice(i, i + 2000)],
+      )
+    ).rows)
+      groups.set(r.so, [...(groups.get(r.so) ?? []), r.acl_ids])
+  const ev = new Map<string, string[]>()
+  const uniqEv = [...new Set(evidenceIds)]
+  for (let i = 0; i < uniqEv.length; i += 5000)
+    for (const r of (
+      await sql.query<{ e: string; acls: string[] }>(
+        `select e::text, array_agg(distinct a) acls from public.search_documents d, unnest(d.evidence_ids) e, unnest(d.acl_ids) a
+         where d.tenant_id = $1 and d.doc_type = 'passage' and d.evidence_ids && $2::uuid[] and e = any($2::uuid[]) group by 1`,
+        [tenantId, uniqEv.slice(i, i + 5000)],
+      )
+    ).rows)
+      ev.set(r.e, r.acls)
+  return {
+    readers,
+    companyWide,
+    fileOK: (acl, file) => !!groups.get(file)?.length && groups.get(file)!.every((g) => readers.covers([acl], g)),
+    fileClasses: (file) => [...new Set((groups.get(file) ?? []).flat())],
+    evidence: (id) => ev.get(id) ?? [],
+  }
+}
+
+// ------------------------------------------------------------------------ entity cards
 
 async function entityCards(sql: Sql, tenantId: string, ids: string[] | null): Promise<SearchDoc[]> {
   const ents = (
@@ -299,62 +333,114 @@ async function entityCards(sql: Sql, tenantId: string, ids: string[] | null): Pr
     )
   ).rows
   if (!ents.length) return []
+  // Links, per file of the row they were read from: a link from another record's row (a work order
+  // "for customer") comes from that record's file; a link out of this record came from one of its
+  // own rows ('self').
   const rels = (
-    await sql.query<{ id: string; rel: string; dir: string; other_type: string; okind: string; n: number; names: string[]; last: string | null }>(
+    await sql.query<{ id: string; rel: string; dir: string; other_type: string; okind: string; file: string | null; n: number; names: string[]; last: string | null }>(
       `with ents as (select unnest($2::uuid[]) id),
        r as (
          select r.source_entity_id eid, r.target_entity_id oid, r.relationship_type_id rt, 'out' dir from public.relationships r join ents on ents.id = r.source_entity_id where r.tenant_id = $1 and r.status <> 'rejected'
          union all
          select r.target_entity_id, r.source_entity_id, r.relationship_type_id, 'in' from public.relationships r join ents on ents.id = r.target_entity_id where r.tenant_id = $1 and r.status <> 'rejected')
-       select r.eid id, rt.name rel, r.dir, ot.name other_type, coalesce(ot.metadata ->> 'kind', 'thing') okind, count(*)::int n,
+       select r.eid id, rt.name rel, r.dir, ot.name other_type, coalesce(ot.metadata ->> 'kind', 'thing') okind,
+              case when r.dir = 'out' then 'self' else o.metadata #>> '{source,file_id}' end file, count(*)::int n,
               (array_agg(distinct o.canonical_name))[1:8] names, max(o.properties ->> 'date') last
        from r join public.relationship_types rt on rt.id = r.rt join public.entities o on o.id = r.oid and o.status in ('candidate', 'active')
        join public.entity_types ot on ot.id = o.entity_type_id
        where rt.name <> 'possibly_same_as'
-       group by 1, 2, 3, 4, 5`,
+       group by 1, 2, 3, 4, 5, 6`,
       [tenantId, ents.map((e) => e.id)],
     )
   ).rows
   const relBy = new Map<string, typeof rels>()
   for (const r of rels) relBy.set(r.id, [...(relBy.get(r.id) ?? []), r])
-  const acls = await entityAcls(
-    sql,
-    tenantId,
-    ents.map((e) => e.id),
-  )
-  return ents.map((e) => {
+  // The rows a record was made from: its own and those of duplicates merged into it, each with the
+  // properties it said.
+  const records = (
+    await sql.query<{ eid: string; name: string; properties: Record<string, unknown>; file: string | null; survivor: boolean }>(
+      `select coalesce(m.merged_into_id, m.id) eid, m.canonical_name name, m.properties, m.metadata #>> '{source,file_id}' file, m.merged_into_id is null survivor
+       from public.entities m where m.tenant_id = $1 and coalesce(m.merged_into_id, m.id) = any($2::uuid[])`,
+      [tenantId, ents.map((e) => e.id)],
+    )
+  ).rows
+  const recBy = new Map<string, typeof records>()
+  for (const r of records) recBy.set(r.eid, [...(recBy.get(r.eid) ?? []), r])
+  const access = await cardAccess(sql, tenantId, [...records.map((r) => r.file), ...rels.map((r) => r.file)].filter((f): f is string => !!f && f !== 'self'), [])
+  const acls = (await sql.query<{ id: string }>(`select id from public.acls where tenant_id = $1 order by 1`, [tenantId])).rows.map((r) => r.id)
+
+  return ents.flatMap((e) => {
+    const recs = recBy.get(e.id) ?? []
+    const ownFiles = [...new Set(recs.map((r) => r.file).filter((f): f is string => !!f))]
+    // Readable by readers of `acl` when they may open one of `files` (no files: company-wide, e.g. the company map).
+    const anyOf = (acl: string, files: string[]) => !files.length || files.some((f) => access.fileOK(acl, f))
+    const allOf = (acl: string, files: string[]) => files.every((f) => access.fileOK(acl, f))
+    // Who may see the record at all: readers of a file it came from, or of a file whose rows link to
+    // it. Every access list is a candidate group (as for facts), so a group that may open all of
+    // those files, such as full access, gets the whole record.
+    const rowFiles = [...new Set((relBy.get(e.id) ?? []).map((r) => r.file).filter((f): f is string => !!f && f !== 'self'))]
+    const classes = acls.filter((a) =>
+      ownFiles.length ? ownFiles.some((f) => access.fileOK(a, f)) || rowFiles.some((f) => access.fileOK(a, f)) : !!access.companyWide && access.readers.covers([a], [access.companyWide]),
+    )
+    // A property was said by the merged rows that hold the same value; otherwise by the record's own row.
+    const merged = recs.filter((r) => !r.survivor)
+    const survivorFiles = recs.filter((r) => r.survivor && r.file).map((r) => r.file!)
+    const saidBy = (k: string, v: unknown) => {
+      const m = merged.filter((r) => r.file && String(r.properties?.[k] ?? '') === String(v)).map((r) => r.file!)
+      return m.length ? m : survivorFiles
+    }
+    const nameFiles = (alias: string) => recs.filter((r) => r.file && normalize(r.name) === normalize(alias)).map((r) => r.file!)
     const props = Object.entries(e.properties ?? {})
       .filter(([k, v]) => k !== 'source_system' && v !== null && v !== '' && typeof v !== 'object')
       .slice(0, 12)
-      .map(([k, v]) => `${k}: ${String(v).slice(0, 120)}`)
-    const links = (relBy.get(e.id) ?? [])
-      .sort((a, b) => b.n - a.n)
-      .slice(0, 14)
-      .map((r) =>
-        r.okind === 'event'
-          ? `${r.other_type}s (${r.rel.replaceAll('_', ' ')}): ${r.n}${r.last ? `, latest ${String(r.last).slice(0, 10)}` : ''}`
-          : `${r.rel.replaceAll('_', ' ')} ${r.dir === 'out' ? '→' : '←'} ${r.other_type}: ${r.names.join(', ')}${r.n > r.names.length ? ` (+${r.n - r.names.length})` : ''}`,
-      )
-    const content = [
-      `${e.type}: ${e.name}`,
-      e.aliases?.length ? `Also known as: ${e.aliases.join(', ')}` : '',
-      e.idents?.length ? `Identifiers: ${e.idents.join('; ')}` : '',
-      props.length ? props.join('\n') : '',
-      links.join('\n'),
-    ]
-      .filter(Boolean)
-      .join('\n')
-    return {
+      .map(([k, v]) => ({ text: `${k}: ${String(v).slice(0, 120)}`, files: saidBy(k, v) }))
+
+    const build = (acl: string): string => {
+      const aliases = (e.aliases ?? []).filter((a) => anyOf(acl, nameFiles(a)))
+      // Identifiers don't say which row gave them: shown only to readers of every row.
+      const idents = allOf(acl, ownFiles) ? (e.idents ?? []) : []
+      const seenProps = props.filter((p) => anyOf(acl, p.files)).map((p) => p.text)
+      const groups = new Map<string, { rel: string; dir: string; other_type: string; okind: string; n: number; names: Set<string>; last: string | null }>()
+      for (const r of relBy.get(e.id) ?? []) {
+        const ok = r.file === 'self' ? allOf(acl, ownFiles) : !r.file || access.fileOK(acl, r.file)
+        if (!ok) continue
+        const k = `${r.rel}|${r.dir}|${r.other_type}`
+        const g = groups.get(k) ?? { rel: r.rel, dir: r.dir, other_type: r.other_type, okind: r.okind, n: 0, names: new Set<string>(), last: null }
+        g.n += r.n
+        for (const nm of r.names) g.names.add(nm)
+        if (r.last && (!g.last || r.last > g.last)) g.last = r.last
+        groups.set(k, g)
+      }
+      const links = [...groups.values()]
+        .sort((a, b) => b.n - a.n)
+        .slice(0, 14)
+        .map((r) => {
+          const names = [...r.names].sort().slice(0, 8)
+          return r.okind === 'event'
+            ? `${r.other_type}s (${r.rel.replaceAll('_', ' ')}): ${r.n}${r.last ? `, latest ${String(r.last).slice(0, 10)}` : ''}`
+            : `${r.rel.replaceAll('_', ' ')} ${r.dir === 'out' ? '→' : '←'} ${r.other_type}: ${names.join(', ')}${r.n > names.length ? ` (+${r.n - names.length})` : ''}`
+        })
+      return [
+        `${e.type}: ${e.name}`,
+        aliases.length ? `Also known as: ${aliases.join(', ')}` : '',
+        idents.length ? `Identifiers: ${idents.join('; ')}` : '',
+        seenProps.join('\n'),
+        links.join('\n'),
+      ]
+        .filter(Boolean)
+        .join('\n')
+    }
+    const card: SearchDoc = {
       id: `e:${e.id}`,
       doc_type: 'entity' as const,
       kind: e.type,
       title: `${e.name} (${e.type})`,
-      content,
+      content: '',
       source_object_id: null,
       document_version_id: null,
       evidence_ids: [],
       entity_ids: [e.id],
-      acl_ids: acls.get(e.id) ?? [],
+      acl_ids: [],
       observed_at: null,
       valid_from: null,
       valid_to: null,
@@ -363,10 +449,72 @@ async function entityCards(sql: Sql, tenantId: string, ids: string[] | null): Pr
       dedupe_key: null,
       citation: { entity_id: e.id, entity_type: e.type, kind: 'entity' },
     }
+    return splitByReaders(card, classes, access.readers, build, sha)
   })
 }
 
 // -------------------------------------------------------------------------- fact cards
+
+/** Who may read each fact: through any of its evidence; facts from system fields alone, through every row of their subject. */
+async function factAccess(sql: Sql, tenantId: string) {
+  const all = (
+    await sql.query<{ id: string; subject: string; ev: string[] | null; files: string[] | null }>(
+      `select f.id, f.subject_entity_id subject,
+              (select array_agg(distinct l.evidence_id) from public.evidence_links l
+                where l.fact_id = f.id or l.fact_id in (select claim_id from public.fact_claims where canonical_id = f.id)) ev
+       from public.facts f where f.tenant_id = $1 and f.metadata ->> 'layer' = 'canonical' and f.status <> 'rejected'`,
+      [tenantId],
+    )
+  ).rows
+  // The rows a subject was made from (its own and merged duplicates').
+  const subjects = [...new Set(all.filter((r) => !r.ev?.length).map((r) => r.subject))]
+  const subjectFiles = new Map<string, string[]>()
+  if (subjects.length)
+    for (const r of (
+      await sql.query<{ eid: string; file: string }>(
+        `select m.id eid, m.metadata #>> '{source,file_id}' file from public.entities m where m.id = any($1::uuid[]) and m.metadata #>> '{source,file_id}' is not null
+         union select m.merged_into_id, m.metadata #>> '{source,file_id}' from public.entities m where m.merged_into_id = any($1::uuid[]) and m.metadata #>> '{source,file_id}' is not null`,
+        [subjects],
+      )
+    ).rows)
+      subjectFiles.set(r.eid, [...(subjectFiles.get(r.eid) ?? []), r.file])
+  for (const r of all) r.files = r.ev?.length ? null : (subjectFiles.get(r.subject) ?? [])
+  const byId = new Map(all.map((r) => [r.id, r]))
+  const access = await cardAccess(
+    sql,
+    tenantId,
+    all.flatMap((r) => r.files ?? []),
+    all.flatMap((r) => r.ev ?? []),
+  )
+  const covers = (acl: string, e: string) => access.readers.covers([acl], access.evidence(e))
+  // Every access list is a candidate reader group, not only those of the evidence: a fact read from
+  // two files with different readers is still seen in full by a group whose people may open both.
+  const acls = (await sql.query<{ id: string }>(`select id from public.acls where tenant_id = $1 order by 1`, [tenantId])).rows.map((r) => r.id)
+  return {
+    readers: access.readers,
+    ev: access.evidence,
+    /** The access lists through which a fact may be seen. */
+    classes(id: string): string[] {
+      const f = byId.get(id)
+      if (!f?.ev?.length && !f?.files?.length) return access.companyWide ? [access.companyWide] : []
+      return acls.filter((a) => this.factOK(a, id))
+    },
+    /** May readers of `acl` see this fact (some evidence that says it)? */
+    factOK(acl: string, id: string): boolean {
+      const f = byId.get(id)
+      if (!f) return false
+      if (f.ev?.length) return f.ev.some((e) => covers(acl, e))
+      return (f.files ?? []).every((x) => access.fileOK(acl, x))
+    },
+    /** May readers of `acl` read all of this fact's evidence? */
+    allEvidence(acl: string, id: string): boolean {
+      const f = byId.get(id)
+      if (!f) return false
+      if (f.ev?.length) return f.ev.every((e) => covers(acl, e))
+      return (f.files ?? []).every((x) => access.fileOK(acl, x))
+    },
+  }
+}
 
 async function factCards(sql: Sql, tenantId: string, ids: string[] | null, dict?: Dictionary): Promise<SearchDoc[]> {
   const facts = (
@@ -384,63 +532,77 @@ async function factCards(sql: Sql, tenantId: string, ids: string[] | null, dict?
       note: string | null
       summary: string | null
       fkind: string | null
-      quotes: { q: string; a: string }[] | null
       evidence: string[] | null
-      acls: string[] | null
-      files: string[] | null
     }>(
       `select f.id, s.id subject_id, s.canonical_name subject, t.name type, f.predicate, f.value #>> '{}' value, f.valid_from::text, f.valid_to::text, f.status, f.authority, f.note,
               f.metadata ->> 'summary' summary, f.metadata ->> 'kind' fkind,
-              (select jsonb_agg(jsonb_build_object('q', left(coalesce(c.metadata ->> 'quote', c.value #>> '{}'), 240), 'a', c.authority)) from (
-                  select c.* from public.fact_claims fc join public.facts c on c.id = fc.claim_id where fc.canonical_id = f.id limit 4) c) quotes,
               (select array_agg(distinct l.evidence_id) from public.evidence_links l
-                where l.fact_id = f.id or l.fact_id in (select claim_id from public.fact_claims where canonical_id = f.id)) evidence,
-              (select array_remove(array_agg(distinct e.acl_id), null) from public.evidence_links l join public.evidence e on e.id = l.evidence_id
-                where l.fact_id = f.id or l.fact_id in (select claim_id from public.fact_claims where canonical_id = f.id)) acls,
-              (select array_agg(distinct dv.source_object_id) from public.evidence_links l join public.evidence e on e.id = l.evidence_id
-                 join public.document_versions dv on dv.id = e.document_version_id
-                where l.fact_id = f.id or l.fact_id in (select claim_id from public.fact_claims where canonical_id = f.id)) files
+                where l.fact_id = f.id or l.fact_id in (select claim_id from public.fact_claims where canonical_id = f.id)) evidence
        from public.facts f join public.entities s on s.id = f.subject_entity_id join public.entity_types t on t.id = s.entity_type_id
        where f.tenant_id = $1 and f.metadata ->> 'layer' = 'canonical' and f.status <> 'rejected' and ($2::uuid[] is null or f.id = any($2::uuid[]))`,
       [tenantId, ids],
     )
   ).rows
   if (!facts.length) return []
-  // Readers of an identical copy of an evidence file may read what was read from it.
-  const twins = await twinAcls(sql, tenantId, [...new Set(facts.flatMap((f) => f.files ?? []))])
-  for (const f of facts) {
-    const extra = (f.files ?? []).flatMap((so) => twins.get(so) ?? [])
-    if (extra.length) f.acls = [...new Set([...(f.acls ?? []), ...extra])]
-  }
-  // Facts backed only by system fields inherit their subject's visibility.
-  const subjAcl = await entityAcls(sql, tenantId, [...new Set(facts.filter((f) => !f.acls?.length).map((f) => f.subject_id))])
+  const access = await factAccess(sql, tenantId)
+  // What each source said, with the evidence it was read from.
+  const claims = (
+    await sql.query<{ canonical_id: string; q: string; a: string | null; ev: string[] }>(
+      `select fc.canonical_id, left(coalesce(c.metadata ->> 'quote', c.value #>> '{}'), 240) q, c.authority a,
+              array(select l.evidence_id from public.evidence_links l where l.fact_id = c.id) ev
+       from public.fact_claims fc join public.facts c on c.id = fc.claim_id
+       where fc.canonical_id = any($1::uuid[]) order by fc.canonical_id, c.id`,
+      [facts.map((f) => f.id)],
+    )
+  ).rows
+  const claimsBy = new Map<string, typeof claims>()
+  for (const c of claims) claimsBy.set(c.canonical_id, [...(claimsBy.get(c.canonical_id) ?? []), c])
+  // What the evidence says, to check that what a reader group may open actually says the value.
+  const evText = new Map(
+    (await sql.query<{ id: string; content: string }>(`select id, lower(content) content from public.evidence where id = any($1::uuid[])`, [[...new Set(facts.flatMap((f) => f.evidence ?? []))]])).rows.map((r) => [
+      r.id,
+      r.content,
+    ]),
+  )
   const today = new Date().toISOString().slice(0, 10)
-  // Every fact that changed carries its own history, so any hit can say "it was X before".
-  const chains = new Map<string, string>()
+  // Every fact that changed carries its own history, so any hit can say "it was X before" (as far
+  // as its readers may see the other versions).
+  const chains = new Map<string, TimelineStep[]>()
   for (const tl of await timelines(sql, tenantId)) {
     if (!tl.key.startsWith('sp:')) continue
-    const text = timelineText(tl.steps)
-    for (const st of tl.steps) chains.set(st.fact_id, text)
+    for (const st of tl.steps) chains.set(st.fact_id, tl.steps)
   }
-  return facts.map((f) => {
+  return facts.flatMap((f) => {
     const when = f.valid_from || f.valid_to ? `Valid ${f.valid_from ?? '…'} to ${f.valid_to ?? 'now'}.` : ''
-    const content = [
-      `${f.subject} (${f.type}) · ${f.predicate.replaceAll('_', ' ')}: ${f.value}`,
-      f.summary ?? '',
-      when,
-      `Status: ${f.status}${f.authority ? ` · strongest source: ${f.authority}` : ''}`,
-      chains.has(f.id) ? `Timeline: ${chains.get(f.id)}` : '',
-      f.note ? `Review note: ${f.note}` : '',
-      ...(f.quotes ?? []).map((q) => `“${q.q}” (${q.a})`),
-    ]
-      .filter(Boolean)
-      .join('\n')
-    return {
+    const build = (acl: string): string | null => {
+      // Summaries and review notes were written from all the evidence: only for readers of all of it.
+      const all = access.allEvidence(acl, f.id)
+      // Readers of part of the evidence see the fact only if that part says the value ("bonus: $30k"
+      // may come from the restricted part alone).
+      if (!all && f.evidence?.length) {
+        const open = f.evidence.filter((e) => access.readers.covers([acl], access.ev(e))).map((e) => evText.get(e) ?? '')
+        if (!saysValue(f.value, open.join('\n'))) return null
+      }
+      const quotes = (claimsBy.get(f.id) ?? []).filter((c) => (c.ev.length ? c.ev.some((e) => access.readers.covers([acl], access.ev(e))) : all)).slice(0, 4)
+      const steps = (chains.get(f.id) ?? []).filter((s) => access.factOK(acl, s.fact_id))
+      return [
+        `${f.subject} (${f.type}) · ${f.predicate.replaceAll('_', ' ')}: ${f.value}`,
+        all ? (f.summary ?? '') : '',
+        when,
+        `Status: ${f.status}${f.authority ? ` · strongest source: ${f.authority}` : ''}`,
+        steps.length >= 2 ? `Timeline: ${timelineText(steps)}` : '',
+        all && f.note ? `Review note: ${f.note}` : '',
+        ...quotes.map((q) => `“${q.q}” (${q.a})`),
+      ]
+        .filter(Boolean)
+        .join('\n')
+    }
+    const card: SearchDoc = {
       id: `f:${f.id}`,
       doc_type: 'fact' as const,
       kind: f.fkind ?? 'fact',
       title: `${f.subject}: ${f.predicate.replaceAll('_', ' ')}`,
-      content,
+      content: '',
       source_object_id: null,
       document_version_id: null,
       evidence_ids: f.evidence ?? [],
@@ -450,13 +612,13 @@ async function factCards(sql: Sql, tenantId: string, ids: string[] | null, dict?
         ...new Set([
           f.subject_id,
           ...(dict
-            ? linkText(dict, `${f.predicate.replaceAll('_', ' ')}\n${f.value}\n${f.summary ?? ''}\n${(f.quotes ?? []).map((q) => q.q).join('\n')}`)
+            ? linkText(dict, `${f.predicate.replaceAll('_', ' ')}\n${f.value}\n${f.summary ?? ''}\n${(claimsBy.get(f.id) ?? []).map((q) => q.q).join('\n')}`)
                 .filter((e) => e.type !== 'Term')
                 .map((e) => e.id)
             : []),
         ]),
       ],
-      acl_ids: f.acls?.length ? f.acls : (subjAcl.get(f.subject_id) ?? []),
+      acl_ids: [],
       observed_at: null,
       valid_from: f.valid_from,
       valid_to: f.valid_to,
@@ -465,6 +627,7 @@ async function factCards(sql: Sql, tenantId: string, ids: string[] | null, dict?
       dedupe_key: null,
       citation: { fact_id: f.id, kind: 'fact', status: f.status },
     }
+    return splitByReaders(card, access.classes(f.id), access.readers, build, sha)
   })
 }
 
@@ -480,37 +643,39 @@ async function timelineCards(sql: Sql, tenantId: string): Promise<SearchDoc[]> {
       )
     ).rows.map((r) => r.topic),
   )
+  const access = await factAccess(sql, tenantId)
   const out: SearchDoc[] = []
   for (const tl of await timelines(sql, tenantId)) {
     if (!tl.key.startsWith('topic:') || !rules.has(tl.key.slice(6))) continue
-    const steps = tl.steps.filter((s) => s.valid_from || s.valid_to)
-    if (steps.length < 2) continue
-    const acl = (
-      await sql.query<{ acls: string[] | null }>(`select array_agg(distinct a) acls from public.search_documents d, unnest(d.acl_ids) a where d.tenant_id = $1 and d.id = any($2::text[])`, [
-        tenantId,
-        tl.steps.map((s) => `f:${s.fact_id}`),
-      ])
-    ).rows[0].acls
-    const lines = steps.map((s) => `${s.valid_from ?? '…'} → ${s.valid_to ?? 'now'} · ${s.subject}: ${s.value}${s.status === 'superseded' ? ' (replaced)' : ''}`)
-    out.push({
+    const dated = tl.steps.filter((s) => s.valid_from || s.valid_to)
+    if (dated.length < 2) continue
+    // Each reader group sees the steps it may see; fewer than two is no history.
+    const build = (acl: string): string | null => {
+      const steps = dated.filter((s) => access.factOK(acl, s.fact_id))
+      if (steps.length < 2) return null
+      const subjects = new Set(steps.map((s) => s.subject))
+      return [`${tl.label}: history across ${subjects.size} records:`, ...steps.map((s) => `${s.valid_from ?? '…'} → ${s.valid_to ?? 'now'} · ${s.subject}: ${s.value}${s.status === 'superseded' ? ' (replaced)' : ''}`)].join('\n')
+    }
+    const card: SearchDoc = {
       id: `t:${tl.key.slice(6)}`,
       doc_type: 'fact',
       kind: 'timeline',
       title: `How ${tl.label} changed over time`,
-      content: [`${tl.label}: history across ${tl.subject_ids.length} records:`, ...lines].join('\n'),
+      content: '',
       source_object_id: null,
       document_version_id: null,
       evidence_ids: [],
       entity_ids: tl.subject_ids,
-      acl_ids: acl ?? [],
+      acl_ids: [],
       observed_at: null,
-      valid_from: steps[0].valid_from,
+      valid_from: dated[0].valid_from,
       valid_to: null,
       is_current: true,
       authority: null,
       dedupe_key: null,
       citation: { kind: 'timeline', topic: tl.key.slice(6), facts: tl.steps.map((s) => s.fact_id) },
-    })
+    }
+    out.push(...splitByReaders(card, [...new Set(dated.flatMap((s) => access.classes(s.fact_id)))], access.readers, build, sha))
   }
   return out
 }
@@ -583,7 +748,8 @@ function esFields(tenantId: string, dict: Dictionary, acl: Map<string, string[]>
     valid_to: r.valid_to,
     is_current: r.is_current,
     authority: r.authority,
-    dedupe_key: r.dedupe_key,
+    // Every document has a key (its own id when nothing shares it): searches collapse on it.
+    dedupe_key: r.dedupe_key ?? r.id,
     citation: r.citation,
   })
 }
@@ -721,7 +887,7 @@ export async function project(sql: Sql, tenantId: string, scope: ProjectScope | 
         ...(await dropStale(
           sql,
           tenantId,
-          `doc_type = 'entity' and id = any($2::text[])`,
+          `doc_type = 'entity' and split_part(id, '~', 1) = any($2::text[])`,
           [entityIds.map((e) => `e:${e}`)],
           cards.map((c) => c.id),
         )),
@@ -748,7 +914,7 @@ export async function project(sql: Sql, tenantId: string, scope: ProjectScope | 
         ...(await dropStale(
           sql,
           tenantId,
-          `doc_type = 'fact' and id = any($2::text[])`,
+          `doc_type = 'fact' and split_part(id, '~', 1) = any($2::text[])`,
           [factIds.map((f) => `f:${f}`)],
           cards.map((c) => c.id),
         )),
