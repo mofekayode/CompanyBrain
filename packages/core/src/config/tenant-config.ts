@@ -51,6 +51,12 @@ export interface TenantRules {
     evidence_kind: Record<string, string>
     /** File paths that count as official documents (policies, SOPs, contracts, pricing…). */
     official_paths: Pattern
+    /**
+     * Which source wins depends on what the fact is about: the accounting system for what is owed,
+     * the signed agreement for agreed terms, HR for employment, the people doing the work for how it
+     * is really done. First pattern matching the predicate wins; others use rank.
+     */
+    by_kind?: { kind: string; predicates: Pattern; rank: Record<string, number> }[]
   }
   /** People and directory interpretation. */
   people: {
@@ -101,6 +107,28 @@ export const DEFAULT_RULES: TenantRules = {
     rank: { system_of_record: 4, document: 3, official_document: 3, email: 2, interview: 1, video: 1, photo: 1 },
     evidence_kind: { transcript_segment: 'interview', video_segment: 'video', email_body: 'email', text: 'document', ocr: 'document', table: 'document', image: 'photo' },
     official_paths: { pattern: '(polic|sop|contract|agreement|handbook|pric|rate|terms|memo|procedure|plan|summary|addendum|exhibit|notice|letter)', flags: 'i' },
+    by_kind: [
+      {
+        kind: 'money owed, billed or paid',
+        predicates: { pattern: '(balance|owe[sd]?|outstanding|invoice|billed|billing amount|paid|payment(s)?_received|revenue|receivable|aging|credit_limit)', flags: 'i' },
+        rank: { system_of_record: 5, document: 3, official_document: 3, email: 2, interview: 1, video: 1, photo: 1 },
+      },
+      {
+        kind: 'agreed terms, rates and prices',
+        predicates: { pattern: '(terms|rate|pric|discount|markup|fee|surcharge|agreement|contract|warranty|renewal|escalator|minimum|sla)', flags: 'i' },
+        rank: { official_document: 5, document: 5, system_of_record: 3, email: 2, interview: 1, video: 1, photo: 1 },
+      },
+      {
+        kind: 'employment',
+        predicates: { pattern: '(title|job|role|hire|hired|start_date|termination|employment|salary|wage|pay_rate|reports_to|manager|department|status)', flags: 'i' },
+        rank: { system_of_record: 5, document: 3, official_document: 3, email: 2, interview: 1, video: 1, photo: 1 },
+      },
+      {
+        kind: 'how work is really done',
+        predicates: { pattern: '(practice|workaround|habit|actually|unwritten|informal|knows|expert|relationship|depends_on|bypass|calls|prefers|key_person|tribal)', flags: 'i' },
+        rank: { interview: 4, video: 4, email: 3, document: 2, official_document: 2, photo: 2, system_of_record: 1 },
+      },
+    ],
   },
   people: {
     sensitive_columns: {
@@ -231,6 +259,14 @@ export function validateRules(r: TenantRules): string[] {
   walk(r, '')
   for (const [k, v] of Object.entries(r.resolution)) if (typeof v === 'number' && (!Number.isFinite(v) || v < 0)) problems.push(`resolution.${k}: must be a positive number`)
   for (const [k, v] of Object.entries(r.authority.rank)) if (!Number.isFinite(v)) problems.push(`authority.rank.${k}: must be a number`)
+  for (const [i, b] of (r.authority.by_kind ?? []).entries()) {
+    for (const [k, v] of Object.entries(b.rank)) if (!Number.isFinite(v)) problems.push(`authority.by_kind[${i}].rank.${k}: must be a number`)
+    try {
+      new RegExp(b.predicates.pattern, b.predicates.flags)
+    } catch {
+      problems.push(`authority.by_kind[${i}].predicates: not a valid pattern`)
+    }
+  }
   return problems
 }
 

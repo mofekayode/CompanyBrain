@@ -15,6 +15,11 @@ import type { Sql } from '../storage/raw'
 export const AUTHORITY_RANK: Record<string, number> = DEFAULT_RULES.authority.rank
 
 /** "system_of_record > document = official_document > email > interview = video = photo" */
+/** The authority ranking for one kind of fact (by its predicate), falling back to the general one. */
+export function rankFor(authority: { rank: Record<string, number>; by_kind?: { kind: string; predicates: { pattern: string; flags?: string }; rank: Record<string, number> }[] }, predicate: string) {
+  return (authority.by_kind ?? []).find((b) => new RegExp(b.predicates.pattern, b.predicates.flags).test(predicate))?.rank ?? authority.rank
+}
+
 export function authorityOrder(rank: Record<string, number>): string {
   const levels = new Map<number, string[]>()
   for (const [k, n] of Object.entries(rank)) levels.set(n, [...(levels.get(n) ?? []), k])
@@ -173,7 +178,7 @@ export async function canonicalize(sql: Sql, tenantId: string, opts: { subjectsP
       return `## ${s.type}: ${s.name}\nClaims:\n${lines.join('\n')}${system.length ? `\nSystem fields:\n${system.join('\n')}` : ''}`
     })
     const out = await structured<{ subjects: { subject: string; facts: Canonical[] }[] }>({
-      system: `You turn claims about a company into canonical facts. Authority, strongest first: ${authorityOrder(rank)} (documents means signed/official ones). Never invent: every canonical fact must be supported by at least one claim or system field ref.${withContext(rules)}`,
+      system: `You turn claims about a company into canonical facts. Authority, strongest first: ${authorityOrder(rank)} (documents means signed/official ones). Which source wins depends on what the fact is about:${(rules.authority.by_kind ?? []).map((b) => ` for ${b.kind}, ${authorityOrder(b.rank)}`).join(';')}. Never invent: every canonical fact must be supported by at least one claim or system field ref.${withContext(rules)}`,
       prompt: `For each subject below, produce its canonical facts:
 - Merge claims that say the same thing (different wording, different interviews) into ONE fact; list all their refs in supports.
 - If sources disagree on a value (including a system field vs an interview), make ONE fact with the best-supported value (by authority, recency and corroboration), status "conflict", the disagreeing refs in contradicts, and conflict_note saying exactly who says what.
@@ -200,7 +205,8 @@ ${blocks.join('\n\n')}`,
           continue
         }
         const supportAuth = supports.map((r) => refs.get(r)!).map((r) => (r.kind === 'system' ? 'system_of_record' : claims.find((c) => c.id === r.id)?.authority ?? 'interview'))
-        const authority = supportAuth.sort((a, b) => (rank[b] ?? 0) - (rank[a] ?? 0))[0]
+        const byKind = rankFor(rules.authority, f.predicate)
+        const authority = supportAuth.sort((a, b) => (byKind[b] ?? 0) - (byKind[a] ?? 0))[0]
         const id = (
           await sql.query<{ id: string }>(
             `insert into public.facts (tenant_id, subject_entity_id, predicate, value, valid_from, valid_to, authority, confidence, status, metadata)
