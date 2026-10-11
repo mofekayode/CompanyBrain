@@ -6,7 +6,7 @@ import { briefAnswer } from '@companybrain/core/answer/brief'
 import type { ToolCtx } from '@companybrain/core/answer/tools'
 import { answerModel, writeAnswer } from '@companybrain/core/answer/write'
 import { answersAllowed } from '@companybrain/core/claude'
-import { refsFor, type Ref } from '@companybrain/core/evals/contract'
+import { orderRetrieved, refsFor, type Ref } from '@companybrain/core/evals/contract'
 import { exportOntology } from '@companybrain/core/evals/ontology-export'
 import { exportComponents } from '@companybrain/core/evals/components'
 import { principalFor } from '@companybrain/core/evals/roles'
@@ -99,15 +99,14 @@ evalContract.post('/eval/answer', async (c) => {
       seen.add(r.source + r.locator)
       citations.push(r)
     }
-  // One entry per piece of evidence, in result order: a fact lists the (readable) files behind it.
-  const retrieved: { source: string; locator: string; rank: number; score: number }[] = []
-  const listed = new Set<string>()
-  for (const h of ranked.hits)
-    for (const r of refs.get(h.id) ?? []) {
-      if (listed.has(r.source + r.locator)) continue
-      listed.add(r.source + r.locator)
-      retrieved.push({ source: r.source, locator: r.locator, rank: retrieved.length + 1, score: Number((h.ranks.rerank ?? h.score).toFixed(4)) })
-    }
+  // One entry per piece of evidence: a fact lists the (readable) files behind it; new files first
+  // (orderRetrieved). The score is that of the result the source came from.
+  const scoreOf = new Map<string, number>()
+  for (const h of ranked.hits) for (const r of refs.get(h.id) ?? []) if (!scoreOf.has(r.source + r.locator)) scoreOf.set(r.source + r.locator, Number((h.ranks.rerank ?? h.score).toFixed(4)))
+  const retrieved = orderRetrieved(
+    ranked.hits.map((h) => h.id),
+    refs,
+  ).map((r, i) => ({ source: r.source, locator: r.locator, rank: i + 1, score: scoreOf.get(r.source + r.locator) ?? 0 }))
 
   // Refused = the direct answer is the refusal (not an answer that mentions some sources are locked).
   // Refused: the key information was withheld for permissions (the strongest source is one this role

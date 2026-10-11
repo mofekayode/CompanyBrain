@@ -132,3 +132,30 @@ export async function refsFor(ctx: ToolCtx, files: Map<string, FileInfo>, ids: s
   }
   return out
 }
+
+/**
+ * The `retrieved` list: results expanded into their sources, each source once. Every result's first
+ * source, then everyone's second, and so on; a file already listed waits until each result has
+ * brought a new file. An answer often needs several files, and a few cards each bringing three of
+ * their own sources would otherwise fill the top of the list (dev check: right file in the top 10
+ * entries 106 → 110 of 120, scripts/retrieved-eval.ts).
+ */
+export function orderRetrieved(ids: string[], refs: Map<string, Ref[]>): Ref[] {
+  const lists = ids.map((id) => refs.get(id) ?? [])
+  const seen = new Set<string>()
+  const all: Ref[] = []
+  for (let i = 0; lists.some((l) => l.length > i); i++)
+    for (const l of lists)
+      if (l[i] && !seen.has(l[i].source + l[i].locator)) {
+        seen.add(l[i].source + l[i].locator)
+        all.push(l[i])
+      }
+  const files = new Set<string>()
+  const first: Ref[] = []
+  const rest: Ref[] = []
+  for (const r of all) {
+    ;(files.has(r.source) ? rest : first).push(r)
+    files.add(r.source)
+  }
+  return [...first, ...rest]
+}
