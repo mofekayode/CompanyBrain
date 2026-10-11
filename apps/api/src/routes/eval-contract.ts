@@ -108,11 +108,11 @@ evalContract.post('/eval/answer', async (c) => {
     refs,
   ).map((r, i) => ({ source: r.source, locator: r.locator, rank: i + 1, score: scoreOf.get(r.source + r.locator) ?? 0 }))
 
-  // Refused = the direct answer is the refusal (not an answer that mentions some sources are locked).
-  // Refused: the key information was withheld for permissions (the strongest source is one this role
-  // can't open), or the answer itself is the refusal.
+  // Refused, as the contract defines it: all or part was withheld for permissions. Part: a locked
+  // match near the top answers clearly better than anything this role can open (brief.ts); all: the
+  // answer itself is the refusal.
   const opening = text.split(/\n\s*\n/)[0].trim()
-  const refused = locked || /^I can[’']t answer that from the information you have access to/.test(opening)
+  const refused = locked || !!brief.restricted?.withheld || /^I can[’']t answer that from the information you have access to/.test(opening)
   // Generation settings: the answer model doesn't accept a temperature (deprecated for it), so runs
   // are fixed by model id and prompt instead; reported so the runner can record it.
   const out = { answer: text, refused, citations, retrieved, latency_ms: Math.round(performance.now() - t0), model, timings: { retrieval_ms: Math.round(tRetrieved - t0) }, generation: { temperature: 'not supported by model; default' } }

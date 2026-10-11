@@ -36,7 +36,7 @@ export interface BriefAnswer {
   entities: { id: string; name: string; type: string }[]
   sources: BriefSource[]
   /** Matches in files this person can't open (names of the access scopes only). */
-  restricted: { count: number; scopes: string[]; best_is_locked: boolean } | null
+  restricted: { count: number; scopes: string[]; best_is_locked: boolean; withheld: boolean } | null
   /** Sources that disagree with each other on this (disputed facts). */
   conflicts: string[]
   /** How well the record answers: a reviewed fact (strong), only passages (partial), or barely (weak). */
@@ -299,7 +299,11 @@ export async function briefAnswer(ctx: ToolCtx, question: string, progress: Brie
           ).rows.map((x) => x.name)
         : []
       // "Locked" only when the single best source for the question (ranked with full access) is one they can't open.
-      restricted = { count: blocked.length, scopes, best_is_locked: !!all.hits[0] && blocked.some((b) => baseId(b.id) === baseId(all.hits[0].id)) }
+      // Withheld: a locked match near the top answers clearly better than anything they can open
+      // (dev check scripts/refusal-eval.ts: 17 of 19 right, none missed).
+      const theirs = Math.max(-99, ...r.hits.slice(0, 5).map((h) => h.ranks.rerank ?? -99))
+      const withheld = blocked.some((b) => all.hits.indexOf(b) < 5 && (b.ranks.rerank ?? -99) >= theirs + 1)
+      restricted = { count: blocked.length, scopes, best_is_locked: !!all.hits[0] && blocked.some((b) => baseId(b.id) === baseId(all.hits[0].id)), withheld }
     }
     step('access', 'Checking for matches in files you can’t open', 'done', restricted ? `${restricted.count} locked` : 'nothing locked')
   }

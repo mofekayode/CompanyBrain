@@ -37,7 +37,7 @@ export interface Brief {
   time: { mode: string; reading: string; as_of: string | null } | null
   entities: { id: string; name: string; type: string }[]
   sources: BriefSource[]
-  restricted: { count: number; scopes: string[]; best_is_locked: boolean } | null
+  restricted: { count: number; scopes: string[]; best_is_locked: boolean; withheld?: boolean } | null
   conflicts: string[]
   evidence: 'strong' | 'partial' | 'weak'
   ms: number
