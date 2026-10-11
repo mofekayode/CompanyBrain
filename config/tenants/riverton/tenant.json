@@ -3647,7 +3647,8 @@
         ],
         "audience": [
           "Owners & Execs"
-        ]
+        ],
+        "label": "Highly Confidential - Deal"
       },
       {
         "key": "fde-interviews",
@@ -3704,7 +3705,8 @@
         "audience": [
           "Accounting",
           "Owners & Execs"
-        ]
+        ],
+        "label": "Confidential - Finance"
       },
       {
         "key": "greg-onedrive",
@@ -3744,7 +3746,8 @@
           "Karen Liu",
           "Dave Brennan",
           "Sarah Okafor"
-        ]
+        ],
+        "label": "Highly Confidential - HR"
       },
       {
         "key": "hr-comp-review",
@@ -3764,7 +3767,8 @@
         "audience": [
           "Karen Liu",
           "Mgmt Team"
-        ]
+        ],
+        "label": "Highly Confidential - HR"
       },
       {
         "key": "hr-personnel",
@@ -3953,6 +3957,12 @@
             "source": "IT exports 10-2",
             "scope_key": "mbox-dave-brennan",
             "path_prefix": "mail/dave.brennan.mbox"
+          },
+          {
+            "why": "His calendar export belongs with his mailbox (mailbox_permissions.csv: david.brennan@, owner only).",
+            "source": "IT exports 10-2",
+            "scope_key": "mbox-dave-brennan",
+            "path_prefix": "mail/dave.brennan_calendar.ics"
           }
         ],
         "audience": [
@@ -4110,7 +4120,6 @@
           }
         ],
         "audience": [
-          "Linda Marsh",
           "Louisville Team"
         ]
       },
@@ -4246,7 +4255,8 @@
         "audience": [
           "Dept: Sales",
           "Mgmt Team"
-        ]
+        ],
+        "label": "Confidential"
       },
       {
         "key": "sales",

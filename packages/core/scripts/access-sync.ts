@@ -20,6 +20,8 @@ interface ScopeConfig {
   status: 'held' | 'released'
   rules: ScopeRule[]
   audience: string[]
+  /** The sensitivity label the folder carries in the source system, if any. */
+  label?: string
 }
 interface AccessConfig {
   scopes: ScopeConfig[]
@@ -47,6 +49,28 @@ const pid = (name: string) => {
   return id
 }
 
+// Labelled areas keep content inside the organization: an external guest reads one only when named
+// in its audience directly, never through a group they joined (a guest in "Mgmt Team" does not get the
+// HR comp review). Groups in a labelled area's audience are expanded to their members for that reason;
+// re-run this sync when memberships change.
+const guests = new Set((await db.query<{ id: string }>(`select id from public.principals where tenant_id = $1 and metadata ->> 'status' = 'guest'`, [t])).rows.map((r) => r.id))
+async function withoutGuests(ids: string[]): Promise<string[]> {
+  const out = new Set<string>()
+  for (const id of ids) {
+    const members = (
+      await db.query<{ id: string; kind: string }>(
+        `with recursive m (id) as (select $2::uuid union select pm.member_id from public.principal_members pm join m on pm.group_id = m.id where pm.tenant_id = $1)
+         select p.id, p.kind from m join public.principals p on p.id = m.id`,
+        [t, id],
+      )
+    ).rows
+    const isGroup = members.find((r) => r.id === id)?.kind === 'group'
+    if (!isGroup) out.add(id)
+    else for (const r of members) if (r.kind === 'user' && !guests.has(r.id)) out.add(r.id)
+  }
+  return [...out]
+}
+
 // 1. Membership exceptions the exports support (guests and former staff don't inherit by default).
 for (const m of cfg.memberships ?? []) {
   console.log(`member  ${m.member} → ${m.group}  (${m.why})`)
@@ -71,7 +95,7 @@ for (const s of cfg.scopes) {
   }
   if (!row) continue
   scopeIds.set(s.key, row.id)
-  const audience = s.audience.map(pid)
+  const audience = s.label ? await withoutGuests(s.audience.map(pid)) : s.audience.map(pid)
   if (row.status !== s.status) console.log(`status  ${s.key}: ${row.status} → ${s.status}`)
   const before = (await db.query<{ p: string }>(`select principal_id::text p from public.access_scope_audience where scope_id = $1`, [row.id])).rows.map((r) => r.p).sort().join()
   if (row.status !== s.status || before !== [...audience].sort().join()) changedScopes.push(row.id)
