@@ -11,7 +11,8 @@ import type { estypes } from '@elastic/elasticsearch'
 import type { Sql } from '../storage/raw'
 import { type KnowledgeView, viewAliases, viewContent } from '../access/knowledge-view'
 import { embedQuery, rerankScores } from './embed'
-import { rewriteQuestion } from './rewrite'
+import { baseId } from './readers'
+import { rewriteQuestion, splitQuestion } from './rewrite'
 import { activeVersion, es, indexAlias } from './es'
 import { type Dictionary, type LinkedEntity, linkText, loadDictionary, normalize } from './linker'
 import { parseTime, type TimeIntent } from './time'
@@ -38,6 +39,8 @@ export interface SearchOptions {
   today?: string
   /** Rewrite the question into the documents' words first (search/rewrite.ts; uses the answer API). */
   rewrite?: boolean
+  /** A question asking for several things is searched part by part as well (splitParts). Default: as rewrite. */
+  decompose?: boolean
 }
 
 export interface SearchHit {
@@ -64,7 +67,7 @@ export interface SearchHit {
 
 export interface SearchResult {
   query: string
-  understood: { entities: LinkedEntity[]; asOf: string | null; preferCurrent: boolean; history: boolean; time: TimeIntent & { anchor_date?: string | null }; rewrite?: string | null }
+  understood: { entities: LinkedEntity[]; asOf: string | null; preferCurrent: boolean; history: boolean; time: TimeIntent & { anchor_date?: string | null }; rewrite?: string | null; parts?: string[] }
   hits: SearchHit[]
   timings: { understand_ms: number; embed_ms: number; es_ms: number; rerank_ms: number; total_ms: number }
   counts: { bm25: number; knn: number; fused: number }
@@ -198,7 +201,54 @@ export function understand(dict: Dictionary, q: string, asOf?: string, now?: Dat
   }
 }
 
+/**
+ * The separate questions in a compound one, by its clauses: a second question ("…? And who…?"), or
+ * "…and what/who/when/how…". Parts that lose their subject ("…and what are their terms?") get the
+ * names the whole question mentions. One part: not compound.
+ */
+export function splitParts(dict: Dictionary, q: string): string[] {
+  const parts = q
+    .split(/\?\s+(?=\S)|;\s+|,?\s+(?:and|also|plus|then)\s+(?=(?:what|who|whom|whose|when|where|why|how|which|is|are|was|were|does|did|do|can|could|should|has|have)\b)/i)
+    .map((p) => p.trim().replace(/\?$/, ''))
+    .filter((p) => p.split(/\s+/).length >= 3)
+  if (parts.length < 2) return [q]
+  const names = linkText(dict, q).filter((e) => e.type !== 'Term')
+  return parts.slice(0, 3).map((p) => {
+    const missing = names.filter((e) => !p.toLowerCase().includes(e.matched.toLowerCase())).map((e) => e.matched)
+    return `${p}${missing.length ? ` (${[...new Set(missing)].join(', ')})` : ''}?`
+  })
+}
+const splits = new Map<string, { at: number; parts: Promise<string[] | null> }>()
+
+/** Searches a compound question as a whole and part by part, taking turns between the lists. */
+async function searchParts(sql: Sql, tenantId: string, query: string, opts: SearchOptions): Promise<SearchResult> {
+  const dict = await dictionary(sql, tenantId)
+  let parts = splitParts(dict, query)
+  // Not split by its wording but naming several things or asking "and": the model splits it.
+  if (parts.length < 2 && opts.rewrite && (/\band\b/i.test(query) || linkText(dict, query).filter((e) => e.type !== 'Term').length >= 2)) {
+    const key = `${tenantId}:${query}`
+    if (!splits.has(key) || Date.now() - splits.get(key)!.at > 60_000) splits.set(key, { at: Date.now(), parts: splitQuestion(sql, tenantId, dict, query) })
+    parts = (await splits.get(key)!.parts) ?? [query]
+  }
+  const whole = search(sql, tenantId, query, { ...opts, decompose: false })
+  if (parts.length < 2) return whole
+  const lists = await Promise.all([whole, ...parts.map((p) => search(sql, tenantId, p, { ...opts, decompose: false, limit: 15 }))])
+  const limit = Math.min(opts.limit ?? 10, 50)
+  const seen = new Set<string>()
+  const hits: SearchHit[] = []
+  for (let i = 0; hits.length < limit && lists.some((l) => l.hits.length > i); i++)
+    for (const l of lists) {
+      const h = l.hits[i]
+      if (!h || seen.has(baseId(h.id))) continue
+      seen.add(baseId(h.id))
+      hits.push(h)
+    }
+  return { ...lists[0], hits: hits.slice(0, limit), understood: { ...lists[0].understood, parts } }
+}
+
 export async function search(sql: Sql, tenantId: string, query: string, opts: SearchOptions = {}): Promise<SearchResult> {
+  // Compound questions are split wherever questions are rewritten (the product paths), unless told not to.
+  if (opts.decompose ?? opts.rewrite) return searchParts(sql, tenantId, query, opts)
   const t0 = performance.now()
   const limit = Math.min(opts.limit ?? 10, 50)
   const dict = await dictionary(sql, tenantId)

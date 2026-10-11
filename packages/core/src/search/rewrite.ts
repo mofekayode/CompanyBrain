@@ -9,6 +9,9 @@
 // 108/120 right file in the top 10 without rewriting, 113/120 with it (situation-style questions
 // 17/24 → 21/24), about 0.6 s and ~140 input / ~13 output tokens per question.
 //
+// Temperature 0: the same question always becomes the same search (runs varied by about 2 of 120
+// on the robustness set otherwise).
+//
 // Off unless the caller asks for it and written answers are allowed (COMPANY_BRAIN_ALLOW_ANSWER_API):
 // it uses the same approved API, and dev scripts never spend by accident. Any failure or a slow reply
 // falls back to the original question.
@@ -34,13 +37,41 @@ export async function rewriteQuestion(sql: Sql, tenantId: string, dict: Dictiona
   const ac = new AbortController()
   const timer = setTimeout(() => ac.abort(), TIMEOUT_MS)
   try {
-    const msg = await claudeForAnswers().messages.create({ model: REWRITE_MODEL, max_tokens: 60, system: SYSTEM, messages: [{ role: 'user', content: user }] }, { signal: ac.signal })
+    const msg = await claudeForAnswers().messages.create({ model: REWRITE_MODEL, max_tokens: 60, temperature: 0, system: SYSTEM, messages: [{ role: 'user', content: user }] }, { signal: ac.signal })
     const text = msg.content
       .map((b) => (b.type === 'text' ? b.text : ''))
       .join('')
       .trim()
       .replace(/^"|"$/g, '')
     return text && text.length < 300 ? text : null
+  } catch {
+    return null
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
+const SPLIT_SYSTEM =
+  "You split a question from someone at a company into the separate searches needed to answer it. If it asks for several things (about different subjects, or different facts about one subject), output each as a standalone question, one per line, at most 3, naming the subject in each. If it asks for one thing, output it unchanged on one line. Use the company's own names for things you are given. Never answer, never explain."
+
+/** The separate questions a compound question asks (two or three), or null when off, unavailable or single. */
+export async function splitQuestion(sql: Sql, tenantId: string, dict: Dictionary, question: string): Promise<string[] | null> {
+  if (!answersAllowed()) return null
+  if (!companyNames.has(tenantId)) companyNames.set(tenantId, (await sql.query<{ name: string }>(`select name from public.tenants where id = $1`, [tenantId])).rows[0]?.name ?? '')
+  const names = linkText(dict, question).map((e) => `"${e.matched}" = ${e.name} (${e.type})`)
+  const user = `Company: ${companyNames.get(tenantId)}.${names.length ? ` Names in the question: ${names.join('; ')}.` : ''}\nQuestion: ${question}`
+  const ac = new AbortController()
+  const timer = setTimeout(() => ac.abort(), TIMEOUT_MS)
+  try {
+    const msg = await claudeForAnswers().messages.create({ model: REWRITE_MODEL, max_tokens: 160, temperature: 0, system: SPLIT_SYSTEM, messages: [{ role: 'user', content: user }] }, { signal: ac.signal })
+    const parts = msg.content
+      .map((b) => (b.type === 'text' ? b.text : ''))
+      .join('')
+      .split('\n')
+      .map((l) => l.replace(/^[-*\d.)\s]+/, '').trim())
+      .filter((l) => l.split(/\s+/).length >= 3)
+      .slice(0, 3)
+    return parts.length >= 2 ? parts : null
   } catch {
     return null
   } finally {
