@@ -5,12 +5,15 @@
 // and the mean reciprocal rank.
 //
 // --rewrite: the product path (question rewriting and splitting; needs COMPANY_BRAIN_ALLOW_ANSWER_API=1).
-// Usage: npx tsx scripts/retrieved-eval.ts <slug>
+// Usage: npx tsx scripts/retrieved-eval.ts <slug> [--rewrite] [--sample N] [--concurrency C]
 
 import { readFileSync } from 'node:fs'
 import { tenantFiles } from '../src/access/knowledge-view'
 import type { ToolCtx } from '../src/answer/tools'
 import { orderRetrieved, type Ref, refsFor } from '../src/evals/contract'
+import { mapLimit, runFlags, sampleOf } from '../src/evals/parallel'
+import { rerankStats } from '../src/search/llm-rerank'
+import { rewriteStats } from '../src/search/rewrite'
 import { search, type SearchHit } from '../src/search/search'
 import { pool } from '../src/workbench/server'
 
@@ -52,18 +55,22 @@ const orders: Record<string, Order> = {
 }
 
 const stats = Object.fromEntries(Object.keys(orders).map((k) => [k, { top10: 0, rr: 0 }]))
-let n = 0
-for (const target of set.targets)
-  for (const q of Object.values(target.q)) {
-    const r = await search(db, t, q, { limit: 50, rerank: true, rewrite: process.argv.includes('--rewrite') })
-    const refs = await refsFor(ctx, files, r.hits.map((h) => h.id))
-    n++
-    for (const [name, order] of Object.entries(orders)) {
-      const list = order(r.hits, refs)
-      const i = list.findIndex((x) => target.gold.some((g) => x.source.includes(g)))
-      if (i >= 0 && i < 10) stats[name].top10++
-      if (i >= 0) stats[name].rr += 1 / (i + 1)
-    }
+const { sample, concurrency } = runFlags(process.argv)
+const tasks = sampleOf(
+  set.targets.flatMap((target) => Object.values(target.q).map((q) => ({ target, q }))),
+  sample,
+)
+const n = tasks.length
+await mapLimit(tasks, concurrency, async ({ target, q }) => {
+  const r = await search(db, t, q, { limit: 50, rerank: true, rewrite: process.argv.includes('--rewrite') })
+  const refs = await refsFor(ctx, files, r.hits.map((h) => h.id))
+  for (const [name, order] of Object.entries(orders)) {
+    const list = order(r.hits, refs)
+    const i = list.findIndex((x) => target.gold.some((g) => x.source.includes(g)))
+    if (i >= 0 && i < 10) stats[name].top10++
+    if (i >= 0) stats[name].rr += 1 / (i + 1)
   }
+})
+console.log(`model calls: rewrite ${rewriteStats.calls} (${rewriteStats.fallbacks} fell back), model rerank ${rerankStats.calls} (${rerankStats.fallbacks} fell back)`)
 for (const [name, s] of Object.entries(stats)) console.log(`${name.padEnd(16)} right file in top 10 entries: ${s.top10}/${n} · MRR ${(s.rr / n).toFixed(2)}`)
 await db.end()

@@ -21,7 +21,10 @@ import type { Sql } from '../storage/raw'
 import { type Dictionary, linkText } from './linker'
 
 export const REWRITE_MODEL = process.env.COMPANY_BRAIN_REWRITE_MODEL ?? 'claude-haiku-4-5-20251001'
-const TIMEOUT_MS = 2000
+// Dev checks raise it (CB_MODEL_TIMEOUT_MS) so retried calls aren't counted as fallbacks.
+const TIMEOUT_MS = Number(process.env.CB_MODEL_TIMEOUT_MS ?? 2000)
+/** Calls made and calls that fell back to the plain question (for dev checks to report). */
+export const rewriteStats = { calls: 0, fallbacks: 0 }
 
 const SYSTEM =
   "You turn a question from someone at a company into a search query for that company's own documents (policies, contracts, procedures, emails, spreadsheets, insurance, vendor agreements). Use the company's own names for things you are given. Keep the question's specifics, and add the formal terms those documents would use for the situation described. Do not add the company's own name: every document has it. Never ask a question, never refuse, never explain: output only the query, under 20 words, no quotes."
@@ -43,8 +46,11 @@ export async function rewriteQuestion(sql: Sql, tenantId: string, dict: Dictiona
       .join('')
       .trim()
       .replace(/^"|"$/g, '')
+    rewriteStats.calls++
     return text && text.length < 300 ? text : null
   } catch {
+    rewriteStats.calls++
+    rewriteStats.fallbacks++
     return null
   } finally {
     clearTimeout(timer)

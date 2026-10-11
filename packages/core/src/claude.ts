@@ -35,7 +35,8 @@ export function claudeForAnswers(): Anthropic {
   if (answerClient) return answerClient
   const env = readEnv(['ANTHROPIC_API_KEY'] as const)
   if (!env.ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY is not set (add it to .env)')
-  answerClient = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY })
+  // Rate limits and overloads are retried with backoff (dev checks run several questions at once).
+  answerClient = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY, maxRetries: 5 })
   return answerClient
 }
 

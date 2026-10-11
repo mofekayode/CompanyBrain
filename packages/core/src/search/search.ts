@@ -11,6 +11,7 @@ import type { estypes } from '@elastic/elasticsearch'
 import type { Sql } from '../storage/raw'
 import { type KnowledgeView, viewAliases, viewContent } from '../access/knowledge-view'
 import { embedQuery, rerankScores } from './embed'
+import { LLM_RERANK_HEAD, llmScores } from './llm-rerank'
 import { baseId } from './readers'
 import { rewriteQuestion, splitQuestion } from './rewrite'
 import { activeVersion, es, indexAlias } from './es'
@@ -41,6 +42,8 @@ export interface SearchOptions {
   rewrite?: boolean
   /** A question asking for several things is searched part by part as well (splitParts). Default: as rewrite. */
   decompose?: boolean
+  /** Re-order the head with a model (llm-rerank.ts; uses the answer API). Default: CB_LLM_RERANK=1 with rerank. */
+  llmRerank?: boolean
 }
 
 export interface SearchHit {
@@ -469,6 +472,12 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
       .map((h, i) => ({ ...h, ranks: { ...h.ranks, rerank: scores[i] }, score: scores[i] }))
       .sort((a, b) => b.score - a.score)
     rerankMs = performance.now() - r0
+  }
+  // ---- optional model rerank of the head (the original question, not the rewrite)
+  if (opts.llmRerank ?? (process.env.CB_LLM_RERANK === '1' && !!opts.rerank)) {
+    const head = hits.slice(0, LLM_RERANK_HEAD)
+    const scores = await llmScores(dict, query.split('\n')[0], head.map((h) => ({ title: h.title, content: h.content })))
+    if (scores) hits = [...head.map((h, i) => ({ h, s: scores[i], i })).sort((a, b) => b.s - a.s || a.i - b.i).map((x) => x.h), ...hits.slice(LLM_RERANK_HEAD)]
   }
 
   // ---- outdated sources: a passage whose facts have all been replaced (as far as was known by the

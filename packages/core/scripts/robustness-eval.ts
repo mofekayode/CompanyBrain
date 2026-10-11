@@ -9,10 +9,13 @@
 //                     chunking or embedding problem)
 // A hit counts a passage from a gold file, or a fact/record whose evidence is in a gold file.
 //
-// Usage: npx tsx scripts/robustness-eval.ts <slug> [set.json] [--verbose] [--style casual] [--rewrite] [--no-rerank]
+// Usage: npx tsx scripts/robustness-eval.ts <slug> [set.json] [--verbose] [--style casual] [--rewrite] [--no-rerank] [--sample N] [--concurrency C]
 //   --rewrite uses the product path (needs COMPANY_BRAIN_ALLOW_ANSWER_API=1); --rewrite-claude/--rewrite-local are experiments
 
 import { readFileSync } from 'node:fs'
+import { mapLimit, runFlags, sampleOf } from '../src/evals/parallel'
+import { rerankStats } from '../src/search/llm-rerank'
+import { rewriteStats } from '../src/search/rewrite'
 import { search, type SearchHit } from '../src/search/search'
 import { pool } from '../src/workbench/server'
 
@@ -103,33 +106,38 @@ const misses: string[] = []
 let ms = 0
 let n = 0
 
-for (const target of set.targets)
-  for (const [style, q] of Object.entries(target.q)) {
-    if (only && style !== only) continue
-    const asked = await rewrite(q)
-    const t0 = performance.now()
-    // --rewrite runs the product's own rewriting inside search (search/rewrite.ts).
-    const r = await search(db, t, asked, { limit: 50, rerank: !args.includes('--no-rerank'), rewrite: args.includes('--rewrite') })
-    ms += performance.now() - t0
-    n++
-    const final = await firstGold(r.hits, target.gold)
-    let outcome: Outcome
-    let detail = ''
-    if (final && final <= 10) outcome = 'found'
-    else {
-      const [kw, mean] = await Promise.all([search(db, t, q, { limit: 100, only: 'bm25', perSource: 10 }), search(db, t, q, { limit: 100, only: 'knn', perSource: 10 })])
-      const kwRank = await firstGold(kw.hits, target.gold)
-      const meanRank = await firstGold(mean.hits, target.gold)
-      const best = Math.min(kwRank ?? 999, meanRank ?? 999)
-      outcome = final ? 'ranked low' : best <= 30 ? 'dropped' : best <= 100 ? 'found too deep' : 'never found'
-      detail = `keyword #${kwRank ?? '-'} · meaning #${meanRank ?? '-'} · final #${final ?? '-'}`
-      misses.push(`  ${outcome.padEnd(17)} [${style}] ${q}\n                    ${target.fact}: ${detail} · top: ${r.hits.slice(0, 3).map((h) => (h.path ?? h.title).split('/').pop()).join(' | ')}`)
-    }
-    bump(style, outcome)
-    if (verbose) console.log(`${outcome.padEnd(17)} [${style}] ${q} ${detail}`)
+// Questions to ask (optionally a spread-out sample), several at a time (--sample N --concurrency C).
+const { sample, concurrency } = runFlags(args)
+const tasks = sampleOf(
+  set.targets.flatMap((target) => Object.entries(target.q).filter(([style]) => !only || style === only).map(([style, q]) => ({ target, style, q }))),
+  sample,
+)
+await mapLimit(tasks, concurrency, async ({ target, style, q }) => {
+  const asked = await rewrite(q)
+  const t0 = performance.now()
+  // --rewrite runs the product's own rewriting inside search (search/rewrite.ts).
+  const r = await search(db, t, asked, { limit: 50, rerank: !args.includes('--no-rerank'), rewrite: args.includes('--rewrite') })
+  ms += performance.now() - t0
+  n++
+  const final = await firstGold(r.hits, target.gold)
+  let outcome: Outcome
+  let detail = ''
+  if (final && final <= 10) outcome = 'found'
+  else {
+    const [kw, mean] = await Promise.all([search(db, t, q, { limit: 100, only: 'bm25', perSource: 10 }), search(db, t, q, { limit: 100, only: 'knn', perSource: 10 })])
+    const kwRank = await firstGold(kw.hits, target.gold)
+    const meanRank = await firstGold(mean.hits, target.gold)
+    const best = Math.min(kwRank ?? 999, meanRank ?? 999)
+    outcome = final ? 'ranked low' : best <= 30 ? 'dropped' : best <= 100 ? 'found too deep' : 'never found'
+    detail = `keyword #${kwRank ?? '-'} · meaning #${meanRank ?? '-'} · final #${final ?? '-'}`
+    misses.push(`  ${outcome.padEnd(17)} [${style}] ${q}\n                    ${target.fact}: ${detail} · top: ${r.hits.slice(0, 3).map((h) => (h.path ?? h.title).split('/').pop()).join(' | ')}`)
   }
+  bump(style, outcome)
+  if (verbose) console.log(`${outcome.padEnd(17)} [${style}] ${q} ${detail}`)
+})
 
 const order: Outcome[] = ['found', 'ranked low', 'dropped', 'found too deep', 'never found']
+console.log(`model calls: rewrite ${rewriteStats.calls} (${rewriteStats.fallbacks} fell back), model rerank ${rerankStats.calls} (${rerankStats.fallbacks} fell back)`)
 console.log(`=== ${set.name}: ${n} phrasings · ${Math.round(ms / n)} ms per search${generator || claude ? ` · ${Math.round(rewriteMs / n)} ms per rewrite (${rewriteModel ?? claudeModel})` : ''}`)
 if (claude) console.log(`rewrite tokens: ${usage.input} in / ${usage.output} out`)
 console.log(`style      ${order.map((o) => o.padStart(15)).join('')}`)
