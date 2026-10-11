@@ -3,6 +3,7 @@
 // "What did <sender> say about <subject topic>?". A question passes when that message (or a copy in
 // another mailbox) is in the top 5. Full access, no answer written.
 //
+// --rewrite: the product path (question rewriting and splitting; needs COMPANY_BRAIN_ALLOW_ANSWER_API=1).
 // Usage: npx tsx scripts/email-eval.ts <slug> [n=40]
 
 import { search } from '../src/search/search'
@@ -34,7 +35,7 @@ let pass = 0
 let total = 0
 for (const m of sample) {
   for (const q of [`What did ${person(m.from)} email ${person(m.to ?? '')} about ${topic(m.subject)}?`, `What did ${person(m.from).split(' ')[0]} say about ${topic(m.subject)}?`]) {
-    const r = await search(db, t, q, { limit: 10, rerank: true })
+    const r = await search(db, t, q, { limit: 10, rerank: true, rewrite: process.argv.includes('--rewrite') })
     const i = r.hits.slice(0, 5).findIndex((h) => `msg:${h.citation.message_id}` === m.key)
     total++
     if (i >= 0) pass++

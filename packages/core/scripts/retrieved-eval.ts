@@ -4,6 +4,7 @@
 // list, on the phrasing-robustness set (gold files from evidence): right file in the top 10 entries,
 // and the mean reciprocal rank.
 //
+// --rewrite: the product path (question rewriting and splitting; needs COMPANY_BRAIN_ALLOW_ANSWER_API=1).
 // Usage: npx tsx scripts/retrieved-eval.ts <slug>
 
 import { readFileSync } from 'node:fs'
@@ -54,7 +55,7 @@ const stats = Object.fromEntries(Object.keys(orders).map((k) => [k, { top10: 0, 
 let n = 0
 for (const target of set.targets)
   for (const q of Object.values(target.q)) {
-    const r = await search(db, t, q, { limit: 50, rerank: true })
+    const r = await search(db, t, q, { limit: 50, rerank: true, rewrite: process.argv.includes('--rewrite') })
     const refs = await refsFor(ctx, files, r.hits.map((h) => h.id))
     n++
     for (const [name, order] of Object.entries(orders)) {

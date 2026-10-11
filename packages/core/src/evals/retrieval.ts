@@ -11,7 +11,7 @@
 import { search, type SearchHit, type SearchOptions } from '../search/search'
 import type { Sql } from '../storage/raw'
 
-export type Variant = 'hybrid' | 'bm25' | 'knn' | 'hybrid+rerank'
+export type Variant = 'hybrid' | 'bm25' | 'knn' | 'hybrid+rerank' | 'product'
 
 interface Item {
   id: string
@@ -56,7 +56,7 @@ async function hitFiles(sql: Sql, tenantId: string, hits: SearchHit[]): Promise<
 }
 
 const optionsFor = (variant: Variant): Partial<SearchOptions> =>
-  variant === 'bm25' ? { only: 'bm25' } : variant === 'knn' ? { only: 'knn' } : variant === 'hybrid+rerank' ? { rerank: true } : {}
+  variant === 'bm25' ? { only: 'bm25' } : variant === 'knn' ? { only: 'knn' } : variant === 'hybrid+rerank' ? { rerank: true } : variant === 'product' ? { rerank: true, rewrite: true } : {}
 
 export async function runRetrievalEval(sql: Sql, tenantId: string, setIds: string[], variant: Variant = 'hybrid') {
   const items = (

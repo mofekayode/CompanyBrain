@@ -5,6 +5,7 @@
 // been replaced, or a passage of an older version of a document; current when it is a current fact,
 // a passage supporting one, or a passage of the newest version. Judged from the database, independently of search's code.
 //
+// --rewrite: the product path (question rewriting and splitting; needs COMPANY_BRAIN_ALLOW_ANSWER_API=1).
 // Usage: npx tsx scripts/outdated-eval.ts <slug>
 
 import { readFileSync } from 'node:fs'
@@ -29,7 +30,7 @@ let worse = 0
 let judged = 0
 const bad: string[] = []
 for (const q of questions) {
-  const r = await search(db, t, q, { limit: 10, rerank: true })
+  const r = await search(db, t, q, { limit: 10, rerank: true, rewrite: process.argv.includes('--rewrite') })
   const state = r.hits.map((h) => {
     if (h.doc_type === 'fact' && h.kind !== 'timeline') return h.is_current ? 'current' : 'outdated'
     if (h.doc_type === 'passage' && h.source_object_id && replaced.has(h.source_object_id)) return 'outdated'
