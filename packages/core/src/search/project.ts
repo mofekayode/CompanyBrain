@@ -325,7 +325,7 @@ async function entityCards(sql: Sql, tenantId: string, ids: string[] | null): Pr
     await sql.query<{ id: string; name: string; type: string; kind: string; properties: Record<string, unknown>; aliases: string[] | null; idents: string[] | null }>(
       `select e.id, e.canonical_name name, t.name type, coalesce(t.metadata ->> 'kind', 'thing') kind, e.properties,
               array(select distinct a.alias from public.entity_aliases a where a.entity_id = e.id and a.status <> 'rejected' and lower(a.alias) <> lower(e.canonical_name)) aliases,
-              array(select i.system || ': ' || i.value from public.entity_identifiers i where i.entity_id = e.id limit 6) idents
+              array(select i.system || ': ' || i.value from public.entity_identifiers i where i.entity_id = e.id and i.status <> 'rejected' limit 6) idents
        from public.entities e join public.entity_types t on t.id = e.entity_type_id
        where e.tenant_id = $1 and e.status in ('candidate', 'active') and coalesce(t.metadata ->> 'kind', 'thing') <> 'event'
          and ($2::uuid[] is null or e.id = any($2::uuid[]))`,

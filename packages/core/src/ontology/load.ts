@@ -58,22 +58,57 @@ interface NewRel {
 }
 
 class Index {
-  constructor(private rules: CompiledRules = DEFAULTS) {}
-  private byId = new Map<string, string>() // `${type}|${system}|${value}` and `${type}|*|${value}`
+  // Identifiers that mean the same thing in every system (an email, a serial number, unique
+  // initials). Any other id means something only in its own system: QuickBooks customer 40 is not
+  // dispatch customer 40.
+  private universal: Set<string>
+  constructor(private rules: CompiledRules = DEFAULTS) {
+    this.universal = new Set(['Email', 'Initials', ...rules.rx.strongIdColumns.map((s) => s.system)])
+  }
+  private byId = new Map<string, string>() // `${type}|${system}|${value}`, `${type}|~|${value}` (universal) and `${type}|*|${value}`
   private byName = new Map<string, string>() // `${type}|${normalized}`
+  private names = new Map<string, Set<string>>() // entity → its normalized names
+  // An id that two different things use ("DH" for both Dwayne Hatcher and Darnell Hughes) identifies neither.
+  private ambiguous = new Set<string>()
+  private setId(key: string, entity: string) {
+    const cur = this.byId.get(key)
+    if (cur && cur !== entity) this.ambiguous.add(key)
+    else if (!cur) this.byId.set(key, entity)
+  }
   addId(type: string, system: string, value: string, entity: string) {
     const v = value.trim().toLowerCase()
     if (!v) return
-    if (!this.byId.has(`${type}|${system}|${v}`)) this.byId.set(`${type}|${system}|${v}`, entity)
-    if (!this.byId.has(`${type}|*|${v}`)) this.byId.set(`${type}|*|${v}`, entity)
+    this.setId(`${type}|${system}|${v}`, entity)
+    if (this.universal.has(system)) this.setId(`${type}|~|${v}`, entity)
+    this.setId(`${type}|*|${v}`, entity)
+  }
+  private getId(key: string) {
+    return this.ambiguous.has(key) ? undefined : this.byId.get(key)
   }
   addName(type: string, name: string, entity: string) {
     const n = normalizeName(name, this.rules)
     if (n && !this.byName.has(`${type}|${n}`)) this.byName.set(`${type}|${n}`, entity)
+    if (n) (this.names.get(entity) ?? this.names.set(entity, new Set()).get(entity)!).add(n)
+  }
+  /** Could this name belong to the entity? The same first word, or one name's letters in order in the other ("BRM" in "Blue Ridge Mills"); a shared generic word ("Dairy") is no evidence. */
+  nameFits(entity: string, name: string, person = false): boolean {
+    const known = this.names.get(entity)
+    const n = normalizeName(name, this.rules)
+    if (!known?.size || !n) return true
+    const first = (s: string) => s.split(' ')[0] ?? ''
+    const squash = (s: string) => s.replace(/ /g, '')
+    const inOrder = (a: string, b: string) => {
+      let i = 0
+      for (const ch of b) if (ch === a[i]) i++
+      return i === a.length
+    }
+    // People also by surname and first initial ("Henry Ostrander" / "Hank Ostrander").
+    const surname = (a: string, b: string) => a.includes(' ') && a.split(' ').at(-1) === b.split(' ').at(-1) && a[0] === b[0]
+    return [...known].some((k) => (person && surname(n, k)) || (first(n).length >= 2 && first(n) === first(k)) || inOrder(squash(n), squash(k)) || inOrder(squash(k), squash(n)))
   }
   find(type: string, value: string, system: string | null, match: 'id' | 'name'): string | undefined {
     const v = value.trim().toLowerCase()
-    const id = (system && this.byId.get(`${type}|${system}|${v}`)) || this.byId.get(`${type}|*|${v}`)
+    const id = system ? (this.getId(`${type}|${system}|${v}`) ?? this.getId(`${type}|~|${v}`)) : this.getId(`${type}|*|${v}`)
     const name = this.byName.get(`${type}|${normalizeName(value, this.rules)}`)
     return match === 'id' ? (id ?? name) : (name ?? id)
   }
@@ -124,7 +159,7 @@ export async function loadStructured(sql: Sql, store: ObjectStore, tenantId: str
   const existing = await sql.query<{ id: string; type: string; name: string; aliases: string[]; ids: { system: string; value: string }[] }>(
     `select e.id, t.name type, e.canonical_name name,
             array(select a.alias from public.entity_aliases a where a.entity_id = e.id and a.status <> 'rejected') aliases,
-            coalesce((select jsonb_agg(jsonb_build_object('system', i.system, 'value', i.value)) from public.entity_identifiers i where i.entity_id = e.id), '[]') ids
+            coalesce((select jsonb_agg(jsonb_build_object('system', i.system, 'value', i.value)) from public.entity_identifiers i where i.entity_id = e.id and i.status <> 'rejected'), '[]') ids
      from public.entities e join public.entity_types t on t.id = e.entity_type_id
      where e.tenant_id = $1 and e.status <> 'merged'`,
     [tenantId],
@@ -258,6 +293,10 @@ export async function loadStructured(sql: Sql, store: ObjectStore, tenantId: str
       const names = sheet.rows.map((r) => val(r, t.name_column))
       const counts = new Map<string, number>()
       for (const n of names) counts.set(n, (counts.get(n) ?? 0) + 1)
+      // An id two rows give to different names identifies neither (dispatch initials "DH" for two technicians).
+      const namesById = new Map<string, Set<string>>()
+      for (const r of sheet.rows) if (val(r, t.id_column) && val(r, t.name_column)) (namesById.get(val(r, t.id_column)) ?? namesById.set(val(r, t.id_column), new Set()).get(val(r, t.id_column))!).add(val(r, t.name_column))
+      const sharedId = (v: string) => (namesById.get(v)?.size ?? 0) > 1
       const first = sheet.header.find((h) => /^first ?name$/i.test(h))
       const last = sheet.header.find((h) => /^last ?name$/i.test(h))
       let created = 0
@@ -265,7 +304,7 @@ export async function loadStructured(sql: Sql, store: ObjectStore, tenantId: str
         // A cell with no letters or digits (" · ", "-") or a placeholder ("(No owner)") is no name.
         const named = (v: string) => (v && /[a-z0-9]/i.test(v) && !rules.rx.placeholder.test(v.trim()) ? v : '')
         let name = named(val(row, t.name_column))
-        const ext = val(row, t.id_column)
+        const ext = sharedId(val(row, t.id_column)) ? '' : val(row, t.id_column)
         if (first && last && (!name || name.includes('@'))) name = `${val(row, first)} ${val(row, last)}`.trim() || name
         if (!name && !ext) return
         // No name of its own (e.g. an asset without a customer tag): describe it from its type/description/model.
@@ -274,7 +313,10 @@ export async function loadStructured(sql: Sql, store: ObjectStore, tenantId: str
         // Known only by its id in this system (a technician by initials): say so, don't invent a name.
         const onlyId = !name && !!ext
         // Same thing already known: by this system's id, else by a name that is unique in this table.
-        let id = (ext && index.find(t.entity_type!, ext, t.system, 'id')) || ((counts.get(val(row, t.name_column)) ?? 0) === 1 && name ? index.find(t.entity_type!, name, null, 'name') : undefined) || undefined
+        const byName = () => ((counts.get(val(row, t.name_column)) ?? 0) === 1 && name ? index.find(t.entity_type!, name, null, 'name') : undefined)
+        let id = (ext && index.find(t.entity_type!, ext, t.system, 'id')) || byName() || undefined
+        // A row with its own name never joins a record whose names share nothing with it, whatever the id says.
+        if (id && name && !index.nameFits(id, name, t.entity_type === 'Person')) id = byName() && index.nameFits(byName()!, name, t.entity_type === 'Person') ? byName() : undefined
         const props: Record<string, unknown> = { source_system: t.system }
         for (const p of t.property_columns) if (val(row, p)) props[p] = val(row, p)
         if (onlyId) props.Description ??= `Known only as "${ext}" in ${t.system}`
