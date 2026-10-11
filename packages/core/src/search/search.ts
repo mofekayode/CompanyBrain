@@ -462,8 +462,15 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
     hits = hits.filter((h) => !replacedFacts.has(h.id))
   }
 
+  // ---- the kind of source asked for: "what did Linda email…" wants the email; "what did Dave say…"
+  // wants his words (an email or a recording) more than a card summarising them.
+  const asksEmail = /\b(e-?mail(s|ed)?|wrote|written to|sent|replied|reply|forwarded|cc'?d|inbox|thread)\b/i.test(query.split('\n')[0])
+  const asksWords = asksEmail || /\b(say|said|says|told|tell|mention(ed)?|according to|in (his|her|their) words)\b/i.test(query.split('\n')[0])
+  const kindFactor = (h: SearchHit) => (asksEmail && h.kind === 'email_body' ? 1.5 : asksWords && h.doc_type === 'passage' && /email_body|transcript_segment|video_segment/.test(h.kind) ? 1.25 : 1)
+
   // ---- time: the right era first (applied last, so neither fusion nor the reranker can undo it)
-  const factor = (h: SearchHit) => {
+  const factor = (h: SearchHit) => kindFactor(h) * timeFactor(h)
+  const timeFactor = (h: SearchHit) => {
     if (outdated.has(h.id)) return 0.3
     if (u.asOf) {
       if (!h.valid_from && !h.valid_to) {
