@@ -202,7 +202,14 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
   const t0 = performance.now()
   const limit = Math.min(opts.limit ?? 10, 50)
   const dict = await dictionary(sql, tenantId)
-  const u = understand(dict, query, opts.asOf, opts.today ? new Date(`${opts.today}T12:00:00Z`) : await clientNow(sql, tenantId))
+  const now = opts.today ? new Date(`${opts.today}T12:00:00Z`) : await clientNow(sql, tenantId)
+  const u = understand(dict, query, opts.asOf, now)
+  // "today" is a question about now: replaced versions are out even when nobody recorded when they ended.
+  if (u.asOf && !opts.asOf && u.asOf >= now.toISOString().slice(0, 10)) {
+    u.asOf = null
+    u.preferCurrent = true
+    u.time = { ...u.time, mode: 'current' }
+  }
   // Rewritten into the documents' words (opt-in): time and names were read from the original above;
   // keyword search, meaning search and the reranker use the original plus the rewrite.
   const rewritten = opts.rewrite ? await cachedRewrite(sql, tenantId, dict, query) : null
@@ -414,8 +421,42 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
     rerankMs = performance.now() - r0
   }
 
+  // ---- outdated sources: a passage whose facts have all been replaced (as far as was known by the
+  // view's cutoff) is an old version of something, unless the question asks about the past.
+  const outdated = new Set<string>()
+  const replacedFacts = new Set<string>()
+  if (!u.asOf && !u.history) {
+    const supported = [...new Set(hits.flatMap((h) => (h.doc_type === 'passage' ? ((h.citation.facts as string[] | undefined) ?? []) : [])))]
+    const current = new Map<string, boolean>()
+    if (opts.view) {
+      for (const f of supported) {
+        const v = opts.view.facts.get(`f:${f}`)
+        if (v) current.set(f, v.is_current)
+      }
+    } else if (supported.length)
+      for (const r of (
+        await sql.query<{ id: string; cur: boolean }>(`select citation ->> 'fact_id' id, is_current cur from public.search_documents where tenant_id = $1 and id = any($2::text[])`, [
+          tenantId,
+          supported.map((f) => `f:${f}`),
+        ])
+      ).rows)
+        current.set(r.id, r.cur)
+    for (const h of hits) {
+      const fs = ((h.citation.facts as string[] | undefined) ?? []).filter((f) => current.has(f))
+      if (h.doc_type === 'passage' && fs.length && fs.every((f) => !current.get(f))) outdated.add(h.id)
+      // An older version of a document, when a newer one existed by the view's cutoff.
+      const newer = ((h.citation.replaced_by as string[] | undefined) ?? []).filter((so) => !opts.view?.hiddenObjects.has(so))
+      if (h.doc_type === 'passage' && newer.length) outdated.add(h.id)
+    }
+    // A replaced fact whose current version is in the results adds nothing but confusion.
+    const currentTitles = new Set(hits.filter((h) => h.doc_type === 'fact' && h.is_current).map((h) => h.title))
+    for (const h of hits) if (h.doc_type === 'fact' && h.kind !== 'timeline' && !h.is_current && currentTitles.has(h.title)) replacedFacts.add(h.id)
+    hits = hits.filter((h) => !replacedFacts.has(h.id))
+  }
+
   // ---- time: the right era first (applied last, so neither fusion nor the reranker can undo it)
   const factor = (h: SearchHit) => {
+    if (outdated.has(h.id)) return 0.3
     if (u.asOf) {
       if (!h.valid_from && !h.valid_to) {
         // Undated passages: written well after the asked date → probably about a later state.

@@ -21,6 +21,7 @@ import { activeVersion, createVersion, es, indexAlias } from './es'
 import { type Dictionary, linkText, loadDictionary, normalize } from './linker'
 import { loadReaders, type Readers, splitByReaders } from './readers'
 import { saysValue } from './search'
+import { replacedBy } from './versions'
 import { type TimelineStep, timelines, timelineText } from '../ontology/timeline'
 
 export interface SearchDoc {
@@ -253,9 +254,35 @@ async function passagesFor(sql: Sql, tenantId: string, dict: Dictionary, dvIds: 
       )
     ).rows.map((r) => [r.id, new Set(r.sheets)]),
   )
+  // The canonical facts each piece of evidence supports: a passage whose facts have all been replaced
+  // is an outdated source (an old price list), judged at question time (search.ts).
+  const factsOf = new Map<string, string[]>()
+  for (const r of (
+    await sql.query<{ e: string; facts: string[] }>(
+      `select l.evidence_id e, array_agg(distinct f.id) facts
+       from public.evidence_links l left join public.fact_claims fc on fc.claim_id = l.fact_id
+       join public.facts f on f.id = coalesce(fc.canonical_id, l.fact_id) and f.metadata ->> 'layer' = 'canonical' and f.status <> 'rejected'
+       where l.evidence_id = any($1::uuid[]) group by 1`,
+      [rows.map((r) => r.id)],
+    )
+  ).rows)
+    factsOf.set(r.e, r.facts)
+  // Older versions of a document ("FINAL pricing.xlsx" once "FINAL pricing v2 USE THIS.xlsx" exists).
+  const versions = replacedBy(
+    (
+      await sql.query<{ id: string; path: string; observed_at: string | null; sha: string | null }>(
+        `select id, original_path path, null observed_at, sha256 sha from public.source_objects where tenant_id = $1 and deleted_at is null and original_path not like 'mail/%'`,
+        [tenantId],
+      )
+    ).rows,
+  )
   const out: SearchDoc[] = []
   for (const group of byDv.values())
     for (const p of cutPassages(group)) {
+      const facts = [...new Set(p.evidence_ids.flatMap((e) => factsOf.get(e) ?? []))]
+      if (facts.length) p.citation = { ...p.citation, facts }
+      const newer = p.source_object_id ? versions.get(p.source_object_id) : undefined
+      if (newer) (p.citation = { ...p.citation, replaced_by: newer }), (p.is_current = false)
       const sheetLabelled = !!p.source_object_id && !!labelled.get(p.source_object_id)?.has(String(p.citation.sheet ?? ''))
       if (p.source_object_id && twins.has(p.source_object_id) && !sheetLabelled) p.acl_ids = [...new Set([...p.acl_ids, ...twins.get(p.source_object_id)!])]
       // A copy in someone's private mailbox keeps that mailbox's access, even when the message
