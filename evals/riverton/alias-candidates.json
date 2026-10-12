@@ -1,0 +1,1990 @@
+[
+  {
+    "entity": "Kinetic Parts Direct",
+    "entity_type": "Vendor",
+    "alias": "Kinetic",
+    "pattern": "short_form",
+    "count": 47,
+    "examples": [
+      {
+        "source": "mail/linda.marsh.mbox/messages/00051.eml",
+        "quote": "…25-12-05T21:10:00.000Z Subject: RE: Bearings/seals price comparison - Kinetic vs Tri-County Thank you. Kinetic Parts Direct is set up in QuickBooks, net 30."
+      },
+      {
+        "source": "mail/andrea.reyes.mbox/messages/00041.eml",
+        "quote": "…nd Buckeye Seal (seals) as the default. Why: Rob's comparison showed Kinetic about 12% cheaper on the same parts, with twice-weekly delivery to Oakley, Jeff"
+      },
+      {
+        "source": "mail/sarah.okafor.mbox/messages/00056.eml",
+        "quote": "…: 2025-11-10T18:55:00.000Z Subject: Bearings/seals price comparison - Kinetic vs Tri-County Sarah, Attached is the basket comparison you asked for. I took"
+      }
+    ]
+  },
+  {
+    "entity": "Hank Ostrander",
+    "entity_type": "Person",
+    "alias": "Hank",
+    "pattern": "chat_handle",
+    "count": 28,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…07-26 07:31:00 PM] Ben Ruhl: praying for her [2026-07-27 06:27:00 AM] Hank O: stop leaving tablets in the trucks overnight [2026-07-30 09:42:00 AM] Jim Po"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…er [2025-04-23 05:53:00 PM] Travis G: not me [2025-04-24 10:13:00 AM] Hank O: inspection sheets due friday, all trucks [2025-04-24 10:21:00 AM] Jamal W: k"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…PM] Dee Collins: ok call me if it gets worse [2026-05-28 06:41:00 AM] Hank O: inspection sheets due friday, all trucks [2026-05-28 06:42:00 AM] Ethan R: o"
+      }
+    ]
+  },
+  {
+    "entity": "Hank Ostrander",
+    "entity_type": "Person",
+    "alias": "Hank O",
+    "pattern": "chat_handle",
+    "count": 28,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…07-26 07:31:00 PM] Ben Ruhl: praying for her [2026-07-27 06:27:00 AM] Hank O: stop leaving tablets in the trucks overnight [2026-07-30 09:42:00 AM] Jim Polk"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…er [2025-04-23 05:53:00 PM] Travis G: not me [2025-04-24 10:13:00 AM] Hank O: inspection sheets due friday, all trucks [2025-04-24 10:21:00 AM] Jamal W: k ["
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…PM] Dee Collins: ok call me if it gets worse [2026-05-28 06:41:00 AM] Hank O: inspection sheets due friday, all trucks [2026-05-28 06:42:00 AM] Ethan R: ok"
+      }
+    ]
+  },
+  {
+    "entity": "Trey Hollins",
+    "entity_type": "Person",
+    "alias": "Trey",
+    "pattern": "chat_handle",
+    "count": 26,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…:09:00 AM] Wyatt C: Bats game friday anybody [2026-07-16 10:10:00 AM] Trey H: same [2026-07-19 10:27:00 AM] Trey H: its 95 out here [2026-07-19 10:44:00 A"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…PM] Renee: leftover pizza in the break room [2025-10-31 07:16:00 PM] Trey H: omw [2025-11-01 01:47:00 PM] Big Mike: Cards gonna be good this year [2025-1"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…backed up [2026-07-06 04:20:00 PM] Tammy: k [2026-07-07 03:08:00 PM] Trey H: who has the big pipe wrench [2026-07-07 03:20:00 PM] Caleb R: not me [2026-0"
+      }
+    ]
+  },
+  {
+    "entity": "Trey Hollins",
+    "entity_type": "Person",
+    "alias": "Trey H",
+    "pattern": "chat_handle",
+    "count": 26,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…:09:00 AM] Wyatt C: Bats game friday anybody [2026-07-16 10:10:00 AM] Trey H: same [2026-07-19 10:27:00 AM] Trey H: its 95 out here [2026-07-19 10:44:00 AM]"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…PM] Renee: leftover pizza in the break room [2025-10-31 07:16:00 PM] Trey H: omw [2025-11-01 01:47:00 PM] Big Mike: Cards gonna be good this year [2025-11-"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…backed up [2026-07-06 04:20:00 PM] Tammy: k [2026-07-07 03:08:00 PM] Trey H: who has the big pipe wrench [2026-07-07 03:20:00 PM] Caleb R: not me [2026-07-"
+      }
+    ]
+  },
+  {
+    "entity": "Bryce Hagan",
+    "entity_type": "Person",
+    "alias": "Bryce",
+    "pattern": "chat_handle",
+    "count": 24,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…lton B: prayers for my mom, surgery tomorrow [2026-07-27 03:35:00 PM] Bryce H: praying for her [2026-07-28 08:01:00 AM] Logan S: lake this weekend [2026-07"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…swap on call wknd of 11/8? going to the lake [2025-10-29 09:02:00 AM] Bryce H: I got you [2025-10-29 09:16:00 AM] Marcus Bell: ok just tell me [2025-10-30"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…02:16:00 PM] Andre M: Renee brought biscuits [2026-06-19 02:34:00 PM] Bryce H: omw [2026-06-23 11:36:00 AM] Jose M: happy friday [2026-06-23 11:53:00 AM] D"
+      }
+    ]
+  },
+  {
+    "entity": "Bryce Hagan",
+    "entity_type": "Person",
+    "alias": "Bryce H",
+    "pattern": "chat_handle",
+    "count": 24,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…lton B: prayers for my mom, surgery tomorrow [2026-07-27 03:35:00 PM] Bryce H: praying for her [2026-07-28 08:01:00 AM] Logan S: lake this weekend [2026-07-2"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…swap on call wknd of 11/8? going to the lake [2025-10-29 09:02:00 AM] Bryce H: I got you [2025-10-29 09:16:00 AM] Marcus Bell: ok just tell me [2025-10-30 10"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…02:16:00 PM] Andre M: Renee brought biscuits [2026-06-19 02:34:00 PM] Bryce H: omw [2026-06-23 11:36:00 AM] Jose M: happy friday [2026-06-23 11:53:00 AM] Dal"
+      }
+    ]
+  },
+  {
+    "entity": "Shawn Mattingly",
+    "entity_type": "Person",
+    "alias": "Shawn",
+    "pattern": "chat_handle",
+    "count": 24,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…ere [2026-07-19 10:44:00 AM] Caleb R: nice!! [2026-07-21 04:03:00 PM] Shawn M: waiting on BRP to let me in, nobody at the gate [2026-07-21 04:09:00 PM] Tam"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…t C: anybody have a B60 belt on their truck? [2025-06-25 09:33:00 AM] Shawn M: nope [2025-06-26 06:02:00 AM] Dalton B: waiting on Highlands Bakery to let m"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…ls [2025-10-24 08:07:00 PM] Wyatt C: call me [2025-10-28 12:47:00 PM] Shawn M: Big Blue all day [2025-10-28 12:56:00 PM] Andre M: lol [2025-10-29 08:47:00"
+      }
+    ]
+  },
+  {
+    "entity": "Shawn Mattingly",
+    "entity_type": "Person",
+    "alias": "Shawn M",
+    "pattern": "chat_handle",
+    "count": 24,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…ere [2026-07-19 10:44:00 AM] Caleb R: nice!! [2026-07-21 04:03:00 PM] Shawn M: waiting on BRP to let me in, nobody at the gate [2026-07-21 04:09:00 PM] Tammy"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…t C: anybody have a B60 belt on their truck? [2025-06-25 09:33:00 AM] Shawn M: nope [2025-06-26 06:02:00 AM] Dalton B: waiting on Highlands Bakery to let me"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…ls [2025-10-24 08:07:00 PM] Wyatt C: call me [2025-10-28 12:47:00 PM] Shawn M: Big Blue all day [2025-10-28 12:56:00 PM] Andre M: lol [2025-10-29 08:47:00 AM"
+      }
+    ]
+  },
+  {
+    "entity": "Curtis Embry",
+    "entity_type": "Person",
+    "alias": "Curtis",
+    "pattern": "chat_handle",
+    "count": 23,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…026-07-16 09:19:00 AM] Caleb R: happy friday [2026-07-16 09:23:00 AM] Curtis E: happy bday! [2026-07-16 10:09:00 AM] Wyatt C: Bats game friday anybody [2026"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…River Road, compressor tripping on high temp [2025-06-27 07:27:00 AM] Curtis E: ok [2025-06-27 10:25:00 AM] Kenny V: <attachment: IMG_4106.jpg> [2025-06-27"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…03 02:46:00 PM] Marcus Bell: ok just tell me [2025-11-04 12:04:00 PM] Curtis E: <attachment: IMG_4393.jpg> [2025-11-04 12:12:00 PM] Curtis E: this look righ"
+      }
+    ]
+  },
+  {
+    "entity": "Curtis Embry",
+    "entity_type": "Person",
+    "alias": "Curtis E",
+    "pattern": "chat_handle",
+    "count": 23,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…026-07-16 09:19:00 AM] Caleb R: happy friday [2026-07-16 09:23:00 AM] Curtis E: happy bday! [2026-07-16 10:09:00 AM] Wyatt C: Bats game friday anybody [2026-0"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…River Road, compressor tripping on high temp [2025-06-27 07:27:00 AM] Curtis E: ok [2025-06-27 10:25:00 AM] Kenny V: <attachment: IMG_4106.jpg> [2025-06-27 10"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…03 02:46:00 PM] Marcus Bell: ok just tell me [2025-11-04 12:04:00 PM] Curtis E: <attachment: IMG_4393.jpg> [2025-11-04 12:12:00 PM] Curtis E: this look right"
+      }
+    ]
+  },
+  {
+    "entity": "Jamal Whitaker",
+    "entity_type": "Person",
+    "alias": "Jamal",
+    "pattern": "chat_handle",
+    "count": 23,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…after you finish, motor tripping the breaker [2026-08-05 07:25:00 AM] Jamal W: after lunch ok? [2026-08-05 07:29:00 AM] Dee Collins: ok I'll let them know"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…O: inspection sheets due friday, all trucks [2025-04-24 10:21:00 AM] Jamal W: k [2025-04-25 07:34:00 PM] Matt Schaefer: stuck behind a train, late to Kemp"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…00 PM] Matt Schaefer: who has the 3/4 impact [2026-05-11 07:17:00 PM] Jamal W: me, I'll drop it at the shop [2026-05-12 10:41:00 AM] Dee Collins: Josh when"
+      }
+    ]
+  },
+  {
+    "entity": "Jamal Whitaker",
+    "entity_type": "Person",
+    "alias": "Jamal W",
+    "pattern": "chat_handle",
+    "count": 23,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…after you finish, motor tripping the breaker [2026-08-05 07:25:00 AM] Jamal W: after lunch ok? [2026-08-05 07:29:00 AM] Dee Collins: ok I'll let them know [2"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…O: inspection sheets due friday, all trucks [2025-04-24 10:21:00 AM] Jamal W: k [2025-04-25 07:34:00 PM] Matt Schaefer: stuck behind a train, late to Kemper"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…00 PM] Matt Schaefer: who has the 3/4 impact [2026-05-11 07:17:00 PM] Jamal W: me, I'll drop it at the shop [2026-05-12 10:41:00 AM] Dee Collins: Josh when y"
+      }
+    ]
+  },
+  {
+    "entity": "Kenny Vittitow",
+    "entity_type": "Person",
+    "alias": "Kenny",
+    "pattern": "chat_handle",
+    "count": 23,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…026-07-23 02:04:00 PM] Dalton B: happy bday! [2026-07-25 07:37:00 PM] Kenny V: happy friday [2026-07-25 07:51:00 PM] Logan S: praying for her [2026-07-26 0"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…h temp [2025-06-27 07:27:00 AM] Curtis E: ok [2025-06-27 10:25:00 AM] Kenny V: <attachment: IMG_4106.jpg> [2025-06-27 10:40:00 AM] Kenny V: this look right"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…Earl W: my cousin does, I'll send his number [2026-07-03 03:15:00 PM] Kenny V: anybody have a 1-5/8 type 21 seal on their truck? [2026-07-03 03:32:00 PM] W"
+      }
+    ]
+  },
+  {
+    "entity": "Kenny Vittitow",
+    "entity_type": "Person",
+    "alias": "Kenny V",
+    "pattern": "chat_handle",
+    "count": 23,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…026-07-23 02:04:00 PM] Dalton B: happy bday! [2026-07-25 07:37:00 PM] Kenny V: happy friday [2026-07-25 07:51:00 PM] Logan S: praying for her [2026-07-26 05:"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…h temp [2025-06-27 07:27:00 AM] Curtis E: ok [2025-06-27 10:25:00 AM] Kenny V: <attachment: IMG_4106.jpg> [2025-06-27 10:40:00 AM] Kenny V: this look right t"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…Earl W: my cousin does, I'll send his number [2026-07-03 03:15:00 PM] Kenny V: anybody have a 1-5/8 type 21 seal on their truck? [2026-07-03 03:32:00 PM] Wya"
+      }
+    ]
+  },
+  {
+    "entity": "Lonnie Carmack",
+    "entity_type": "Person",
+    "alias": "Lonnie",
+    "pattern": "chat_handle",
+    "count": 23,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…t the gate [2025-06-26 06:19:00 AM] Tammy: k [2025-06-26 03:31:00 PM] Lonnie: stuck behind a train, late to Midwest Galv [2025-06-26 03:34:00 PM] Tammy: ok"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…ruck? [2026-07-03 03:32:00 PM] Wyatt C: nope [2026-07-03 05:37:00 PM] Lonnie: anybody have a gasket kit for the CR90 on their truck? [2026-07-03 05:39:00 PM"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…o K-Plate [2025-01-13 03:31:00 PM] Tammy: ok [2025-01-14 07:32:00 AM] Lonnie: truck wont start, Darius can you grab me [2025-01-14 07:37:00 AM] Tammy: I'll"
+      }
+    ]
+  },
+  {
+    "entity": "Earl Whitlock",
+    "entity_type": "Person",
+    "alias": "Earl",
+    "pattern": "chat_handle",
+    "count": 22,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…7-28 08:01:00 AM] Logan S: lake this weekend [2026-07-28 08:13:00 AM] Earl W: happy bday! [2026-07-31 04:34:00 PM] Tammy: who's closest to Midwest Galv? g"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…Ray: anybody know a good mechanic for a f150 [2026-06-28 05:47:00 PM] Earl W: my cousin does, I'll send his number [2026-07-03 03:15:00 PM] Kenny V: anybo"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "Shively Feed [2025-01-22 04:18:00 PM] Earl W: replace it [2025-01-23 12:11:00 PM] Lonnie: happy friday [2025-01-23 12:19:0"
+      }
+    ]
+  },
+  {
+    "entity": "Earl Whitlock",
+    "entity_type": "Person",
+    "alias": "Earl W",
+    "pattern": "chat_handle",
+    "count": 22,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…7-28 08:01:00 AM] Logan S: lake this weekend [2026-07-28 08:13:00 AM] Earl W: happy bday! [2026-07-31 04:34:00 PM] Tammy: who's closest to Midwest Galv? gea"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…Ray: anybody know a good mechanic for a f150 [2026-06-28 05:47:00 PM] Earl W: my cousin does, I'll send his number [2026-07-03 03:15:00 PM] Kenny V: anybody"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "Shively Feed [2025-01-22 04:18:00 PM] Earl W: replace it [2025-01-23 12:11:00 PM] Lonnie: happy friday [2025-01-23 12:19:00"
+      }
+    ]
+  },
+  {
+    "entity": "Logan Spalding",
+    "entity_type": "Person",
+    "alias": "Logan",
+    "pattern": "chat_handle",
+    "count": 22,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…cus Bell: timesheets to Tammy by noon friday [2026-07-23 02:02:00 PM] Logan S: Bats game friday anybody [2026-07-23 02:04:00 PM] Dalton B: happy bday! [202"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…ively Feed, compressor tripping on high temp [2025-10-30 10:51:00 AM] Logan S: omw [2025-10-30 10:57:00 AM] Tammy: thx [2025-10-31 07:06:00 AM] Big Mike: <"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…ybody [2026-07-10 10:23:00 AM] Dalton B: yes [2026-07-10 07:19:00 PM] Logan S: <attachment: IMG_4750.jpg> [2026-07-10 07:25:00 PM] Logan S: this look right"
+      }
+    ]
+  },
+  {
+    "entity": "Logan Spalding",
+    "entity_type": "Person",
+    "alias": "Logan S",
+    "pattern": "chat_handle",
+    "count": 22,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…cus Bell: timesheets to Tammy by noon friday [2026-07-23 02:02:00 PM] Logan S: Bats game friday anybody [2026-07-23 02:04:00 PM] Dalton B: happy bday! [2026-"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…ively Feed, compressor tripping on high temp [2025-10-30 10:51:00 AM] Logan S: omw [2025-10-30 10:57:00 AM] Tammy: thx [2025-10-31 07:06:00 AM] Big Mike: <at"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…ybody [2026-07-10 10:23:00 AM] Dalton B: yes [2026-07-10 07:19:00 PM] Logan S: <attachment: IMG_4750.jpg> [2026-07-10 07:25:00 PM] Logan S: this look right t"
+      }
+    ]
+  },
+  {
+    "entity": "Wyatt Coomes",
+    "entity_type": "Person",
+    "alias": "Wyatt",
+    "pattern": "chat_handle",
+    "count": 22,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…026-07-16 09:23:00 AM] Curtis E: happy bday! [2026-07-16 10:09:00 AM] Wyatt C: Bats game friday anybody [2026-07-16 10:10:00 AM] Trey H: same [2026-07-19 1"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…ll: green sheets in the box, not on the dash [2025-06-25 09:26:00 AM] Wyatt C: anybody have a B60 belt on their truck? [2025-06-25 09:33:00 AM] Shawn M: no"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "Ohio Falls [2025-10-24 08:07:00 PM] Wyatt C: call me [2025-10-28 12:47:00 PM] Shawn M: Big Blue all day [2025-10-28 12:56"
+      }
+    ]
+  },
+  {
+    "entity": "Wyatt Coomes",
+    "entity_type": "Person",
+    "alias": "Wyatt C",
+    "pattern": "chat_handle",
+    "count": 22,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…026-07-16 09:23:00 AM] Curtis E: happy bday! [2026-07-16 10:09:00 AM] Wyatt C: Bats game friday anybody [2026-07-16 10:10:00 AM] Trey H: same [2026-07-19 10:"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…ll: green sheets in the box, not on the dash [2025-06-25 09:26:00 AM] Wyatt C: anybody have a B60 belt on their truck? [2025-06-25 09:33:00 AM] Shawn M: nope"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "Ohio Falls [2025-10-24 08:07:00 PM] Wyatt C: call me [2025-10-28 12:47:00 PM] Shawn M: Big Blue all day [2025-10-28 12:56:0"
+      }
+    ]
+  },
+  {
+    "entity": "Dalton Ballard",
+    "entity_type": "Person",
+    "alias": "Dalton",
+    "pattern": "chat_handle",
+    "count": 21,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…:02:00 PM] Logan S: Bats game friday anybody [2026-07-23 02:04:00 PM] Dalton B: happy bday! [2026-07-25 07:37:00 PM] Kenny V: happy friday [2026-07-25 07:51"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…ruck? [2025-06-25 09:33:00 AM] Shawn M: nope [2025-06-26 06:02:00 AM] Dalton B: waiting on Highlands Bakery to let me in, nobody at the gate [2025-06-26 06:"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…2026-06-23 11:36:00 AM] Jose M: happy friday [2026-06-23 11:53:00 AM] Dalton B: not me [2026-06-25 07:05:00 AM] Bobby Ray: running late to the New Albany pl"
+      }
+    ]
+  },
+  {
+    "entity": "Dalton Ballard",
+    "entity_type": "Person",
+    "alias": "Dalton B",
+    "pattern": "chat_handle",
+    "count": 21,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…:02:00 PM] Logan S: Bats game friday anybody [2026-07-23 02:04:00 PM] Dalton B: happy bday! [2026-07-25 07:37:00 PM] Kenny V: happy friday [2026-07-25 07:51:0"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…ruck? [2025-06-25 09:33:00 AM] Shawn M: nope [2025-06-26 06:02:00 AM] Dalton B: waiting on Highlands Bakery to let me in, nobody at the gate [2025-06-26 06:19"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…2026-06-23 11:36:00 AM] Jose M: happy friday [2026-06-23 11:53:00 AM] Dalton B: not me [2026-06-25 07:05:00 AM] Bobby Ray: running late to the New Albany plan"
+      }
+    ]
+  },
+  {
+    "entity": "Steve Kaminski",
+    "entity_type": "Person",
+    "alias": "Steve",
+    "pattern": "chat_handle",
+    "count": 21,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…ler Brandt: cant, still at BR Hamilton til 2 [2025-04-23 05:44:00 PM] Steve K: anybody selling a boat trailer [2025-04-23 05:53:00 PM] Travis G: not me [20"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…r W: anybody know a good mechanic for a f150 [2025-10-09 01:16:00 PM] Steve K: nice!! [2025-10-10 05:22:00 PM] Eric Lindgren: who has the borescope [2025-1"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…on call for refrig. talking to Sarah monday [2026-01-19 01:23:00 PM] Steve K: anybody have a 1-5/8 type 21 seal on their truck? [2026-01-19 01:29:00 PM] E"
+      }
+    ]
+  },
+  {
+    "entity": "Steve Kaminski",
+    "entity_type": "Person",
+    "alias": "Steve K",
+    "pattern": "chat_handle",
+    "count": 21,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…ler Brandt: cant, still at BR Hamilton til 2 [2025-04-23 05:44:00 PM] Steve K: anybody selling a boat trailer [2025-04-23 05:53:00 PM] Travis G: not me [2025"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…r W: anybody know a good mechanic for a f150 [2025-10-09 01:16:00 PM] Steve K: nice!! [2025-10-10 05:22:00 PM] Eric Lindgren: who has the borescope [2025-10-"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…on call for refrig. talking to Sarah monday [2026-01-19 01:23:00 PM] Steve K: anybody have a 1-5/8 type 21 seal on their truck? [2026-01-19 01:29:00 PM] Eth"
+      }
+    ]
+  },
+  {
+    "entity": "Aaron Fischer",
+    "entity_type": "Person",
+    "alias": "Aaron",
+    "pattern": "chat_handle",
+    "count": 20,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…12:00 AM] Sam O: hot as blazes in this plant [2026-07-31 09:17:00 AM] Aaron F: not me [2026-07-31 11:00:00 AM] Dee Collins: Ethan can you swing by Kemper a"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…pact [2026-05-25 10:43:00 AM] Kyle B: not me [2026-05-26 07:39:00 PM] Aaron F: running 20 late to the co-op in Trenton, wreck on 71 [2026-05-26 07:41:00 PM"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…01-29 07:43:00 PM] Tony Albers: happy friday [2026-01-29 07:58:00 PM] Aaron F: praying for her [2026-01-30 07:42:00 AM] Jamal W: happy birthday Connor!! [2"
+      }
+    ]
+  },
+  {
+    "entity": "Aaron Fischer",
+    "entity_type": "Person",
+    "alias": "Aaron F",
+    "pattern": "chat_handle",
+    "count": 20,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…12:00 AM] Sam O: hot as blazes in this plant [2026-07-31 09:17:00 AM] Aaron F: not me [2026-07-31 11:00:00 AM] Dee Collins: Ethan can you swing by Kemper aft"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…pact [2026-05-25 10:43:00 AM] Kyle B: not me [2026-05-26 07:39:00 PM] Aaron F: running 20 late to the co-op in Trenton, wreck on 71 [2026-05-26 07:41:00 PM]"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…01-29 07:43:00 PM] Tony Albers: happy friday [2026-01-29 07:58:00 PM] Aaron F: praying for her [2026-01-30 07:42:00 AM] Jamal W: happy birthday Connor!! [202"
+      }
+    ]
+  },
+  {
+    "entity": "Andre Meeks",
+    "entity_type": "Person",
+    "alias": "Andre M",
+    "pattern": "chat_handle",
+    "count": 20,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…10-28 12:47:00 PM] Shawn M: Big Blue all day [2025-10-28 12:56:00 PM] Andre M: lol [2025-10-29 08:47:00 AM] Jose M: anybody want to swap on call wknd of 11/8"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…7:34:00 AM] Marcus Bell: send it to the shop [2026-06-19 02:16:00 PM] Andre M: Renee brought biscuits [2026-06-19 02:34:00 PM] Bryce H: omw [2026-06-23 11:36"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…called, pump leaking at the seal. can you go [2025-01-20 02:34:00 PM] Andre M: 10-4 [2025-01-20 07:41:00 PM] Kenny V: truck wont start, Bobby can you grab me"
+      }
+    ]
+  },
+  {
+    "entity": "Kyle Brennan",
+    "entity_type": "Person",
+    "alias": "Kyle",
+    "pattern": "chat_handle",
+    "count": 20,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…0:28:00 AM] Jordan P: who has the 3/4 impact [2026-05-25 10:43:00 AM] Kyle B: not me [2026-05-26 07:39:00 PM] Aaron F: running 20 late to the co-op in Tre"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…[2025-02-17 02:47:00 PM] Hank O: thats junk [2025-02-18 05:15:00 PM] Kyle B: <attachment: IMG_1107.jpg> [2025-02-18 05:16:00 PM] Kyle B: found this in th"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…[2025-09-22 05:59:00 PM] Brian Teller: 10-4 [2025-09-23 04:18:00 PM] Kyle B: anybody have a 1-5/8 type 21 seal on their truck? [2025-09-23 04:32:00 PM] D"
+      }
+    ]
+  },
+  {
+    "entity": "Kyle Brennan",
+    "entity_type": "Person",
+    "alias": "Kyle B",
+    "pattern": "chat_handle",
+    "count": 20,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…0:28:00 AM] Jordan P: who has the 3/4 impact [2026-05-25 10:43:00 AM] Kyle B: not me [2026-05-26 07:39:00 PM] Aaron F: running 20 late to the co-op in Trent"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…[2025-02-17 02:47:00 PM] Hank O: thats junk [2025-02-18 05:15:00 PM] Kyle B: <attachment: IMG_1107.jpg> [2025-02-18 05:16:00 PM] Kyle B: found this in the"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…[2025-09-22 05:59:00 PM] Brian Teller: 10-4 [2025-09-23 04:18:00 PM] Kyle B: anybody have a 1-5/8 type 21 seal on their truck? [2025-09-23 04:32:00 PM] DeS"
+      }
+    ]
+  },
+  {
+    "entity": "DeShawn Rice",
+    "entity_type": "Person",
+    "alias": "DeShawn",
+    "pattern": "chat_handle",
+    "count": 19,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…026-07-21 10:23:00 AM] Travis G: save me one [2026-07-24 06:47:00 AM] DeShawn R: anybody have a L-100 jaw insert on their truck? [2026-07-24 06:52:00 AM] Mat"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…7:14:00 AM] Matt Schaefer: look at this mess [2025-04-17 07:25:00 AM] DeShawn R: thats junk [2025-04-18 07:42:00 AM] Carl J: anybody want to swap on call wkn"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…2026-05-07 01:54:00 PM] Dee Collins: perfect [2026-05-08 10:41:00 AM] DeShawn R: running 20 late to Kroll, wreck on 71 [2026-05-08 10:44:00 AM] Dee Collins:"
+      }
+    ]
+  },
+  {
+    "entity": "DeShawn Rice",
+    "entity_type": "Person",
+    "alias": "DeShawn R",
+    "pattern": "chat_handle",
+    "count": 19,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…026-07-21 10:23:00 AM] Travis G: save me one [2026-07-24 06:47:00 AM] DeShawn R: anybody have a L-100 jaw insert on their truck? [2026-07-24 06:52:00 AM] Matt"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…7:14:00 AM] Matt Schaefer: look at this mess [2025-04-17 07:25:00 AM] DeShawn R: thats junk [2025-04-18 07:42:00 AM] Carl J: anybody want to swap on call wknd"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…2026-05-07 01:54:00 PM] Dee Collins: perfect [2026-05-08 10:41:00 AM] DeShawn R: running 20 late to Kroll, wreck on 71 [2026-05-08 10:44:00 AM] Dee Collins: I'"
+      }
+    ]
+  },
+  {
+    "entity": "Jake Thurman",
+    "entity_type": "Person",
+    "alias": "Jake",
+    "pattern": "chat_handle",
+    "count": 18,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…-11-01 01:49:00 PM] Bryce H: praying for her [2025-11-03 02:34:00 PM] Jake T: anybody want to swap on call wknd of 11/15? family thing [2025-11-03 02:43:0"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…08-03 05:19:00 PM] Jesse C: wife says hi lol [2025-08-03 05:31:00 PM] Jake T: lol [2025-08-05 06:37:00 AM] Tammy: Dairy Kastle run anybody [2025-08-05 06:"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…y [2026-03-03 04:44:00 PM] Bobby Ray: not me [2026-03-05 01:07:00 PM] Jake T: truck wont start, Trey can you grab me [2026-03-05 01:23:00 PM] Tammy: I'll"
+      }
+    ]
+  },
+  {
+    "entity": "Jake Thurman",
+    "entity_type": "Person",
+    "alias": "Jake T",
+    "pattern": "chat_handle",
+    "count": 18,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…-11-01 01:49:00 PM] Bryce H: praying for her [2025-11-03 02:34:00 PM] Jake T: anybody want to swap on call wknd of 11/15? family thing [2025-11-03 02:43:00"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…08-03 05:19:00 PM] Jesse C: wife says hi lol [2025-08-03 05:31:00 PM] Jake T: lol [2025-08-05 06:37:00 AM] Tammy: Dairy Kastle run anybody [2025-08-05 06:50"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…y [2026-03-03 04:44:00 PM] Bobby Ray: not me [2026-03-05 01:07:00 PM] Jake T: truck wont start, Trey can you grab me [2026-03-05 01:23:00 PM] Tammy: I'll ca"
+      }
+    ]
+  },
+  {
+    "entity": "Nick Vollmer",
+    "entity_type": "Person",
+    "alias": "Nick",
+    "pattern": "chat_handle",
+    "count": 18,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…cookies from Patty's daughter in the office [2026-07-30 09:51:00 AM] Nick V: omw [2026-07-31 09:12:00 AM] Sam O: hot as blazes in this plant [2026-07-31"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…M] Tony Albers: me, I'll drop it at the shop [2025-05-14 03:26:00 PM] Nick V: Reds suck again [2025-05-14 03:34:00 PM] Carl J: same [2025-05-19 11:10:00 A"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…:00 PM] Eric Lindgren: who has the borescope [2025-10-10 05:40:00 PM] Nick V: its in my truck [2025-10-12 08:29:00 AM] Steve K: <attachment: IMG_1467.jpg>"
+      }
+    ]
+  },
+  {
+    "entity": "Nick Vollmer",
+    "entity_type": "Person",
+    "alias": "Nick V",
+    "pattern": "chat_handle",
+    "count": 18,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…cookies from Patty's daughter in the office [2026-07-30 09:51:00 AM] Nick V: omw [2026-07-31 09:12:00 AM] Sam O: hot as blazes in this plant [2026-07-31 09"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…M] Tony Albers: me, I'll drop it at the shop [2025-05-14 03:26:00 PM] Nick V: Reds suck again [2025-05-14 03:34:00 PM] Carl J: same [2025-05-19 11:10:00 AM]"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…:00 PM] Eric Lindgren: who has the borescope [2025-10-10 05:40:00 PM] Nick V: its in my truck [2025-10-12 08:29:00 AM] Steve K: <attachment: IMG_1467.jpg> ["
+      }
+    ]
+  },
+  {
+    "entity": "Brownsboro Rubber Products",
+    "entity_type": "Customer",
+    "alias": "BRP",
+    "pattern": "initialism",
+    "count": 17,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…4:00 AM] Caleb R: nice!! [2026-07-21 04:03:00 PM] Shawn M: waiting on BRP to let me in, nobody at the gate [2026-07-21 04:09:00 PM] Tammy: k [2026-07-22"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…50.jpg> [2026-07-10 07:25:00 PM] Logan S: this look right to anybody? BRP [2026-07-10 07:29:00 PM] Big Mike: replace it [2026-07-13 07:20:00 AM] Marcus B"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…PM] Bobby Ray: praying for her [2025-01-20 02:29:00 PM] Tammy: Andre BRP called, pump leaking at the seal. can you go [2025-01-20 02:34:00 PM] Andre M:"
+      }
+    ]
+  },
+  {
+    "entity": "Jordan Pace",
+    "entity_type": "Person",
+    "alias": "Jordan",
+    "pattern": "chat_handle",
+    "count": 17,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…6-05-21 02:36:00 PM] Kayla S: check the cage [2026-05-25 10:28:00 AM] Jordan P: who has the 3/4 impact [2026-05-25 10:43:00 AM] Kyle B: not me [2026-05-26 0"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…t squeal on the AHU, they want someone today [2025-03-02 05:12:00 PM] Jordan P: yep [2025-03-03 06:39:00 AM] Dee Collins: OV gate code this month 3307 [2025"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…:00 AM] Dwayne H: found this in the sump lol [2025-01-16 07:19:00 AM] Jordan P: call me [2025-01-16 05:33:00 PM] Ben Ruhl: can I take off 1/31? kids thing ["
+      }
+    ]
+  },
+  {
+    "entity": "Jordan Pace",
+    "entity_type": "Person",
+    "alias": "Jordan P",
+    "pattern": "chat_handle",
+    "count": 17,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…6-05-21 02:36:00 PM] Kayla S: check the cage [2026-05-25 10:28:00 AM] Jordan P: who has the 3/4 impact [2026-05-25 10:43:00 AM] Kyle B: not me [2026-05-26 07:"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…t squeal on the AHU, they want someone today [2025-03-02 05:12:00 PM] Jordan P: yep [2025-03-03 06:39:00 AM] Dee Collins: OV gate code this month 3307 [2025-0"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…:00 AM] Dwayne H: found this in the sump lol [2025-01-16 07:19:00 AM] Jordan P: call me [2025-01-16 05:33:00 PM] Ben Ruhl: can I take off 1/31? kids thing [20"
+      }
+    ]
+  },
+  {
+    "entity": "Travis Gentry",
+    "entity_type": "Person",
+    "alias": "Travis",
+    "pattern": "chat_handle",
+    "count": 17,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…cookies from Patty's daughter in the office [2026-07-21 10:23:00 AM] Travis G: save me one [2026-07-24 06:47:00 AM] DeShawn R: anybody have a L-100 jaw ins"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…PM] Steve K: anybody selling a boat trailer [2025-04-23 05:53:00 PM] Travis G: not me [2025-04-24 10:13:00 AM] Hank O: inspection sheets due friday, all tr"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…06:22:00 AM] Jim Polk: donuts in the office [2025-02-19 06:30:00 AM] Travis G: omw [2025-02-19 02:14:00 PM] Josh Hensley: who has the hydraulic puller [202"
+      }
+    ]
+  },
+  {
+    "entity": "Travis Gentry",
+    "entity_type": "Person",
+    "alias": "Travis G",
+    "pattern": "chat_handle",
+    "count": 17,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…cookies from Patty's daughter in the office [2026-07-21 10:23:00 AM] Travis G: save me one [2026-07-24 06:47:00 AM] DeShawn R: anybody have a L-100 jaw inser"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…PM] Steve K: anybody selling a boat trailer [2025-04-23 05:53:00 PM] Travis G: not me [2025-04-24 10:13:00 AM] Hank O: inspection sheets due friday, all truc"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…06:22:00 AM] Jim Polk: donuts in the office [2025-02-19 06:30:00 AM] Travis G: omw [2025-02-19 02:14:00 PM] Josh Hensley: who has the hydraulic puller [2025-"
+      }
+    ]
+  },
+  {
+    "entity": "Kayla Stroud",
+    "entity_type": "Person",
+    "alias": "Kayla",
+    "pattern": "chat_handle",
+    "count": 16,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…I got 2, meet me at the Speedway on Red Bank [2026-07-26 07:18:00 PM] Kayla S: hot as blazes in this plant [2026-07-26 07:31:00 PM] Ben Ruhl: praying for h"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…9:00 AM] Dee Collins: I'll let them know hon [2026-05-11 03:47:00 PM] Kayla S: waiting on OVCS to let me in, nobody at the gate [2026-05-11 03:48:00 PM] De"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…2025-02-22 01:40:00 PM] Kyle B: happy friday [2025-02-22 01:56:00 PM] Kayla S: my cousin does, I'll send his number [2025-02-23 01:37:00 PM] Dee Collins: A"
+      }
+    ]
+  },
+  {
+    "entity": "Kayla Stroud",
+    "entity_type": "Person",
+    "alias": "Kayla S",
+    "pattern": "chat_handle",
+    "count": 16,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…I got 2, meet me at the Speedway on Red Bank [2026-07-26 07:18:00 PM] Kayla S: hot as blazes in this plant [2026-07-26 07:31:00 PM] Ben Ruhl: praying for her"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…9:00 AM] Dee Collins: I'll let them know hon [2026-05-11 03:47:00 PM] Kayla S: waiting on OVCS to let me in, nobody at the gate [2026-05-11 03:48:00 PM] Dee"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…2025-02-22 01:40:00 PM] Kyle B: happy friday [2025-02-22 01:56:00 PM] Kayla S: my cousin does, I'll send his number [2025-02-23 01:37:00 PM] Dee Collins: Aar"
+      }
+    ]
+  },
+  {
+    "entity": "Samuel Okonkwo",
+    "entity_type": "Person",
+    "alias": "Sam",
+    "pattern": "chat_handle",
+    "count": 16,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "Sam!! [2026-07-18 05:22:00 PM] Sam O: lol [2026-07-21 10:11:00 AM] Dee Collins: cookies from Patty's daughter in t"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…M] Dee Collins: OV gate code this month 6627 [2026-02-02 08:40:00 AM] Sam O: <attachment: IMG_1511.jpg> [2026-02-02 08:43:00 AM] Sam O: this look right t"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…after you finish, air compressor won't load [2025-05-21 05:49:00 PM] Sam O: on it [2025-05-21 05:52:00 PM] Dee Collins: thanks! [2025-05-22 07:07:00 PM]"
+      }
+    ]
+  },
+  {
+    "entity": "Samuel Okonkwo",
+    "entity_type": "Person",
+    "alias": "Sam O",
+    "pattern": "chat_handle",
+    "count": 16,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "Sam!! [2026-07-18 05:22:00 PM] Sam O: lol [2026-07-21 10:11:00 AM] Dee Collins: cookies from Patty's daughter in the"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…M] Dee Collins: OV gate code this month 6627 [2026-02-02 08:40:00 AM] Sam O: <attachment: IMG_1511.jpg> [2026-02-02 08:43:00 AM] Sam O: this look right to"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…after you finish, air compressor won't load [2025-05-21 05:49:00 PM] Sam O: on it [2025-05-21 05:52:00 PM] Dee Collins: thanks! [2025-05-22 07:07:00 PM] D"
+      }
+    ]
+  },
+  {
+    "entity": "Connor Walsh",
+    "entity_type": "Person",
+    "alias": "Connor",
+    "pattern": "chat_handle",
+    "count": 14,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…4 07:28:00 AM] Ben Ruhl: my kid made varsity [2026-08-04 07:43:00 AM] Connor W: happy bday! [2026-08-05 07:20:00 AM] Dee Collins: Jamal can you swing by the"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…7:42:00 AM] Jamal W: happy birthday Connor!! [2026-01-30 07:49:00 AM] Connor W: not me [2026-02-02 06:36:00 AM] Dee Collins: OV gate code this month 6627 [2"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…the cage [2025-09-23 04:41:00 PM] Kyle B: ok [2025-09-27 01:23:00 PM] Connor W: my kid made varsity [2025-09-27 01:35:00 PM] Sam O: not me [2025-10-06 04:23"
+      }
+    ]
+  },
+  {
+    "entity": "Connor Walsh",
+    "entity_type": "Person",
+    "alias": "Connor W",
+    "pattern": "chat_handle",
+    "count": 14,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…4 07:28:00 AM] Ben Ruhl: my kid made varsity [2026-08-04 07:43:00 AM] Connor W: happy bday! [2026-08-05 07:20:00 AM] Dee Collins: Jamal can you swing by the c"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…7:42:00 AM] Jamal W: happy birthday Connor!! [2026-01-30 07:49:00 AM] Connor W: not me [2026-02-02 06:36:00 AM] Dee Collins: OV gate code this month 6627 [202"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…the cage [2025-09-23 04:41:00 PM] Kyle B: ok [2025-09-27 01:23:00 PM] Connor W: my kid made varsity [2025-09-27 01:35:00 PM] Sam O: not me [2025-10-06 04:23:0"
+      }
+    ]
+  },
+  {
+    "entity": "Dwayne Hatcher",
+    "entity_type": "Person",
+    "alias": "Dwayne",
+    "pattern": "chat_handle",
+    "count": 14,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…8-07 09:18:00 AM] Aaron F: look at this mess [2026-08-07 09:31:00 AM] Dwayne H: send it to Ray [2026-08-10 08:10:00 AM] Josh Hensley: so we got sold [2026-0"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…2025-05-21 05:52:00 PM] Dee Collins: thanks! [2025-05-22 07:07:00 PM] Dwayne H: hot as blazes in this plant [2025-05-22 07:11:00 PM] Travis G: lol [2025-05-"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…you finish, compressor tripping on high temp [2025-01-30 03:37:00 PM] Dwayne H: yep [2025-01-30 03:39:00 PM] Dee Collins: thanks! [2025-01-31 03:30:00 PM] H"
+      }
+    ]
+  },
+  {
+    "entity": "Dwayne Hatcher",
+    "entity_type": "Person",
+    "alias": "Dwayne H",
+    "pattern": "chat_handle",
+    "count": 14,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…8-07 09:18:00 AM] Aaron F: look at this mess [2026-08-07 09:31:00 AM] Dwayne H: send it to Ray [2026-08-10 08:10:00 AM] Josh Hensley: so we got sold [2026-08-"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…2025-05-21 05:52:00 PM] Dee Collins: thanks! [2025-05-22 07:07:00 PM] Dwayne H: hot as blazes in this plant [2025-05-22 07:11:00 PM] Travis G: lol [2025-05-28"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…you finish, compressor tripping on high temp [2025-01-30 03:37:00 PM] Dwayne H: yep [2025-01-30 03:39:00 PM] Dee Collins: thanks! [2025-01-31 03:30:00 PM] Hea"
+      }
+    ]
+  },
+  {
+    "entity": "Jose Medina",
+    "entity_type": "Person",
+    "alias": "Jose",
+    "pattern": "chat_handle",
+    "count": 12,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…ll day [2025-10-28 12:56:00 PM] Andre M: lol [2025-10-29 08:47:00 AM] Jose M: anybody want to swap on call wknd of 11/8? going to the lake [2025-10-29 09:"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…scuits [2026-06-19 02:34:00 PM] Bryce H: omw [2026-06-23 11:36:00 AM] Jose M: happy friday [2026-06-23 11:53:00 AM] Dalton B: not me [2026-06-25 07:05:00"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…28 07:43:00 PM] Marcus Bell: ok just tell me [2026-03-03 04:34:00 PM] Jose M: my kid made varsity [2026-03-03 04:44:00 PM] Bobby Ray: not me [2026-03-05 0"
+      }
+    ]
+  },
+  {
+    "entity": "Jose Medina",
+    "entity_type": "Person",
+    "alias": "Jose M",
+    "pattern": "chat_handle",
+    "count": 12,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…ll day [2025-10-28 12:56:00 PM] Andre M: lol [2025-10-29 08:47:00 AM] Jose M: anybody want to swap on call wknd of 11/8? going to the lake [2025-10-29 09:02"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…scuits [2026-06-19 02:34:00 PM] Bryce H: omw [2026-06-23 11:36:00 AM] Jose M: happy friday [2026-06-23 11:53:00 AM] Dalton B: not me [2026-06-25 07:05:00 AM"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…28 07:43:00 PM] Marcus Bell: ok just tell me [2026-03-03 04:34:00 PM] Jose M: my kid made varsity [2026-03-03 04:44:00 PM] Bobby Ray: not me [2026-03-05 01:"
+      }
+    ]
+  },
+  {
+    "entity": "Caleb Riggs",
+    "entity_type": "Person",
+    "alias": "Caleb R",
+    "pattern": "chat_handle",
+    "count": 11,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "Lonnie has him [2026-07-16 09:19:00 AM] Caleb R: happy friday [2026-07-16 09:23:00 AM] Curtis E: happy bday! [2026-07-16 10:09:"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…-07-05 01:59:00 PM] Kenny V: praying for her [2026-07-06 04:11:00 PM] Caleb R: running late to River Road, 64 is backed up [2026-07-06 04:20:00 PM] Tammy: k"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…-03-11 07:39:00 AM] Shawn M: its in my truck [2026-03-12 11:15:00 AM] Caleb R: who left the coffee pot on in the shop [2026-03-12 11:26:00 AM] Malik D: happy"
+      }
+    ]
+  },
+  {
+    "entity": "Ridgeline Capital Advisors LLC",
+    "entity_type": "Vendor",
+    "alias": "Ridgeline",
+    "pattern": "short_form",
+    "count": 11,
+    "examples": [
+      {
+        "source": "01 Corporate/Project Riverbend - Confidential Information Memorandum (Nov 2025).pdf",
+        "quote": "…e \"Memorandum\") has been prepared by Ridgeline Capital Advisors LLC (\"Ridgeline\") on behalf of Riverton Industrial Services, Inc. (the \"Company\") solely for us"
+      },
+      {
+        "source": "Owners & Execs/Ridgeline/Process letter - Project Riverbend.pdf",
+        "quote": "…yees, customers, suppliers or lenders. All communication goes through Ridgeline. The Company reserves the right to change this process or end discussions with"
+      },
+      {
+        "source": "mail/dave.brennan.mbox/messages/00003.eml",
+        "quote": "…ennan@rivertonindustrial.com> Date: 2024-11-12T19:20:00.000Z Subject: Ridgeline / Riverton - engagement letter Dave, Attached is the countersigned engagement"
+      }
+    ]
+  },
+  {
+    "entity": "Milford",
+    "entity_type": "Site",
+    "alias": "the water plant",
+    "pattern": "nickname",
+    "count": 10,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…tell me [2025-04-21 02:14:00 PM] Dee Collins: Tyler can you swing by the water plant in Milford after you finish, compressor tripping on high temp [2025-04-21…"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…07:48:00 PM] Dee Collins: Jordan when you're done at Hartwell head to the water plant in Milford. compressor tripping on high temp. contact is at the front…"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…5:00 PM] Dee Collins: Tyler when you're done at Carthage Chem head to the water plant in Milford. sump pump not kicking on. contact is at the front desk…"
+      }
+    ]
+  },
+  {
+    "entity": "Trenton Elevator",
+    "entity_type": "Site",
+    "alias": "the co-op",
+    "pattern": "nickname",
+    "count": 10,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…py bday! [2026-08-05 07:20:00 AM] Dee Collins: Jamal can you swing by the co-op in Trenton after you finish, motor tripping the breaker [2026-08-05 07:25:00 AM"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…] Kyle B: not me [2026-05-26 07:39:00 PM] Aaron F: running 20 late to the co-op in Trenton, wreck on 71 [2026-05-26 07:41:00 PM] Dee Collins: ok call me if it"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…1-27 05:24:00 PM] Dee Collins: Tyler when you're done at OVCS head to the co-op in Trenton. compressor tripping on high temp. contact is at the front desk [202"
+      }
+    ]
+  },
+  {
+    "entity": "Carl Jennings",
+    "entity_type": "Person",
+    "alias": "Carl",
+    "pattern": "chat_handle",
+    "count": 9,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…025-04-17 07:25:00 AM] DeShawn R: thats junk [2025-04-18 07:42:00 AM] Carl J: anybody want to swap on call wknd of 4/26? kids tournament [2025-04-18 07:46"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…ken after you finish, belt squeal on the AHU [2025-02-24 11:13:00 AM] Carl J: cant, still at Hartwell til 2 [2025-02-24 02:50:00 PM] Dee Collins: donuts i"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…5-05-14 03:26:00 PM] Nick V: Reds suck again [2025-05-14 03:34:00 PM] Carl J: same [2025-05-19 11:10:00 AM] Aaron F: running 20 late to Kemper, wreck on 7"
+      }
+    ]
+  },
+  {
+    "entity": "Carl Jennings",
+    "entity_type": "Person",
+    "alias": "Carl J",
+    "pattern": "chat_handle",
+    "count": 9,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…025-04-17 07:25:00 AM] DeShawn R: thats junk [2025-04-18 07:42:00 AM] Carl J: anybody want to swap on call wknd of 4/26? kids tournament [2025-04-18 07:46:0"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…ken after you finish, belt squeal on the AHU [2025-02-24 11:13:00 AM] Carl J: cant, still at Hartwell til 2 [2025-02-24 02:50:00 PM] Dee Collins: donuts in"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…5-05-14 03:26:00 PM] Nick V: Reds suck again [2025-05-14 03:34:00 PM] Carl J: same [2025-05-19 11:10:00 AM] Aaron F: running 20 late to Kemper, wreck on 71"
+      }
+    ]
+  },
+  {
+    "entity": "Darius Fields",
+    "entity_type": "Person",
+    "alias": "Darius",
+    "pattern": "chat_handle",
+    "count": 8,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…office [2025-01-08 06:52:00 AM] Rusty P: omw [2025-01-13 03:30:00 PM] Darius F: stuck behind a train, late to K-Plate [2025-01-13 03:31:00 PM] Tammy: ok [20"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…s closest to Derby City? gearbox running hot [2025-01-27 06:55:00 AM] Darius F: after lunch ok? [2025-01-27 07:02:00 AM] Tammy: ok [2025-01-27 01:31:00 PM]"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…age [2025-08-06 06:59:00 AM] Shawn M: thanks [2025-08-06 02:28:00 PM] Darius F: hot as blazes [2025-08-06 02:43:00 PM] Earl W: happy bday! [2025-08-07 05:40"
+      }
+    ]
+  },
+  {
+    "entity": "Darius Fields",
+    "entity_type": "Person",
+    "alias": "Darius F",
+    "pattern": "chat_handle",
+    "count": 8,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…office [2025-01-08 06:52:00 AM] Rusty P: omw [2025-01-13 03:30:00 PM] Darius F: stuck behind a train, late to K-Plate [2025-01-13 03:31:00 PM] Tammy: ok [2025"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…s closest to Derby City? gearbox running hot [2025-01-27 06:55:00 AM] Darius F: after lunch ok? [2025-01-27 07:02:00 AM] Tammy: ok [2025-01-27 01:31:00 PM] Ma"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…age [2025-08-06 06:59:00 AM] Shawn M: thanks [2025-08-06 02:28:00 PM] Darius F: hot as blazes [2025-08-06 02:43:00 PM] Earl W: happy bday! [2025-08-07 05:40:0"
+      }
+    ]
+  },
+  {
+    "entity": "Ethan Rowe",
+    "entity_type": "Person",
+    "alias": "Ethan",
+    "pattern": "chat_handle",
+    "count": 8,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…you finish, compressor tripping on high temp [2026-07-31 11:14:00 AM] Ethan R: yep [2026-07-31 11:15:00 AM] Dee Collins: ok I'll let them know [2026-08-03"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…O: inspection sheets due friday, all trucks [2026-05-28 06:42:00 AM] Ethan R: ok [2026-05-28 08:20:00 AM] Dee Collins: Tony can you swing by BR Hamilton a"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "Mind your business lol [2026-01-25 07:50:00 PM] Ethan R: anybody selling a boat trailer [2026-01-25 07:51:00 PM] Eric Lindgren: nice!"
+      }
+    ]
+  },
+  {
+    "entity": "Ethan Rowe",
+    "entity_type": "Person",
+    "alias": "Ethan R",
+    "pattern": "chat_handle",
+    "count": 8,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…you finish, compressor tripping on high temp [2026-07-31 11:14:00 AM] Ethan R: yep [2026-07-31 11:15:00 AM] Dee Collins: ok I'll let them know [2026-08-03 06"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…O: inspection sheets due friday, all trucks [2026-05-28 06:42:00 AM] Ethan R: ok [2026-05-28 08:20:00 AM] Dee Collins: Tony can you swing by BR Hamilton aft"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "Mind your business lol [2026-01-25 07:50:00 PM] Ethan R: anybody selling a boat trailer [2026-01-25 07:51:00 PM] Eric Lindgren: nice!!"
+      }
+    ]
+  },
+  {
+    "entity": "Hamilton Plant",
+    "entity_type": "Site",
+    "alias": "BR",
+    "pattern": "nickname",
+    "count": 8,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…ng on high temp [2025-04-21 02:30:00 PM] Tyler Brandt: cant, still at BR Hamilton til 2 [2025-04-23 05:44:00 PM] Steve K: anybody selling a boat trailer"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…han R: ok [2026-05-28 08:20:00 AM] Dee Collins: Tony can you swing by BR Hamilton after you finish, motor tripping the breaker [2026-05-28 08:27:00 AM]"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…: same [2025-02-10 01:04:00 PM] Dee Collins: Zach when you're done at BR Hamilton head to the dairy. coupling insert shot. contact is at the front desk"
+      }
+    ]
+  },
+  {
+    "entity": "Hamilton Plant",
+    "entity_type": "Site",
+    "alias": "BR Hamilton",
+    "pattern": "nickname",
+    "count": 8,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…ng on high temp [2025-04-21 02:30:00 PM] Tyler Brandt: cant, still at BR Hamilton til 2 [2025-04-23 05:44:00 PM] Steve K: anybody selling a boat trailer…"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…han R: ok [2026-05-28 08:20:00 AM] Dee Collins: Tony can you swing by BR Hamilton after you finish, motor tripping the breaker [2026-05-28 08:27:00 AM] Tony…"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…: same [2025-02-10 01:04:00 PM] Dee Collins: Zach when you're done at BR Hamilton head to the dairy. coupling insert shot. contact is at the front desk…"
+      }
+    ]
+  },
+  {
+    "entity": "Ohio Valley Cold Storage",
+    "entity_type": "Customer",
+    "alias": "OV",
+    "pattern": "initialism",
+    "count": 8,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…0 07:49:00 AM] Connor W: not me [2026-02-02 06:36:00 AM] Dee Collins: OV gate code this month 6627 [2026-02-02 08:40:00 AM] Sam O: <attachment: IMG_1511"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…ollins: We will miss you girl!! [2025-02-03 06:36:00 AM] Dee Collins: OV gate code this month 8812 [2025-02-03 12:12:00 PM] Dee Collins: Anybody close t"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…8-30 10:41:00 AM] Steve K: same [2026-09-01 06:35:00 AM] Dee Collins: OV gate code this month 4471 [2026-09-01 09:30:00 AM] Hank O: clean out your truck"
+      }
+    ]
+  },
+  {
+    "entity": "Jerome Watts",
+    "entity_type": "Person",
+    "alias": "Jerome",
+    "pattern": "chat_handle",
+    "count": 7,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…20 09:20:00 AM] Shawn M: send it to the shop [2026-04-20 10:14:00 AM] Jerome: @Tammy Dana at Tri-County matched Kinetic on the 6205s so I'm just ordering fr"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…l: Malik D starts today, apprentice. be nice [2026-02-03 05:23:00 PM] Jerome: Dairy Kastle run anybody [2026-02-03 05:41:00 PM] Earl W: save me one [2026-02"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…[2025-12-18 02:10:00 PM] Lonnie: happy bday! [2025-12-18 07:03:00 PM] Jerome: Renee brought biscuits [2025-12-18 07:13:00 PM] Earl W: yes [2025-12-19 06:25:"
+      }
+    ]
+  },
+  {
+    "entity": "Malik Downs",
+    "entity_type": "Person",
+    "alias": "Malik",
+    "pattern": "chat_handle",
+    "count": 7,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…M] Marcus Bell: fine by me, update the sheet [2026-10-05 04:04:00 PM] Malik D: anybody have a 1-5/8 type 21 seal on their truck? [2026-10-05 04:08:00 PM] B"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "Big one [2026-02-28 07:33:00 PM] Malik D: anybody want to swap on call wknd of 3/7? going to the lake [2026-02-28 07:3"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…6-09-18 07:15:00 PM] Marcus Bell: Ignore him [2026-09-21 07:09:00 AM] Malik D: truck wont start, Kenny can you grab me [2026-09-21 07:12:00 AM] Tammy: k [2"
+      }
+    ]
+  },
+  {
+    "entity": "Malik Downs",
+    "entity_type": "Person",
+    "alias": "Malik D",
+    "pattern": "chat_handle",
+    "count": 7,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…M] Marcus Bell: fine by me, update the sheet [2026-10-05 04:04:00 PM] Malik D: anybody have a 1-5/8 type 21 seal on their truck? [2026-10-05 04:08:00 PM] Bob"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "Big one [2026-02-28 07:33:00 PM] Malik D: anybody want to swap on call wknd of 3/7? going to the lake [2026-02-28 07:35:"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…6-09-18 07:15:00 PM] Marcus Bell: Ignore him [2026-09-21 07:09:00 AM] Malik D: truck wont start, Kenny can you grab me [2026-09-21 07:12:00 AM] Tammy: k [202"
+      }
+    ]
+  },
+  {
+    "entity": "Oakley HQ & Main Shop",
+    "entity_type": "Branch",
+    "alias": "HQ",
+    "pattern": "parenthetical+nickname",
+    "count": 7,
+    "examples": [
+      {
+        "source": "Scans from copier/SCAN0601.PDF",
+        "quote": "…ICES, INC. Louisville Branch 11420 Electron Dr, Louisville, KY 40299 Oakley (HQ) | Grove City DATE 4/17/24 CUSTOMER Kentuckiana Plating PLANT /LOCATION WO"
+      },
+      {
+        "source": "Scans from copier/SCAN0601.PDF",
+        "quote": "…ICES, INC. Louisville Branch 11420 Electron Dr, Louisville, KY 40299 Oakley (HQ) | Grove City DATE 4/29/24 CUSTOMER Kentuckiana Plating PLANT / LOCATION P"
+      },
+      {
+        "source": "01 Corporate/Riverton Management Presentation Jan 2026.pptx",
+        "quote": "## Branches Oakley (HQ) • 47 staff • Rebuild & machine shop • Dispatch, finance, sales Louisville"
+      }
+    ]
+  },
+  {
+    "entity": "Rusty Pickett",
+    "entity_type": "Person",
+    "alias": "Rusty",
+    "pattern": "chat_handle",
+    "count": 7,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…08 06:34:00 AM] Trey H: donuts in the office [2025-01-08 06:52:00 AM] Rusty P: omw [2025-01-13 03:30:00 PM] Darius F: stuck behind a train, late to K-Plate"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…2025-01-23 12:11:00 PM] Lonnie: happy friday [2025-01-23 12:19:00 PM] Rusty P: my cousin does, I'll send his number [2025-01-23 02:26:00 PM] Andre M: donut"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…5-09-05 09:55:00 AM] Logan S: check the cage [2025-09-05 02:00:00 PM] Rusty P: my last day too guys. same place. sorry Marcus [2025-09-05 03:49:00 PM] Jake"
+      }
+    ]
+  },
+  {
+    "entity": "Rusty Pickett",
+    "entity_type": "Person",
+    "alias": "Rusty P",
+    "pattern": "chat_handle",
+    "count": 7,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…08 06:34:00 AM] Trey H: donuts in the office [2025-01-08 06:52:00 AM] Rusty P: omw [2025-01-13 03:30:00 PM] Darius F: stuck behind a train, late to K-Plate ["
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…2025-01-23 12:11:00 PM] Lonnie: happy friday [2025-01-23 12:19:00 PM] Rusty P: my cousin does, I'll send his number [2025-01-23 02:26:00 PM] Andre M: donuts"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…5-09-05 09:55:00 AM] Logan S: check the cage [2025-09-05 02:00:00 PM] Rusty P: my last day too guys. same place. sorry Marcus [2025-09-05 03:49:00 PM] Jake T"
+      }
+    ]
+  },
+  {
+    "entity": "Jesse Combs",
+    "entity_type": "Person",
+    "alias": "Jesse",
+    "pattern": "chat_handle",
+    "count": 6,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…2025-02-01 11:08:00 AM] Kenny V: happy bday! [2025-02-04 07:32:00 AM] Jesse C: anybody want to swap on call wknd of 2/15? family thing [2025-02-04 07:38:00"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…2025-08-02 08:34:00 AM] Kenny V: save me one [2025-08-03 05:19:00 PM] Jesse C: wife says hi lol [2025-08-03 05:31:00 PM] Jake T: lol [2025-08-05 06:37:00 A"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…ery called, coupling insert shot. can you go [2025-04-17 11:11:00 AM] Jesse C: cant, still at River Road til 2 [2025-04-17 11:23:00 AM] Tammy: ok [2025-04-"
+      }
+    ]
+  },
+  {
+    "entity": "Jesse Combs",
+    "entity_type": "Person",
+    "alias": "Jesse C",
+    "pattern": "chat_handle",
+    "count": 6,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…2025-02-01 11:08:00 AM] Kenny V: happy bday! [2025-02-04 07:32:00 AM] Jesse C: anybody want to swap on call wknd of 2/15? family thing [2025-02-04 07:38:00 A"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…2025-08-02 08:34:00 AM] Kenny V: save me one [2025-08-03 05:19:00 PM] Jesse C: wife says hi lol [2025-08-03 05:31:00 PM] Jake T: lol [2025-08-05 06:37:00 AM]"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…ery called, coupling insert shot. can you go [2025-04-17 11:11:00 AM] Jesse C: cant, still at River Road til 2 [2025-04-17 11:23:00 AM] Tammy: ok [2025-04-18"
+      }
+    ]
+  },
+  {
+    "entity": "Zach Mullins",
+    "entity_type": "Person",
+    "alias": "Zach",
+    "pattern": "chat_handle",
+    "count": 6,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…-05-08 06:14:00 AM] Aaron F: Earl is the man [2025-05-08 07:28:00 PM] Zach M: can I take off 5/19? kids thing [2025-05-08 07:44:00 PM] Dee Collins: fine,"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…ng insert shot. contact is at the front desk [2025-02-10 01:18:00 PM] Zach M: 10-4 [2025-02-10 01:36:00 PM] Dee Collins: perfect [2025-02-11 06:14:00 AM]"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…a f150 [2025-01-09 10:51:00 AM] Steve K: lol [2025-01-09 02:26:00 PM] Zach M: who has the torque multiplier [2025-01-09 02:44:00 PM] Sam O: check the cage"
+      }
+    ]
+  },
+  {
+    "entity": "Zach Mullins",
+    "entity_type": "Person",
+    "alias": "Zach M",
+    "pattern": "chat_handle",
+    "count": 6,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…-05-08 06:14:00 AM] Aaron F: Earl is the man [2025-05-08 07:28:00 PM] Zach M: can I take off 5/19? kids thing [2025-05-08 07:44:00 PM] Dee Collins: fine, pu"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…ng insert shot. contact is at the front desk [2025-02-10 01:18:00 PM] Zach M: 10-4 [2025-02-10 01:36:00 PM] Dee Collins: perfect [2025-02-11 06:14:00 AM] To"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…a f150 [2025-01-09 10:51:00 AM] Steve K: lol [2025-01-09 02:26:00 PM] Zach M: who has the torque multiplier [2025-01-09 02:44:00 PM] Sam O: check the cage ["
+      }
+    ]
+  },
+  {
+    "entity": "Ashley Moreno",
+    "entity_type": "Person",
+    "alias": "Ashley",
+    "pattern": "chat_handle",
+    "count": 5,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…Eric Lindgren: me, I'll drop it at the shop [2025-02-21 05:28:00 PM] Ashley M: donuts in the office [2025-02-21 05:41:00 PM] Aaron F: lol [2025-02-22 01:40"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…room [2025-12-03 06:49:00 AM] Ben Ruhl: yes [2025-12-03 07:05:00 AM] Ashley M: donuts in the office [2025-12-03 07:13:00 AM] Kayla S: dont let Ray get em a"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…AM] Dee Collins: ok call me if it gets worse [2026-09-10 07:08:00 AM] Ashley M: donuts in the office [2026-09-10 07:09:00 AM] Josh Hensley: yes [2026-09-11"
+      }
+    ]
+  },
+  {
+    "entity": "Ashley Moreno",
+    "entity_type": "Person",
+    "alias": "Ashley M",
+    "pattern": "chat_handle",
+    "count": 5,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…Eric Lindgren: me, I'll drop it at the shop [2025-02-21 05:28:00 PM] Ashley M: donuts in the office [2025-02-21 05:41:00 PM] Aaron F: lol [2025-02-22 01:40:0"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…room [2025-12-03 06:49:00 AM] Ben Ruhl: yes [2025-12-03 07:05:00 AM] Ashley M: donuts in the office [2025-12-03 07:13:00 AM] Kayla S: dont let Ray get em all"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…AM] Dee Collins: ok call me if it gets worse [2026-09-10 07:08:00 AM] Ashley M: donuts in the office [2026-09-10 07:09:00 AM] Josh Hensley: yes [2026-09-11 07"
+      }
+    ]
+  },
+  {
+    "entity": "ADP",
+    "entity_type": "Vendor",
+    "alias": "Enroll",
+    "pattern": "nickname",
+    "count": 4,
+    "examples": [
+      {
+        "source": "mail/dave.brennan.mbox/messages/00001.eml",
+        "quote": "…ou want to make a change, log in to ADP and go to Myself > Benefits > Enroll. Rate sheets are posted on the bulletin board by the time clock in Oakley, and"
+      },
+      {
+        "source": "mail/karen.liu.mbox/messages/00029.eml",
+        "quote": "…endents, or start an HSA, log in to ADP and go to Myself > Benefits > Enroll by November 14. 7. Dependents being added need a birth certificate or marriage"
+      }
+    ]
+  },
+  {
+    "entity": "Blue Ridge Food Processing LLC",
+    "entity_type": "Customer",
+    "alias": "BR",
+    "pattern": "initialism",
+    "count": 4,
+    "examples": [
+      {
+        "source": "mail/dave.brennan.mbox/messages/00029.eml",
+        "quote": "…n@rivertonindustrial.com> Date: 2025-07-14T12:15:00.000Z Subject: RE: BR renewal signed Dave, Thank you. I have the signed agreement and Amendment No."
+      },
+      {
+        "source": "mail/linda.marsh.mbox/messages/00019.eml",
+        "quote": "…marsh@rivertonindustrial.com> Date: 2025-07-11T20:40:00.000Z Subject: BR renewal signed Linda - Blue Ridge renewal signed today, 3 years thru June 2028"
+      }
+    ]
+  },
+  {
+    "entity": "Lunken Aerospace Components",
+    "entity_type": "Customer",
+    "alias": "Lunken Aerospace",
+    "pattern": "nickname",
+    "count": 4,
+    "examples": [
+      {
+        "source": "Priya + Lauren - sales.m4a",
+        "quote": "[00:02:27] Speaker 2: Mine directly. Ohio Valley Cold Storage, Lunken Aerospace, the Little Miami Water Authority, Ohio River Dairy, Mason Medical, Sycamore, F"
+      },
+      {
+        "source": "2026-10-16 09.42 Dee - dispatch.m4a",
+        "quote": "[00:10:51] Speaker 2: Lunken Aerospace out by the airport. They make airplane parts, government stuff. So bay three is"
+      },
+      {
+        "source": "New Recording 11.m4a",
+        "quote": "…:11:01] Speaker 2: A handful of net forty-fives. The Water Authority, Lunken Aerospace, Mason Medical. The brewery in Westwood is net fifteen and pays by…"
+      }
+    ]
+  },
+  {
+    "entity": "Ardent Pinnacle Logistics",
+    "entity_type": "Customer",
+    "alias": "Ardent",
+    "pattern": "short_form",
+    "count": 3,
+    "examples": [
+      {
+        "source": "mail/billing.mbox/messages/00002.eml",
+        "quote": "…LLC is now Ardent Pinnacle Logistics LLC following our acquisition by Ardent Logistics. Please update your records and address all invoices dated after Augu"
+      }
+    ]
+  },
+  {
+    "entity": "Ardent Pinnacle Logistics",
+    "entity_type": "Customer",
+    "alias": "Ardent Logistics",
+    "pattern": "nickname",
+    "count": 3,
+    "examples": [
+      {
+        "source": "mail/billing.mbox/messages/00002.eml",
+        "quote": "…LLC is now Ardent Pinnacle Logistics LLC following our acquisition by Ardent Logistics. Please update your records and address all invoices dated after August…"
+      }
+    ]
+  },
+  {
+    "entity": "Blue Ridge Food Processing LLC",
+    "entity_type": "Customer",
+    "alias": "Harvest Plains Foods",
+    "pattern": "nickname",
+    "count": 3,
+    "examples": [
+      {
+        "source": "mail/linda.marsh.mbox/messages/00011.eml",
+        "quote": "…Mills, Inc. is now Blue Ridge Food Processing LLC (our new parent is Harvest Plains Foods). Our email domain has changed to blueridgefp.com. Old addresses…"
+      }
+    ]
+  },
+  {
+    "entity": "Hunter Greer",
+    "entity_type": "Person",
+    "alias": "Hunter",
+    "pattern": "chat_handle",
+    "count": 3,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…you go [2026-10-06 09:16:00 AM] Trey H: 10-4 [2026-10-07 07:34:00 AM] Hunter G: waiting on Derby City to let me in, nobody at the gate [2026-10-07 07:44:00"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…nope [2026-09-11 12:35:00 PM] Big Mike: omw [2026-09-14 12:13:00 PM] Hunter G: anybody have a oil filter for the Atlas on their truck? [2026-09-14 12:28:00"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…38:00 PM] Earl W: found this in the sump lol [2026-08-13 02:55:00 PM] Hunter G: thats junk [2026-08-13 07:17:00 PM] Dalton B: anybody want to swap on call w"
+      }
+    ]
+  },
+  {
+    "entity": "Hunter Greer",
+    "entity_type": "Person",
+    "alias": "Hunter G",
+    "pattern": "chat_handle",
+    "count": 3,
+    "examples": [
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…you go [2026-10-06 09:16:00 AM] Trey H: 10-4 [2026-10-07 07:34:00 AM] Hunter G: waiting on Derby City to let me in, nobody at the gate [2026-10-07 07:44:00 AM"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…nope [2026-09-11 12:35:00 PM] Big Mike: omw [2026-09-14 12:13:00 PM] Hunter G: anybody have a oil filter for the Atlas on their truck? [2026-09-14 12:28:00 P"
+      },
+      {
+        "source": "texts/Marcus_iPhone_Louisville crew.txt",
+        "quote": "…38:00 PM] Earl W: found this in the sump lol [2026-08-13 02:55:00 PM] Hunter G: thats junk [2026-08-13 07:17:00 PM] Dalton B: anybody want to swap on call wkn"
+      }
+    ]
+  },
+  {
+    "entity": "Isaiah Grant",
+    "entity_type": "Person",
+    "alias": "Isaiah",
+    "pattern": "chat_handle",
+    "count": 3,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…ur trucks this week, cage is doing inventory [2026-09-01 09:37:00 AM] Isaiah G: ok [2026-09-01 04:34:00 PM] Josh Hensley: <attachment: IMG_1796.jpg> [2026-0"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…6-22 02:16:00 PM] Aaron F: look at this mess [2026-06-22 02:23:00 PM] Isaiah G: call me [2026-06-23 05:09:00 PM] Kayla S: waiting on Carthage Chem to let me"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…DeShawn R: cracked housing, replace or weld? [2026-10-07 09:40:00 AM] Isaiah G: call me [2026-10-07 05:31:00 PM] Dee Collins: Tony can you swing by the co-o"
+      }
+    ]
+  },
+  {
+    "entity": "Isaiah Grant",
+    "entity_type": "Person",
+    "alias": "Isaiah G",
+    "pattern": "chat_handle",
+    "count": 3,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…ur trucks this week, cage is doing inventory [2026-09-01 09:37:00 AM] Isaiah G: ok [2026-09-01 04:34:00 PM] Josh Hensley: <attachment: IMG_1796.jpg> [2026-09-"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…6-22 02:16:00 PM] Aaron F: look at this mess [2026-06-22 02:23:00 PM] Isaiah G: call me [2026-06-23 05:09:00 PM] Kayla S: waiting on Carthage Chem to let me i"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…DeShawn R: cracked housing, replace or weld? [2026-10-07 09:40:00 AM] Isaiah G: call me [2026-10-07 05:31:00 PM] Dee Collins: Tony can you swing by the co-op"
+      }
+    ]
+  },
+  {
+    "entity": "Kemper Plastics Corp.",
+    "entity_type": "Customer",
+    "alias": "Reds",
+    "pattern": "nickname",
+    "count": 3,
+    "examples": [
+      {
+        "source": "mail/dave.brennan.mbox/messages/00081.eml",
+        "quote": "…slip to me last week that Doug Raines has been getting gift cards and Reds tickets from Greg, and Doug sends Kemper's T&M work our way. I went through Gre"
+      },
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…Albers: me, I'll drop it at the shop [2025-05-14 03:26:00 PM] Nick V: Reds suck again [2025-05-14 03:34:00 PM] Carl J: same [2025-05-19 11:10:00 AM] Aaron"
+      }
+    ]
+  },
+  {
+    "entity": "Ohio Valley Cold Storage",
+    "entity_type": "Customer",
+    "alias": "Westchester",
+    "pattern": "nickname",
+    "count": 3,
+    "examples": [
+      {
+        "source": "Sarah O.m4a",
+        "quote": "…SI. Because in August of last year, we had a near miss at OVCS at the Westchester building. A valve got opened when the line wasn't fully isolated. One tech had"
+      },
+      {
+        "source": "Dave B - history.m4a",
+        "quote": "…Ohio Valley Cold Storage. OVCS. It's a giant freezer warehouse up in Westchester. Well, and Monroe now. They opened a second building this spring. Everybody her"
+      },
+      {
+        "source": "2026-10-16 09.42 Dee - dispatch.m4a",
+        "quote": "…warehouse, so the freezer. They've got two buildings now, the one in Westchester and the new one up in Monroe."
+      }
+    ]
+  },
+  {
+    "entity": "BLUEGRASS DISTILLING CO",
+    "entity_type": "Customer",
+    "alias": "the distilleries",
+    "pattern": "nickname",
+    "count": 2,
+    "examples": [
+      {
+        "source": "mail/marcus.bell.mbox/messages/00058.eml",
+        "quote": "…2 more techs, a second truck for Bluegrass PM, and I want to go after the distilleries in Bardstown. Marcus Bell Branch Manager - Louisville"
+      }
+    ]
+  },
+  {
+    "entity": "BLUEGRASS DISTILLING CO",
+    "entity_type": "Customer",
+    "alias": "the distillery",
+    "pattern": "parenthetical+nickname",
+    "count": 2,
+    "examples": [
+      {
+        "source": "New Recording 11.m4a",
+        "quote": "…margins, if you take them at face value. Kemper looks bad and is bad. But Bluegrass, the distillery, looked like a loss last year on a calendar basis because…"
+      },
+      {
+        "source": "Dave 2.m4a",
+        "quote": "[00:14:16] Speaker 2: Bluegrass, the distillery. Marcus won that one a year ago. An install and then PM after. And if you look"
+      }
+    ]
+  },
+  {
+    "entity": "Hamilton & Pierce Insurance",
+    "entity_type": "Vendor",
+    "alias": "Hamilton & Pierce Insurance Agency",
+    "pattern": "nickname",
+    "count": 2,
+    "examples": [
+      {
+        "source": "mail/karen.liu.mbox/messages/00018.eml",
+        "quote": "…rectly to Wade as well. Amy Pierce Account Manager, Commercial Lines Hamilton & Pierce Insurance Agency ________________________________"
+      },
+      {
+        "source": "06 Insurance/H&P Summary of Insurance 4.1.26.pdf",
+        "quote": "## HAMILTON & PIERCE INSURANCE AGENCY Commercial Lines"
+      }
+    ]
+  },
+  {
+    "entity": "Little Miami Regional Water Authority",
+    "entity_type": "Customer",
+    "alias": "Little Miami",
+    "pattern": "nickname",
+    "count": 2,
+    "examples": [
+      {
+        "source": "Dave 2.m4a",
+        "quote": "…f one per job. That was part of the renewal. And the water authority, Little Miami, they need a PO before you invoice them anything. You can't bill them…"
+      },
+      {
+        "source": "New Recording 11.m4a",
+        "quote": "[00:08:18] Speaker 2: Linda. Sorry. Little Miami sent back the invoice for the pump job at Milford. No PO on it. Of course they"
+      }
+    ]
+  },
+  {
+    "entity": "Blue Ridge Food Processing LLC",
+    "entity_type": "Customer",
+    "alias": "Blue",
+    "pattern": "parenthetical",
+    "count": 1,
+    "examples": [
+      {
+        "source": "2026-10-16 09.42 Dee - dispatch.m4a",
+        "quote": "…name, what, a year and a half ago. I still say Mills. Everybody says Big Blue or just Blue. Biggest customer we've got. Two plants, Hamilton and Florence."
+      }
+    ]
+  },
+  {
+    "entity": "Dave Brennan",
+    "entity_type": "Person",
+    "alias": "DB",
+    "pattern": "parenthetical",
+    "count": 1,
+    "examples": [
+      {
+        "source": "OneDrive/Ridgeline/mgmt bios for CIM - dave edits.docx",
+        "quote": "…s Manager since 2017. Marcus Bell - Louisville since 2013. [author: Dave Brennan (DB), time: 2026-10-05T02:31:52.000+00:00]: make sure she's front and center"
+      }
+    ]
+  },
+  {
+    "entity": "Heather Quinn",
+    "entity_type": "Person",
+    "alias": "Heather",
+    "pattern": "chat_handle",
+    "count": 1,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…2025-01-30 03:39:00 PM] Dee Collins: thanks! [2025-01-31 03:30:00 PM] Heather Q: Last day today!"
+      }
+    ]
+  },
+  {
+    "entity": "Heather Quinn",
+    "entity_type": "Person",
+    "alias": "Heather Q",
+    "pattern": "chat_handle",
+    "count": 1,
+    "examples": [
+      {
+        "source": "texts/Dee_iPhone_Oakley Techs group.txt",
+        "quote": "…2025-01-30 03:39:00 PM] Dee Collins: thanks! [2025-01-31 03:30:00 PM] Heather Q: Last day today!"
+      }
+    ]
+  },
+  {
+    "entity": "Lancaster Corrugated",
+    "entity_type": "Customer",
+    "alias": "Lancaster",
+    "pattern": "short_form",
+    "count": 1,
+    "examples": [
+      {
+        "source": "tom.jablonski/Documents/Columbus customer notes.docx",
+        "quote": "### LANCASTER CORRUGATED LLC Lancaster Plant - 1100 Mill Park Dr, Lancaster, OH 43130"
+      }
+    ]
+  },
+  {
+    "entity": "Mill Creek Rendering",
+    "entity_type": "Customer",
+    "alias": "the rendering plant",
+    "pattern": "parenthetical",
+    "count": 1,
+    "examples": [
+      {
+        "source": "Dave 2.m4a",
+        "quote": "…well, the foundry, Fifer, the meat folks over in Camp Washington, and Mill Creek, the rendering plant. That's five. Five or so."
+      }
+    ]
+  },
+  {
+    "entity": "Priya Shah",
+    "entity_type": "Person",
+    "alias": "Priya",
+    "pattern": "parenthetical",
+    "count": 1,
+    "examples": [
+      {
+        "source": "Dave 2.m4a",
+        "quote": "…en Greg left in February, I covered it for a couple weeks, and then I called Priya early March and told her, \"It's yours.\" So it's Priya's. Whether the…"
+      }
+    ]
+  }
+]

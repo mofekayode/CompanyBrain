@@ -1,0 +1,549 @@
+[
+ {
+  "entity": "Blue Ridge Food Processing LLC",
+  "type": "Customer",
+  "alias": "Big Blue",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Blue Ridge Food Processing LLC",
+  "type": "Customer",
+  "alias": "Blue",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Blue Ridge Food Processing LLC",
+  "type": "Customer",
+  "alias": "BRM",
+  "kind": "abbreviation",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Blue Ridge Food Processing LLC",
+  "type": "Customer",
+  "alias": "Blue Ridge",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Ohio Valley Cold Storage",
+  "type": "Customer",
+  "alias": "OVCS",
+  "kind": "abbreviation",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Ohio Valley Cold Storage",
+  "type": "Customer",
+  "alias": "the freezer",
+  "kind": "jargon",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Ohio Valley Cold Storage",
+  "type": "Customer",
+  "alias": "Valley Cold",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Ohio Valley Cold Storage",
+  "type": "Customer",
+  "alias": "OV Cold",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Ohio Valley Cold Storage",
+  "type": "Customer",
+  "alias": "OV",
+  "kind": "abbreviation",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Kemper Plastics Corp.",
+  "type": "Customer",
+  "alias": "Kemper",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Kemper Plastics Corp.",
+  "type": "Customer",
+  "alias": "Kemper Molding",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Tri State Bottling",
+  "type": "Customer",
+  "alias": "Tri-State",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Tri State Bottling",
+  "type": "Customer",
+  "alias": "TSB",
+  "kind": "abbreviation",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Tri State Bottling",
+  "type": "Customer",
+  "alias": "the bottler",
+  "kind": "jargon",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Queen City Paper & Packaging",
+  "type": "Customer",
+  "alias": "Queen City",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Queen City Paper & Packaging",
+  "type": "Customer",
+  "alias": "QCP",
+  "kind": "abbreviation",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Queen City Paper & Packaging",
+  "type": "Customer",
+  "alias": "the paper plant",
+  "kind": "jargon",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Midwest Galvanizing",
+  "type": "Customer",
+  "alias": "Midwest Galv",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Midwest Galvanizing",
+  "type": "Customer",
+  "alias": "the galvanizer",
+  "kind": "jargon",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Midwest Galvanizing",
+  "type": "Customer",
+  "alias": "MWG",
+  "kind": "abbreviation",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Harmon Auto Parts DC (Obetz)",
+  "type": "Customer",
+  "alias": "Harmon DC",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Harmon Auto Parts DC (Obetz)",
+  "type": "Customer",
+  "alias": "Harmon",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Harmon Auto Parts DC (Obetz)",
+  "type": "Customer",
+  "alias": "the Obetz DC",
+  "kind": "jargon",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Hartwell Precision Castings",
+  "type": "Customer",
+  "alias": "Hartwell",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Hartwell Precision Castings",
+  "type": "Customer",
+  "alias": "the foundry",
+  "kind": "jargon",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Mill Creek Rendering",
+  "type": "Customer",
+  "alias": "Mill Creek",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Mill Creek Rendering",
+  "type": "Customer",
+  "alias": "the rendering plant",
+  "kind": "jargon",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Kroll Logistics - Tri-County DC",
+  "type": "Customer",
+  "alias": "Kroll",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Kroll Logistics - Tri-County DC",
+  "type": "Customer",
+  "alias": "the warehouse",
+  "kind": "jargon",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Kroll Logistics - Tri-County DC",
+  "type": "Customer",
+  "alias": "the Springdale DC",
+  "kind": "jargon",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Brownsboro Rubber Products",
+  "type": "Customer",
+  "alias": "Brownsboro",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Brownsboro Rubber Products",
+  "type": "Customer",
+  "alias": "BRP",
+  "kind": "abbreviation",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Brownsboro Rubber Products",
+  "type": "Customer",
+  "alias": "the rubber plant",
+  "kind": "jargon",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Sycamore Specialty Foods",
+  "type": "Customer",
+  "alias": "Sycamore",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Sycamore Specialty Foods",
+  "type": "Customer",
+  "alias": "SSF",
+  "kind": "abbreviation",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Sycamore Specialty Foods",
+  "type": "Customer",
+  "alias": "the chip plant",
+  "kind": "jargon",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Darby Creek Pet Foods",
+  "type": "Customer",
+  "alias": "Darby Creek",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Darby Creek Pet Foods",
+  "type": "Customer",
+  "alias": "the pet food plant",
+  "kind": "jargon",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Darby Creek Pet Foods",
+  "type": "Customer",
+  "alias": "DCPF",
+  "kind": "abbreviation",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Derby City Cold Storage",
+  "type": "Customer",
+  "alias": "Derby Cold",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Derby City Cold Storage",
+  "type": "Customer",
+  "alias": "Derby City",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Derby City Cold Storage",
+  "type": "Customer",
+  "alias": "DCCS",
+  "kind": "abbreviation",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)"
+ },
+ {
+  "entity": "Kroll Logistics - Tri-County DC",
+  "type": "Customer",
+  "alias": "Tri-County",
+  "kind": "nickname",
+  "source": "misc2/customer stuff.docx (dispatcher glossary)",
+  "ambiguous": true,
+  "context": {
+   "note": "Kroll warehouse when a job; Tri-County Bearing & Supply when a part"
+  }
+ },
+ {
+  "entity": "Kinetic Parts Direct",
+  "type": "Vendor",
+  "alias": "Kinetic",
+  "kind": "nickname",
+  "source": "mined from evidence (scripts/mine-aliases.ts, reviewed)"
+ },
+ {
+  "entity": "Blue Ridge Food Processing LLC",
+  "type": "Customer",
+  "alias": "BR",
+  "kind": "abbreviation",
+  "source": "mined from evidence (scripts/mine-aliases.ts, reviewed)"
+ },
+ {
+  "entity": "Hamilton Plant",
+  "type": "Site",
+  "alias": "BR Hamilton",
+  "kind": "nickname",
+  "source": "mined from evidence (scripts/mine-aliases.ts, reviewed)"
+ },
+ {
+  "entity": "Oakley HQ & Main Shop",
+  "type": "Branch",
+  "alias": "HQ",
+  "kind": "abbreviation",
+  "source": "mined from evidence (scripts/mine-aliases.ts, reviewed)"
+ },
+ {
+  "entity": "Lunken Aerospace Components",
+  "type": "Customer",
+  "alias": "Lunken Aerospace",
+  "kind": "nickname",
+  "source": "mined from evidence (scripts/mine-aliases.ts, reviewed)"
+ },
+ {
+  "entity": "Little Miami Regional Water Authority",
+  "type": "Customer",
+  "alias": "Little Miami",
+  "kind": "nickname",
+  "source": "mined from evidence (scripts/mine-aliases.ts, reviewed)"
+ },
+ {
+  "entity": "BLUEGRASS DISTILLING CO",
+  "type": "Customer",
+  "alias": "the distillery",
+  "kind": "jargon",
+  "source": "mined from evidence (scripts/mine-aliases.ts, reviewed)"
+ },
+ {
+  "entity": "Ridgeline Capital Advisors LLC",
+  "type": "Vendor",
+  "alias": "Ridgeline",
+  "kind": "nickname",
+  "source": "mined from evidence (scripts/mine-aliases.ts, reviewed)"
+ },
+ {
+  "entity": "Hamilton & Pierce Insurance",
+  "type": "Vendor",
+  "alias": "Hamilton & Pierce Insurance Agency",
+  "kind": "name",
+  "source": "mined from evidence (scripts/mine-aliases.ts, reviewed)"
+ },
+ {
+  "entity": "Priya Shah",
+  "type": "Person",
+  "alias": "Priya",
+  "kind": "nickname",
+  "source": "mined from evidence (scripts/mine-aliases.ts, reviewed)"
+ },
+ {
+  "entity": "Dave Brennan",
+  "type": "Person",
+  "alias": "DB",
+  "kind": "abbreviation",
+  "source": "mined from evidence (scripts/mine-aliases.ts, reviewed)"
+ },
+ {
+  "entity": "Mike Hargrove",
+  "type": "Person",
+  "alias": "Big Mike",
+  "kind": "nickname",
+  "source": "mined from evidence (scripts/mine-aliases.ts, reviewed)",
+  "ambiguous": true,
+  "context": {
+   "note": "Louisville crew texts; two Mike H. at the company"
+  }
+ },
+ {
+  "entity": "Hank Ostrander",
+  "type": "Person",
+  "alias": "Hank",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Hank Ostrander",
+  "type": "Person",
+  "alias": "Hank O",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Trey Hollins",
+  "type": "Person",
+  "alias": "Trey",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Bryce Hagan",
+  "type": "Person",
+  "alias": "Bryce",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Shawn Mattingly",
+  "type": "Person",
+  "alias": "Shawn",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Curtis Embry",
+  "type": "Person",
+  "alias": "Curtis",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Jamal Whitaker",
+  "type": "Person",
+  "alias": "Jamal",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Kenny Vittitow",
+  "type": "Person",
+  "alias": "Kenny",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Lonnie Carmack",
+  "type": "Person",
+  "alias": "Lonnie",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Earl Whitlock",
+  "type": "Person",
+  "alias": "Earl",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Logan Spalding",
+  "type": "Person",
+  "alias": "Logan",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Wyatt Coomes",
+  "type": "Person",
+  "alias": "Wyatt",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Dalton Ballard",
+  "type": "Person",
+  "alias": "Dalton",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Steve Kaminski",
+  "type": "Person",
+  "alias": "Steve K",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Steve Kaminski",
+  "type": "Person",
+  "alias": "Steve",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Aaron Fischer",
+  "type": "Person",
+  "alias": "Aaron",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Andre Meeks",
+  "type": "Person",
+  "alias": "Andre M",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Kyle Brennan",
+  "type": "Person",
+  "alias": "Kyle",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "DeShawn Rice",
+  "type": "Person",
+  "alias": "DeShawn",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Jake Thurman",
+  "type": "Person",
+  "alias": "Jake",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Nick Vollmer",
+  "type": "Person",
+  "alias": "Nick",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ },
+ {
+  "entity": "Jordan Pace",
+  "type": "Person",
+  "alias": "Jordan",
+  "kind": "nickname",
+  "source": "group text handles (mine-aliases.ts chat_handle, reviewed)"
+ }
+]
