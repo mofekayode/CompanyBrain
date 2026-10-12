@@ -103,19 +103,38 @@ export async function refsFor(ctx: ToolCtx, files: Map<string, FileInfo>, ids: s
   for (const c of copies) if (!copyOf.has(c.id) && ok(c.copy)) copyOf.set(c.id, c.copy)
   /** The path to cite for content read from this file (null: no copy this reader may open). */
   const cite = (so: string | null) => (so && copyOf.has(so) ? files.get(copyOf.get(so)!)!.path! : null)
+  // An email attachment is cited as its mailbox with "msg=<id>;att=<file>" (the contract), then its own
+  // place (page, sheet row). The message id comes from the parent message's body (or an identical copy's).
+  const attachment = new Map(
+    (
+      await ctx.sql.query<{ so: string; att: string; mid: string | null }>(
+        `select a.id so, regexp_replace(a.original_path, '^.*/attachments/', '') att,
+                (select e.locator ->> 'message_id' from public.evidence e join public.document_versions dv on dv.id = e.document_version_id
+                   join public.source_objects c on c.id = dv.source_object_id
+                  where e.kind = 'email_body' and (c.id = p.id or (p.sha256 is not null and c.sha256 = p.sha256)) limit 1) mid
+         from public.source_objects a join public.source_objects p on p.id = a.parent_id
+         where a.tenant_id = $1 and a.id = any($2::uuid[]) and a.original_path ~ '/messages/[^/]+\\.eml/attachments/'`,
+        [ctx.tenantId, used],
+      )
+    ).rows.map((r) => [r.so, r]),
+  )
+  const place = (so: string | null, locator: string) => {
+    const a = so ? attachment.get(so) : undefined
+    return a ? [`msg=${a.mid ?? ''}`, `att=${a.att}`, locator].filter(Boolean).join(';') : locator
+  }
 
   for (const d of docs) {
     const refs: Ref[] = []
     if (d.doc_type === 'passage' && cite(d.source_object_id)) {
       const path = cite(d.source_object_id)!
-      refs.push({ source: path, locator: locatorOf(path, d.citation), quote: d.content.slice(0, 240) })
+      refs.push({ source: path, locator: place(d.source_object_id, locatorOf(path, d.citation)), quote: d.content.slice(0, 240) })
     } else if (d.doc_type === 'fact') {
       const seen = new Set<string>()
       for (const id of d.evidence_ids) {
         const e = evById.get(id)
         if (!e || !readable.has(e.id) || !cite(e.so)) continue
         const path = cite(e.so)!
-        const locator = locatorOf(path, { ...e.locator, page_number: e.page_number, start_ms: e.start_ms ?? e.locator.start_ms, end_ms: e.end_ms ?? e.locator.end_ms })
+        const locator = place(e.so, locatorOf(path, { ...e.locator, page_number: e.page_number, start_ms: e.start_ms ?? e.locator.start_ms, end_ms: e.end_ms ?? e.locator.end_ms }))
         if (seen.has(path + locator)) continue
         seen.add(path + locator)
         refs.push({ source: path, locator, quote: e.content })
@@ -126,7 +145,7 @@ export async function refsFor(ctx: ToolCtx, files: Map<string, FileInfo>, ids: s
       if (e?.file_id && ok(e.file_id) && readableFiles.has(e.file_id)) refs.push({ source: files.get(e.file_id)!.path!, locator: e.row ? `row=${e.row}` : '' })
       // Records made from links between rows have no file of their own: cite the system rows
       // (and then other passages) that mention them, as far as the reader can open them.
-      for (const p of mentions.get(baseId(d.id).slice(2)) ?? []) if (refs.length < perFact && cite(p.so)) refs.push({ source: cite(p.so)!, locator: locatorOf(cite(p.so)!, p.citation), quote: p.content.slice(0, 240) })
+      for (const p of mentions.get(baseId(d.id).slice(2)) ?? []) if (refs.length < perFact && cite(p.so)) refs.push({ source: cite(p.so)!, locator: place(p.so, locatorOf(cite(p.so)!, p.citation)), quote: p.content.slice(0, 240) })
     }
     out.set(d.id, refs)
   }
