@@ -96,8 +96,15 @@ const KNN_K = Number(process.env.CB_KNN_K ?? 100)
 const KNN_CANDIDATES = Number(process.env.CB_KNN_CANDIDATES ?? 1000)
 /** How deep into each leg (keyword, meaning) the reranker looks, beyond the fused head. */
 const LEG_POOL = Number(process.env.CB_LEG_POOL ?? 20)
+/**
+ * Ranking experiments (CB_RANK_EXP=name[,name]; default none): lanes (final list by kind quotas),
+ * entity (hits about the question's named entities up), evidence (the top fact's sources right after
+ * it), head60 (the reranker judges 60 of the fused list instead of 40).
+ */
+const RANK_EXP = new Set((process.env.CB_RANK_EXP ?? '').split(',').map((s) => s.trim()).filter(Boolean))
+const rankExp = (name: string) => RANK_EXP.has(name)
 /** How much of the fused list the reranker judges (plus each leg's top LEG_POOL). */
-const RERANK_HEAD = 40
+const RERANK_HEAD = rankExp('head60') ? 60 : 40
 
 /** The reader's principals: themselves plus every group they belong to (transitively). */
 export async function principalsOf(sql: Sql, tenantId: string, principalId: string): Promise<string[]> {
@@ -471,6 +478,13 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
     hits = hits
       .map((h, i) => ({ ...h, ranks: { ...h.ranks, rerank: scores[i] }, score: scores[i] }))
       .sort((a, b) => b.score - a.score)
+    // (experiment: blend) the cross-encoder's order fused with the legs' order (RRF of the two ranks):
+    // a document both legs put near the top is not sunk by one low reranker score.
+    if (rankExp('blend'))
+      hits = hits
+        .map((h, i) => ({ h, s: 1 / (RRF_K + i + 1) + 1 / (RRF_K + h.ranks.fused) }))
+        .sort((a, b) => b.s - a.s)
+        .map(({ h }) => h)
     rerankMs = performance.now() - r0
   }
   // ---- optional model rerank of the head (the original question, not the rewrite)
@@ -527,8 +541,13 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
   const asksWords = asksEmail || /\b(say|said|says|told|tell|mention(ed)?|according to|in (his|her|their) words)\b/i.test(query.split('\n')[0])
   const kindFactor = (h: SearchHit) => (asksEmail && h.kind === 'email_body' ? 1.5 : asksWords && h.doc_type === 'passage' && /email_body|transcript_segment|video_segment/.test(h.kind) ? 1.25 : 1)
 
+  // ---- (experiment: entity) what the question names: a hit about that customer, person or asset
+  // ranks above one that merely uses the same words.
+  const namedIds = rankExp('entity') ? new Set(u.entities.filter((e) => e.type !== 'Term').map((e) => e.id)) : null
+  const entityFactor = (h: SearchHit) => (namedIds?.size && h.entity_ids.some((id) => namedIds.has(id)) ? 1.3 : 1)
+
   // ---- time: the right era first (applied last, so neither fusion nor the reranker can undo it)
-  const factor = (h: SearchHit) => kindFactor(h) * timeFactor(h)
+  const factor = (h: SearchHit) => kindFactor(h) * timeFactor(h) * entityFactor(h)
   const timeFactor = (h: SearchHit) => {
     if (outdated.has(h.id)) return 0.3
     if (u.asOf) {
@@ -558,9 +577,31 @@ export async function search(sql: Sql, tenantId: string, query: string, opts: Se
     .map((h, i) => ({ h, s: (1 / (RRF_K + i + 1)) * factor(h) }))
     .sort((a, b) => b.s - a.s)
     .map(({ h }) => h)
+  // ---- (experiment: evidence) the sources behind the leading fact come right after it: an answer
+  // quotes them, and the file they are in is the one the fact rests on.
+  if (rankExp('evidence')) {
+    const i = hits.findIndex((h) => h.doc_type === 'fact' && h.kind !== 'timeline')
+    const factId = i >= 0 && i < limit ? (hits[i].citation.fact_id as string | undefined) : undefined
+    if (factId) {
+      const behind = hits.filter((h, j) => j > i && h.doc_type === 'passage' && ((h.citation.facts as string[] | undefined) ?? []).includes(factId)).slice(0, 3)
+      if (behind.length) hits = [...hits.slice(0, i + 1), ...behind, ...hits.slice(i + 1).filter((h) => !behind.includes(h))]
+    }
+  }
+  // ---- (experiment: lanes) the page is composed by kind: up to 3 facts, 5 documents and 2 histories
+  // in their ranked order, then everything else in order (instead of the 30% document reservation).
+  if (rankExp('lanes') && !opts.docTypes?.length && limit >= 5) {
+    const quota: Record<string, number> = { fact: 3, passage: 5, timeline: 2 }
+    const laneOf = (h: SearchHit) => (h.doc_type === 'passage' ? 'passage' : h.kind === 'timeline' ? 'timeline' : h.doc_type === 'fact' ? 'fact' : 'other')
+    const head: SearchHit[] = []
+    for (const h of hits) {
+      const l = laneOf(h)
+      if (l !== 'other' && quota[l] > 0) quota[l]--, head.push(h)
+    }
+    hits = [...head, ...hits.filter((h) => !head.includes(h))]
+  }
   // Mixed results: when cards (facts, records) would fill the page, keep ~30% of the slots for the
   // best documents, answers need something to quote, and a card is only as good as its sources.
-  if (!opts.docTypes?.length && limit >= 5) {
+  else if (!opts.docTypes?.length && limit >= 5) {
     const want = Math.ceil(limit * 0.3)
     const head = hits.slice(0, limit)
     const have = head.filter((h) => h.doc_type === 'passage').length
