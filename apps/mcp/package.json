@@ -1,0 +1,19 @@
+{
+  "name": "@companybrain/mcp",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "MCP server: the company brain's search and knowledge tools for Claude, ChatGPT or any MCP client, filtered by who is asking.",
+  "scripts": {
+    "stdio": "tsx src/server.ts",
+    "http": "tsx src/server.ts --http",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@companybrain/core": "*",
+    "@modelcontextprotocol/sdk": "^1.32.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4"
+  }
+}
