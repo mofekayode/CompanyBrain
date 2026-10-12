@@ -4,8 +4,9 @@
 // one of them would read what came from all of them. Cards are therefore split into variants
 // (see project.ts): each variant holds only content that every one of its readers may open.
 //
-// Containment is checked on people (users, including role profiles), with group membership
-// expanded, so "Sales group" and "the three people in Sales" compare as the same readers.
+// Containment is checked on principals (a role group, a person), with group membership expanded on
+// the admitting side: a person inside a listed group is covered; a group is covered only when it, or
+// a group holding it, is listed.
 
 import type { Sql } from '../storage/raw'
 
@@ -54,21 +55,34 @@ export async function loadReaders(sql: Sql, tenantId: string): Promise<Readers> 
     }
     return cache.get(key)!
   }
+  // Who an access list admits, as principals: its entries, and everything inside its groups.
+  const admitted = new Map<string, Set<string>>()
+  const admits = (aclIds: string[]) => {
+    const key = [...new Set(aclIds)].sort().join(',')
+    if (!admitted.has(key)) {
+      const s = new Set<string>()
+      const walk = (p: string) => {
+        if (s.has(p)) return
+        s.add(p)
+        for (const c of childrenOf.get(p) ?? []) walk(c)
+      }
+      for (const e of entries.rows) if (aclIds.includes(e.acl_id)) walk(e.principal_id)
+      admitted.set(key, s)
+    }
+    return admitted.get(key)!
+  }
   const covered = new Map<string, boolean>()
   return {
     of,
+    // Containment is checked on principals, not on the people behind them: a role reads a file only
+    // when the role (or a group holding it) is on the file's list, not because its current holder
+    // happens to be named there.
     covers(who, through) {
       if (through === null) return true
       const key = `${[...new Set(who)].sort().join(',')}|${[...new Set(through)].sort().join(',')}`
       if (!covered.has(key)) {
-        const can = of(through)
-        let ok = true
-        for (const u of of(who))
-          if (!can.has(u)) {
-            ok = false
-            break
-          }
-        covered.set(key, ok)
+        const can = admits(through)
+        covered.set(key, entries.rows.filter((e) => who.includes(e.acl_id)).every((e) => can.has(e.principal_id)))
       }
       return covered.get(key)!
     },
