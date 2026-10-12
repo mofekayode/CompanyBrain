@@ -1,3 +1,4 @@
+import { pool } from '@companybrain/core/workbench/server'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
@@ -27,7 +28,11 @@ export const app = new Hono()
 app.use('*', logger())
 app.use('/api/*', cors({ origin: WEB_ORIGINS, allowMethods: ['GET', 'POST', 'PATCH', 'PUT', 'OPTIONS'], maxAge: 600 }))
 
-app.get('/health', (c) => c.json({ ok: true }))
+// Pool counts so a long run can be watched for connections going bad (total, idle, waiting for one).
+app.get('/health', (c) => {
+  const p = pool() as unknown as { totalCount: number; idleCount: number; waitingCount: number }
+  return c.json({ ok: true, db: { total: p.totalCount, idle: p.idleCount, waiting: p.waitingCount }, rss_mb: Math.round(process.memoryUsage().rss / 1048576) })
+})
 /** Which paid services the pipeline may call (the portal disables AI actions when off). */
 app.get('/api/status', (c) => c.json({ claude_api: apiAllowed() }))
 
