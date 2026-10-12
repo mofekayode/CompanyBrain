@@ -118,8 +118,8 @@ for (const s of cfg.scopes) {
 const rules = cfg.scopes.flatMap((s) => s.rules)
 const fallback = 'unsorted-intake'
 const files = (
-  await db.query<{ id: string; source: string; path: string; scope: string | null; origin: string | null }>(
-    `select so.id, s.name source, so.original_path path, sc.key scope, fa.origin
+  await db.query<{ id: string; source: string; path: string; scope: string | null; origin: string | null; client: boolean }>(
+    `select so.id, s.name source, so.original_path path, sc.key scope, fa.origin, coalesce(fa.reasons @> '[{"kind":"client"}]', false) client
      from public.source_objects so join public.sources s on s.id = so.source_id
      left join public.file_access fa on fa.source_object_id = so.id left join public.access_scopes sc on sc.id = fa.scope_id
      where so.tenant_id = $1`,
@@ -131,6 +131,8 @@ const moved = new Map<string, string[]>()
 const keptMoves = new Set(cfg.file_moves.map((m) => m.path))
 for (const f of files) {
   if (f.origin === 'human' && keptMoves.has(f.path)) continue
+  // Client-confirmed access (scripts/load-client-access.ts) is not re-derived from folders.
+  if (f.client) continue
   const key = matchRule(f, rules)?.scope_key ?? fallback
   if (key !== f.scope) moved.set(key, [...(moved.get(key) ?? []), f.id])
 }

@@ -6,53 +6,57 @@
   "roles": {
     "ROLE-CEO-BUYER": {
       "profile": [
-        "All Staff",
-        "Mgmt Team",
-        "Owners & Execs"
+        "Role: ROLE-CEO-BUYER"
       ],
-      "why": "New owner running the company: the owners' access (Owners & Execs: Accounting, deal folders, data room), management and all-staff; no personal mailboxes or HR files. The Northgate buyer's own guest account (Rachel Stein) is narrower."
+      "why": "Client-confirmed: exactly this role's access (CEO / Buyer. May open: General internal, Operations, Commercial (pricing, Finance reports & AR/AP, Confidential contracts, HR & payroll, Executive / deal.)"
     },
     "ROLE-OPS-MGR": {
       "profile": [
-        "All Staff",
-        "Mgmt Team",
-        "Dispatch",
-        "Oakley Techs",
-        "Louisville Techs",
-        "Columbus Techs"
+        "Role: ROLE-OPS-MGR"
       ],
-      "why": "Runs field operations across branches: management, dispatch and field-service access; no personal mailbox"
+      "why": "Client-confirmed: exactly this role's access (Operations Manager. May open: General internal, Operations, Commercial (pricing.)"
     },
     "ROLE-BRANCH-MGR": {
-      "person": "Marcus Bell",
-      "why": "Branch Manager, Louisville"
+      "profile": [
+        "Role: ROLE-BRANCH-MGR"
+      ],
+      "why": "Client-confirmed: exactly this role's access (Branch Manager. May open: General internal, Operations, Commercial (pricing.)"
     },
     "ROLE-FIELD-TECH": {
-      "person": "Jamal Whitaker",
-      "why": "Field Technician II"
+      "profile": [
+        "Role: ROLE-FIELD-TECH"
+      ],
+      "why": "Client-confirmed: exactly this role's access (Field Technician. May open: General internal, Operations.)"
     },
     "ROLE-SALES-MGR": {
-      "person": "Priya Shah",
-      "why": "Sales Manager"
+      "profile": [
+        "Role: ROLE-SALES-MGR"
+      ],
+      "why": "Client-confirmed: exactly this role's access (Sales Manager. May open: General internal, Operations, Commercial (pricing, Confidential contracts.)"
     },
     "ROLE-SALES": {
-      "person": "Tyler Branham",
-      "why": "Account Manager"
+      "profile": [
+        "Role: ROLE-SALES"
+      ],
+      "why": "Client-confirmed: exactly this role's access (Sales Rep / Account Manager. May open: General internal, Operations, Commercial (pricing.)"
     },
     "ROLE-FINANCE": {
       "profile": [
-        "All Staff",
-        "Accounting"
+        "Role: ROLE-FINANCE"
       ],
-      "why": "The Accounting group (Accounting library, billing mailbox, QuickBooks exports); not the owners group"
+      "why": "Client-confirmed: exactly this role's access (Finance. May open: General internal, Operations, Commercial (pricing, Finance reports & AR/AP, Confidential contracts.)"
     },
     "ROLE-HR": {
-      "person": "Karen Liu",
-      "why": "HR & Office Manager"
+      "profile": [
+        "Role: ROLE-HR"
+      ],
+      "why": "Client-confirmed: exactly this role's access (HR. May open: General internal, HR & payroll.)"
     },
     "ROLE-DISPATCH": {
-      "person": "Dee Collins",
-      "why": "Service Coordinator / Dispatch Lead"
+      "profile": [
+        "Role: ROLE-DISPATCH"
+      ],
+      "why": "Client-confirmed: exactly this role's access (Dispatch / Service Coordination. May open: General internal, Operations.)"
     }
   }
 }

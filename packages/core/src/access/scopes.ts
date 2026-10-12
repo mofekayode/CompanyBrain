@@ -453,7 +453,7 @@ export async function applyAccess(sql: Sql, tenantId: string): Promise<{ scopes:
               (select a.id from public.acls a where a.tenant_id = $1 and a.name = 'file:' || g.source_object_id) file_acl
        from public.access_grants g join public.file_access fa on fa.source_object_id = g.source_object_id
        join public.access_scopes sc on sc.id = fa.scope_id
-       where g.tenant_id = $1 and g.source_object_id is not null`,
+       where g.tenant_id = $1 and g.source_object_id is not null and not (fa.reasons @> '[{"kind":"client"}]')`,
       [tenantId],
     )
   ).rows
@@ -475,7 +475,9 @@ export async function applyAccess(sql: Sql, tenantId: string): Promise<{ scopes:
   await sql.query(
     `update public.file_access fa set acl_id = sc.acl_id from public.access_scopes sc
      where fa.tenant_id = $1 and sc.id = fa.scope_id and fa.acl_id <> sc.acl_id
-       and not exists (select 1 from public.access_grants g where g.source_object_id = fa.source_object_id)`,
+       and not exists (select 1 from public.access_grants g where g.source_object_id = fa.source_object_id)
+       -- Client-confirmed access (scripts/load-client-access.ts) is never replaced by a scope's.
+       and not (fa.reasons @> '[{"kind":"client"}]')`,
     [tenantId],
   )
 
