@@ -14,8 +14,10 @@ export async function exportComponents(sql: Sql, tenantId: string, slug: string)
   const pathOf = (so: string) => files.get(so)?.path ?? null
   const ev = (
     await sql.query<{ so: string; kind: string; content: string; speaker: string | null; page_number: number | null; locator: Record<string, unknown>; ordinal: number }>(
+      // Current versions only: a file extracted twice would otherwise appear twice.
       `select dv.source_object_id so, e.kind, e.content, e.speaker, e.page_number, e.locator, e.ordinal
        from public.evidence e join public.document_versions dv on dv.id = e.document_version_id
+       join public.documents d on d.current_version_id = dv.id and d.deleted_at is null
        where e.tenant_id = $1 and e.kind in ('transcript_segment', 'ocr', 'video_segment') order by dv.source_object_id, e.ordinal`,
       [tenantId],
     )
